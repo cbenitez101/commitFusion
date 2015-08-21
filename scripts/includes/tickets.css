@@ -1,0 +1,16 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 09-feb-2015, 19:59:23
+    Author     : ruben
+*/
+
+.ticket {width: 70px; height: 70px; color: white; background-color: #4F7327;border-radius: 5px;text-align: center;display: block;}
+.tickettable {height: 600px; overflow: hidden;width: 100%;}
+.accountingtable td {padding-right: 20px; text-align: center}
+.modal, .ui-dialog-buttonset {width: 298px !important;}
+.ui-resizable-handle {display: none !important;}
+button:disabled {background-color: grey}

@@ -1,0 +1,19 @@
+Array
+(
+    [lotesid] => 4
+    [precio] => 5
+    [password] => 
+    [traficodescarga] => 0
+    [wisprBandwidthMaxUp] => 0
+    [wisprBandwidthMaxDown] => 0
+    [expiration] => 0000-00-00
+    [loginTime] => 
+    [simultaneousUse] => 0
+    [idleTimeout] => 0
+    [acctInterimInterval] => 0
+    [modoconsumo] => One-All-Session
+    [movilidad] => Called_Station-Id
+    [duracion] => 86400
+    [servername] => SunsGarden
+    [identificador] => 3
+)

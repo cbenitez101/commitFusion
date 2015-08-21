@@ -1,0 +1,1 @@
+{include file="contabilidad/$page.tpl"}
