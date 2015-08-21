@@ -1,5 +1,2 @@
 /nbproject
-test.php
-/cgi-bin
-/template_c
-/cache
+/template_c/*
