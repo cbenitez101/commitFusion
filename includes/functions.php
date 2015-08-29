@@ -121,7 +121,8 @@ function include_header_file($file){
     if (stristr($file, "http")&& stristr($file, "css")) {
         $includeheader['css'][]='<link rel="stylesheet" href="'.$file.'"/>';
     }
-    $includeheader = array_unique($includeheader);
+    $includeheader['js'] = array_unique($includeheader['js']);
+    $includeheader['css'] = array_unique($includeheader['css']);
 }
 /**
  * Include all js and css files stored in to the specified folder.
