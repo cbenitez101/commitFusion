@@ -94,9 +94,9 @@ function external_salir() {
 function include_header_content($code, $type= 'js') {
     global $includeheader;
     if ($type == 'js') {            //Depending the filetype the tag are added to the code.
-        $includeheader[]='<script type="text/javascript">'.str_replace(array("  ", "   ", "    ","     "), " ", str_replace(array("\r","\n", "\t"), "", $code)).'</script>';
+        $includeheader['js'][]='<script type="text/javascript">'.str_replace(array("  ", "   ", "    ","     "), " ", str_replace(array("\r","\n", "\t"), "", $code)).'</script>';
     } elseif ($type == 'css') {
-        $includeheader[]='<style type="text/css">'.str_replace("  ", " ", str_replace(array("\r","\n"), "", $code)).'</style>';
+        $includeheader['css'][]='<style type="text/css">'.str_replace("  ", " ", str_replace(array("\r","\n"), "", $code)).'</style>';
     }
     
 }
@@ -110,16 +110,16 @@ function include_header_file($file){
     global $includeheader;
     global $fulldomain;
     if (file_exists($fulldomain.'/scripts/'.$file.'.js')) {
-        $includeheader[]='<script type="text/javascript" src="'.DOMAIN.'/scripts/'.$file.'.js"></script>';
+        $includeheader['js'][]='<script type="text/javascript" src="'.DOMAIN.'/scripts/'.$file.'.js"></script>';
     }
     if (file_exists($fulldomain.'/scripts/'.$file.'.css')) {
-        $includeheader[]='<link rel="stylesheet" type="text/css" media="all" href="'.DOMAIN.'/scripts/'.$file.'.css"/>';
+        $includeheader['css'][]='<link rel="stylesheet" type="text/css" media="all" href="'.DOMAIN.'/scripts/'.$file.'.css"/>';
     }
     if (stristr($file, "http")&& stristr($file, "js")) {
-        $includeheader[]='<script type="text/javascript" src="'.$file.'"></script>';
+        $includeheader['js'][]='<script type="text/javascript" src="'.$file.'"></script>';
     }
     if (stristr($file, "http")&& stristr($file, "css")) {
-        $includeheader[]='<link rel="stylesheet" href="'.$file.'"/>';
+        $includeheader['css'][]='<link rel="stylesheet" href="'.$file.'"/>';
     }
     $includeheader = array_unique($includeheader);
 }
@@ -136,10 +136,10 @@ function load_modul($name) {
             while (($file = readdir($dh)) !== false) {
                 if (filetype($fulldomain.'/scripts/'.$name.'/'.$file)=='file') {
                     if (end(explode(".", $file))== "js") {      //For each file check if it is a js
-                        $includeheader[]='<script type="text/javascript" src="'.DOMAIN.'/scripts/'.$name.'/'.$file.'"></script>';
+                        $includeheader['js'][]='<script type="text/javascript" src="'.DOMAIN.'/scripts/'.$name.'/'.$file.'"></script>';
                     }                                           //or css file to add it.
                     if (end(explode(".", $file))== 'css') {
-                        $includeheader[]='<link rel="stylesheet" type="text/css" media="all" href="'.DOMAIN.'/scripts/'.$name.'/'.$file.'"/>';
+                        $includeheader['css'][]='<link rel="stylesheet" type="text/css" media="all" href="'.DOMAIN.'/scripts/'.$name.'/'.$file.'"/>';
                     }
                 }
                     
@@ -900,6 +900,7 @@ function simplefactura($pdf) {
     }
 }
 function enviaemail($pdf) {
+    global $fulldomain;
     require 'scripts/phpmailer/PHPMailerAutoload.php';
     $mysqli = new mysqli('83.56.10.172', 'servibyte', 'sbyte_15_Mxz', 'simpleinvoices', 8092); 
     $result = $mysqli->query("SELECT * FROM `si_customers` WHERE `id`=".$pdf[2]['si']);
@@ -918,8 +919,8 @@ function enviaemail($pdf) {
     $mail->AddAddress($aux['email'], utf8_decode($aux['name']));
     $mail->IsHTML();
     $mail->Subject = utf8_decode('Factura e Informe del mes '.spanish(date('F')));
-    $mail->addAttachment('/var/www/vhosts/servibyte.com/servibyte.net/'.$pdf[0]);
-    $mail->addAttachment('/var/www/vhosts/servibyte.com/servibyte.net/Factura '.$pdf[0]);
+    $mail->addAttachment($fulldomain.'/'.$pdf[0]);
+    $mail->addAttachment($fulldomain.'/Factura '.$pdf[0]);
     $mail->msgHTML(utf8_decode('Estimado cliente, le enviamos la factura y el informe de consumo de este mes.'));
     $mail->send();
 }

@@ -5,8 +5,11 @@
         <title>{$title}</title>
         <meta charset="UTF-8">
         <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    {foreach item=code from=$includeheadercss}
+	    {$code}
+    {/foreach}
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    {foreach item=code from=$includeheader}
+    {foreach item=code from=$includeheaderjs}
         {$code}
     {/foreach}
     </head>

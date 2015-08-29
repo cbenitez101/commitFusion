@@ -284,4 +284,5 @@ function login() {
 //}
 //pdf_block(5, 20);
 
-echo md5('sbyte_14_Mxz');
+
+echo getcwd();

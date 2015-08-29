@@ -1,0 +1,836 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="f93bd5a7-4b80-413b-9883-44d11bb021c5" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/includes/defines.php" afterPath="$PROJECT_DIR$/includes/defines.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/includes/functions.php" afterPath="$PROJECT_DIR$/includes/functions.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/header.tpl" afterPath="$PROJECT_DIR$/templates/header.tpl" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.php" afterPath="$PROJECT_DIR$/index.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test.php" afterPath="$PROJECT_DIR$/test.php" />
+    </list>
+    <ignored path="www-sb.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <ignored path=".idea/dataSources.local.xml" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FavoritesManager">
+    <favorites_list name="www-sb" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file leaf-file-name="settings.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/includes/settings.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-8.75">
+              <caret line="14" column="46" selection-start-line="14" selection-start-column="46" selection-end-line="14" selection-end-column="46" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/index.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-10.625">
+              <caret line="17" column="27" selection-start-line="17" selection-start-column="27" selection-end-line="17" selection-end-column="27" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="defines.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/includes/defines.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-6.25">
+              <caret line="12" column="25" selection-start-line="12" selection-start-column="25" selection-end-line="12" selection-end-column="25" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="functions.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/includes/functions.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.52369076">
+              <caret line="63" column="20" selection-start-line="63" selection-start-column="20" selection-end-line="63" selection-end-column="20" />
+              <folding>
+                <marker date="1440836478000" expanded="true" signature="1938:2129" placeholder="SELECT clien..." />
+                <marker date="1440836478000" expanded="true" signature="2132:2216" placeholder="SELECT clien..." />
+                <marker date="1440836478000" expanded="true" signature="7455:7501" placeholder="SELECT * FRO..users..." />
+                <marker date="1440836478000" expanded="true" signature="8478:8538" placeholder="UPDATE users..." />
+                <marker date="1440836478000" expanded="true" signature="9261:9468" placeholder="INSERT INTO ..." />
+                <marker date="1440836478000" expanded="true" signature="9471:9577" placeholder="DELETE FROM ..." />
+                <marker date="1440836478000" expanded="true" signature="10096:10250" placeholder="DELETE FROM ..." />
+                <marker date="1440836478000" expanded="true" signature="10375:10527" placeholder="SELECT clien..clientes..." />
+                <marker date="1440836478000" expanded="true" signature="11295:11423" placeholder="SELECT clien..locales..." />
+                <marker date="1440836478000" expanded="true" signature="11779:11819" placeholder="DELETE FROM ..." />
+                <marker date="1440836478000" expanded="true" signature="13489:13592" placeholder="UPDATE users..." />
+                <marker date="1440836478000" expanded="true" signature="13795:13814" placeholder="ALTER TABLE ..." />
+                <marker date="1440836478000" expanded="true" signature="14225:14275" placeholder="DELETE FROM ..." />
+                <marker date="1440836478000" expanded="true" signature="14317:14420" placeholder="DELETE FROM ..." />
+                <marker date="1440836478000" expanded="true" signature="14504:14556" placeholder="SELECT * FRO..hotspots..." />
+                <marker date="1440836478000" expanded="true" signature="15293:15325" placeholder="DELETE FROM ..." />
+                <marker date="1440836478000" expanded="true" signature="16203:16232" placeholder="DELETE FROM ..." />
+                <marker date="1440836478000" expanded="true" signature="17523:17592" placeholder="SELECT * FRO..radusergroup..." />
+                <marker date="1440836478000" expanded="true" signature="17799:17940" placeholder="INSERT INTO ..." />
+                <marker date="1440836478000" expanded="true" signature="17978:18130" placeholder="INSERT INTO ..." />
+                <marker date="1440836478000" expanded="true" signature="18172:18336" placeholder="INSERT INTO ..." />
+                <marker date="1440836478000" expanded="true" signature="18627:18777" placeholder="INSERT INTO ..." />
+                <marker date="1440836478000" expanded="true" signature="18938:19090" placeholder="INSERT INTO ..." />
+                <marker date="1440836478000" expanded="true" signature="19241:19449" placeholder="INSERT INTO ..." />
+                <marker date="1440836478000" expanded="true" signature="19635:19773" placeholder="INSERT INTO ..." />
+                <marker date="1440836478000" expanded="true" signature="19923:20096" placeholder="INSERT INTO ..." />
+                <marker date="1440836478000" expanded="true" signature="20509:20731" placeholder="INSERT INTO ..." />
+                <marker date="1440836478000" expanded="true" signature="21164:21447" placeholder="..." />
+                <marker date="1440836478000" expanded="true" signature="21172:21270" placeholder="..." />
+                <marker date="1440836478000" expanded="true" signature="21198:21261" placeholder="..." />
+                <marker date="1440836478000" expanded="true" signature="21208:21251" placeholder="{...}" />
+                <marker date="1440836478000" expanded="true" signature="21278:21439" placeholder="..." />
+                <marker date="1440836478000" expanded="true" signature="21286:21347" placeholder="..." />
+                <marker date="1440836478000" expanded="true" signature="21355:21430" placeholder="..." />
+                <marker date="1440836478000" expanded="true" signature="21729:21850" placeholder="INSERT INTO ..." />
+                <marker date="1440836478000" expanded="true" signature="22239:22323" placeholder="DELETE FROM ..." />
+                <marker date="1440836478000" expanded="true" signature="22668:22731" placeholder="DELETE FROM ..." />
+                <marker date="1440836478000" expanded="true" signature="22768:22830" placeholder="DELETE FROM ..." />
+                <marker date="1440836478000" expanded="true" signature="22871:22934" placeholder="DELETE FROM ..." />
+                <marker date="1440836478000" expanded="true" signature="22979:23046" placeholder="DELETE FROM ..." />
+                <marker date="1440836478000" expanded="true" signature="23097:23165" placeholder="DELETE FROM ..." />
+                <marker date="1440836478000" expanded="true" signature="23221:23286" placeholder="DELETE FROM ..." />
+                <marker date="1440836478000" expanded="true" signature="23697:23729" placeholder="DELETE FROM ..." />
+                <marker date="1440836478000" expanded="true" signature="24190:24277" placeholder="SELECT * FRO..." />
+                <marker date="1440836478000" expanded="true" signature="24530:24564" placeholder="SELECT Preci..lotes..." />
+                <marker date="1440836478000" expanded="true" signature="24913:24949" placeholder="SELECT * FRO..." />
+                <marker date="1440836478000" expanded="true" signature="25701:25753" placeholder="SELECT `user..." />
+                <marker date="1440836478000" expanded="true" signature="26363:26474" placeholder="SELECT `Id_h..." />
+                <marker date="1440836478000" expanded="true" signature="26891:26993" placeholder="SELECT `Id`,..." />
+                <marker date="1440836478000" expanded="true" signature="27377:27413" placeholder="SELECT * FRO..." />
+                <marker date="1440836478000" expanded="true" signature="27512:27552" placeholder="SELECT * FRO..." />
+                <marker date="1440836478000" expanded="true" signature="27646:27693" placeholder="SELECT * FRO..." />
+                <marker date="1440836478000" expanded="true" signature="27907:28054" placeholder="INSERT INTO ..." />
+                <marker date="1440836478000" expanded="true" signature="28096:28253" placeholder="INSERT INTO ..." />
+                <marker date="1440836478000" expanded="true" signature="28299:28469" placeholder="INSERT INTO ..." />
+                <marker date="1440836478000" expanded="true" signature="28519:28696" placeholder="INSERT INTO ..." />
+                <marker date="1440836478000" expanded="true" signature="29028:29183" placeholder="INSERT INTO ..." />
+                <marker date="1440836478000" expanded="true" signature="29368:29525" placeholder="INSERT INTO ..." />
+                <marker date="1440836478000" expanded="true" signature="29700:29914" placeholder="INSERT INTO ..." />
+                <marker date="1440836478000" expanded="true" signature="30124:30267" placeholder="INSERT INTO ..." />
+                <marker date="1440836478000" expanded="true" signature="30441:30619" placeholder="INSERT INTO ..." />
+                <marker date="1440836478000" expanded="true" signature="31163:31378" placeholder="INSERT INTO ..." />
+                <marker date="1440836478000" expanded="true" signature="31477:31522" placeholder="DELETE FROM ..." />
+                <marker date="1440836478000" expanded="true" signature="31565:31596" placeholder="DELETE FROM ..." />
+                <marker date="1440836478000" expanded="true" signature="36653:36716" placeholder="SELECT vendo..macinfo..." />
+                <marker date="1440836478000" expanded="true" signature="41947:41986" placeholder="SELECT * FRO..." />
+                <marker date="1440836478000" expanded="true" signature="42417:42526" placeholder="SELECT perfi..lotes..." />
+                <marker date="1440836478000" expanded="true" signature="43292:43401" placeholder="SELECT perfi..lotes..." />
+                <marker date="1440836478000" expanded="true" signature="44211:44312" placeholder="INSERT INTO ..." />
+                <marker date="1440836478000" expanded="true" signature="44314:44400" placeholder="SELECT MAX(`..." />
+                <marker date="1440836478000" expanded="true" signature="44434:44571" placeholder="INSERT INTO ..." />
+                <marker date="1440836478000" expanded="true" signature="44572:44843" placeholder="SELECT MAX(`..." />
+                <marker date="1440836478000" expanded="true" signature="44881:44981" placeholder="INSERT INTO ..." />
+                <marker date="1440836478000" expanded="true" signature="44982:45086" placeholder="SELECT MAX(`..." />
+                <marker date="1440836478000" expanded="true" signature="45262:45310" placeholder="SELECT MAX(`..." />
+                <marker date="1440836478000" expanded="true" signature="45968:46008" placeholder="SELECT * FRO..." />
+                <marker date="1440836478000" expanded="true" signature="46949:46994" placeholder="INSERT INTO ..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="header.tpl" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/header.tpl">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-4.375">
+              <caret line="7" column="45" selection-start-line="7" selection-start-column="45" selection-end-line="7" selection-end-column="45" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GradleLocalSettings">
+    <option name="externalProjectsViewState">
+      <projects_view />
+    </option>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/test.php" />
+        <option value="$PROJECT_DIR$/includes/defines.php" />
+        <option value="$PROJECT_DIR$/includes/functions.php" />
+        <option value="$PROJECT_DIR$/templates/header.tpl" />
+        <option value="$PROJECT_DIR$/index.php" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+  </component>
+  <component name="NamedScopeManager">
+    <order />
+  </component>
+  <component name="PhpServers">
+    <servers />
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="-1080" />
+    <option name="y" value="-418" />
+    <option name="width" value="1080" />
+    <option name="height" value="1920" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
+    <OptionsSetting value="true" id="Add" />
+    <OptionsSetting value="true" id="Remove" />
+    <OptionsSetting value="true" id="Checkout" />
+    <OptionsSetting value="true" id="Update" />
+    <OptionsSetting value="true" id="Status" />
+    <OptionsSetting value="true" id="Edit" />
+    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="0" id="Remove" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
+      <pane id="Scratches" />
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="www-sb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="www-sb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="www-sb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="www-sb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="www-sb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="www-sb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="www-sb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="includes" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="www-sb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="www-sb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="controller" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="settings.editor.selected.configurable" value="preferences.editor" />
+    <property name="settings.editor.splitter.proportion" value="0.2" />
+    <property name="FullScreen" value="true" />
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
+      <module name="" />
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
+      <option name="PROGRAM_PARAMETERS" />
+      <method />
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <module />
+      <method />
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="true" type="Remote" factoryName="Remote">
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" value="javadebug" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="5005" />
+      <method />
+    </configuration>
+    <configuration default="true" type="TestNG" factoryName="TestNG">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="ANNOTATION_TYPE" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" />
+      <envs />
+      <properties />
+      <listeners />
+      <method />
+    </configuration>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f93bd5a7-4b80-413b-9883-44d11bb021c5" name="Default" comment="" />
+      <created>1440830704680</created>
+      <option name="number" value="Default" />
+      <updated>1440830704680</updated>
+      <workItem from="1440830706614" duration="207000" />
+      <workItem from="1440830924616" duration="771000" />
+      <workItem from="1440832599064" duration="1035000" />
+      <workItem from="1440833735904" duration="1456000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="3469000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-1080" y="-418" width="1080" height="1920" extended-state="0" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3294956" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32995194" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23148148" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+    </layout>
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+      <collection />
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Se arreglo que el fullpath sea generico,&#10;que el envio de la factura de pdf el path use la variable&#10;y intento de arreglo de cargar 1º los css y luego los js" />
+    <option name="LAST_COMMIT_MESSAGE" value="Se arreglo que el fullpath sea generico,&#10;que el envio de la factura de pdf el path use la variable&#10;y intento de arreglo de cargar 1º los css y luego los js" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager />
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/includes/settings.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="70" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/defines.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="10" column="20" selection-start-line="10" selection-start-column="20" selection-end-line="10" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/functions.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="30" column="9" selection-start-line="30" selection-start-column="9" selection-end-line="30" selection-end-column="9" />
+          <folding>
+            <marker date="1440836478000" expanded="true" signature="1938:2129" placeholder="SELECT clien..." />
+            <marker date="1440836478000" expanded="true" signature="2132:2216" placeholder="SELECT clien..." />
+            <marker date="1440836478000" expanded="true" signature="7455:7501" placeholder="SELECT * FRO..users..." />
+            <marker date="1440836478000" expanded="true" signature="8478:8538" placeholder="UPDATE users..." />
+            <marker date="1440836478000" expanded="true" signature="9261:9468" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="9471:9577" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="10096:10250" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="10375:10527" placeholder="SELECT clien..clientes..." />
+            <marker date="1440836478000" expanded="true" signature="11295:11423" placeholder="SELECT clien..locales..." />
+            <marker date="1440836478000" expanded="true" signature="11779:11819" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="13489:13592" placeholder="UPDATE users..." />
+            <marker date="1440836478000" expanded="true" signature="13795:13814" placeholder="ALTER TABLE ..." />
+            <marker date="1440836478000" expanded="true" signature="14225:14275" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="14317:14420" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="14504:14556" placeholder="SELECT * FRO..hotspots..." />
+            <marker date="1440836478000" expanded="true" signature="15293:15325" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="16203:16232" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="17523:17592" placeholder="SELECT * FRO..radusergroup..." />
+            <marker date="1440836478000" expanded="true" signature="17799:17940" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="17978:18130" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="18172:18336" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="18627:18777" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="18938:19090" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="19241:19449" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="19635:19773" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="19923:20096" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="20509:20731" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="21164:21447" placeholder="..." />
+            <marker date="1440836478000" expanded="true" signature="21172:21270" placeholder="..." />
+            <marker date="1440836478000" expanded="true" signature="21198:21261" placeholder="..." />
+            <marker date="1440836478000" expanded="true" signature="21208:21251" placeholder="{...}" />
+            <marker date="1440836478000" expanded="true" signature="21278:21439" placeholder="..." />
+            <marker date="1440836478000" expanded="true" signature="21286:21347" placeholder="..." />
+            <marker date="1440836478000" expanded="true" signature="21355:21430" placeholder="..." />
+            <marker date="1440836478000" expanded="true" signature="21729:21850" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="22239:22323" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="22668:22731" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="22768:22830" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="22871:22934" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="22979:23046" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="23097:23165" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="23221:23286" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="23697:23729" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="24190:24277" placeholder="SELECT * FRO..." />
+            <marker date="1440836478000" expanded="true" signature="24530:24564" placeholder="SELECT Preci..lotes..." />
+            <marker date="1440836478000" expanded="true" signature="24913:24949" placeholder="SELECT * FRO..." />
+            <marker date="1440836478000" expanded="true" signature="25701:25753" placeholder="SELECT `user..." />
+            <marker date="1440836478000" expanded="true" signature="26363:26474" placeholder="SELECT `Id_h..." />
+            <marker date="1440836478000" expanded="true" signature="26891:26993" placeholder="SELECT `Id`,..." />
+            <marker date="1440836478000" expanded="true" signature="27377:27413" placeholder="SELECT * FRO..." />
+            <marker date="1440836478000" expanded="true" signature="27512:27552" placeholder="SELECT * FRO..." />
+            <marker date="1440836478000" expanded="true" signature="27646:27693" placeholder="SELECT * FRO..." />
+            <marker date="1440836478000" expanded="true" signature="27907:28054" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="28096:28253" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="28299:28469" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="28519:28696" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="29028:29183" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="29368:29525" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="29700:29914" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="30124:30267" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="30441:30619" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="31163:31378" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="31477:31522" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="31565:31596" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="36653:36716" placeholder="SELECT vendo..macinfo..." />
+            <marker date="1440836478000" expanded="true" signature="41947:41986" placeholder="SELECT * FRO..." />
+            <marker date="1440836478000" expanded="true" signature="42417:42526" placeholder="SELECT perfi..lotes..." />
+            <marker date="1440836478000" expanded="true" signature="43292:43401" placeholder="SELECT perfi..lotes..." />
+            <marker date="1440836478000" expanded="true" signature="44211:44312" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="44314:44400" placeholder="SELECT MAX(`..." />
+            <marker date="1440836478000" expanded="true" signature="44434:44571" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="44572:44843" placeholder="SELECT MAX(`..." />
+            <marker date="1440836478000" expanded="true" signature="44881:44981" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="44982:45086" placeholder="SELECT MAX(`..." />
+            <marker date="1440836478000" expanded="true" signature="45262:45310" placeholder="SELECT MAX(`..." />
+            <marker date="1440836478000" expanded="true" signature="45968:46008" placeholder="SELECT * FRO..." />
+            <marker date="1440836478000" expanded="true" signature="46949:46994" placeholder="INSERT INTO ..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="287" column="13" selection-start-line="287" selection-start-column="13" selection-end-line="287" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controller/login.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1440829858000" expanded="true" signature="-1:-1" placeholder="SELECT users..." />
+            <marker date="1440829858000" expanded="true" signature="-1:-1" placeholder="SELECT users..." />
+            <marker date="1440829858000" expanded="true" signature="-1:-1" placeholder="UPDATE users..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/settings.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/defines.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="43" column="20" selection-start-line="43" selection-start-column="20" selection-end-line="43" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/functions.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="70" column="9" selection-start-line="70" selection-start-column="9" selection-end-line="70" selection-end-column="9" />
+          <folding>
+            <marker date="1440836478000" expanded="true" signature="1938:2129" placeholder="SELECT clien..." />
+            <marker date="1440836478000" expanded="true" signature="2132:2216" placeholder="SELECT clien..." />
+            <marker date="1440836478000" expanded="true" signature="7455:7501" placeholder="SELECT * FRO..users..." />
+            <marker date="1440836478000" expanded="true" signature="8478:8538" placeholder="UPDATE users..." />
+            <marker date="1440836478000" expanded="true" signature="9261:9468" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="9471:9577" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="10096:10250" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="10375:10527" placeholder="SELECT clien..clientes..." />
+            <marker date="1440836478000" expanded="true" signature="11295:11423" placeholder="SELECT clien..locales..." />
+            <marker date="1440836478000" expanded="true" signature="11779:11819" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="13489:13592" placeholder="UPDATE users..." />
+            <marker date="1440836478000" expanded="true" signature="13795:13814" placeholder="ALTER TABLE ..." />
+            <marker date="1440836478000" expanded="true" signature="14225:14275" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="14317:14420" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="14504:14556" placeholder="SELECT * FRO..hotspots..." />
+            <marker date="1440836478000" expanded="true" signature="15293:15325" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="16203:16232" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="17523:17592" placeholder="SELECT * FRO..radusergroup..." />
+            <marker date="1440836478000" expanded="true" signature="17799:17940" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="17978:18130" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="18172:18336" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="18627:18777" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="18938:19090" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="19241:19449" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="19635:19773" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="19923:20096" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="20509:20731" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="21164:21447" placeholder="..." />
+            <marker date="1440836478000" expanded="true" signature="21172:21270" placeholder="..." />
+            <marker date="1440836478000" expanded="true" signature="21198:21261" placeholder="..." />
+            <marker date="1440836478000" expanded="true" signature="21208:21251" placeholder="{...}" />
+            <marker date="1440836478000" expanded="true" signature="21278:21439" placeholder="..." />
+            <marker date="1440836478000" expanded="true" signature="21286:21347" placeholder="..." />
+            <marker date="1440836478000" expanded="true" signature="21355:21430" placeholder="..." />
+            <marker date="1440836478000" expanded="true" signature="21729:21850" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="22239:22323" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="22668:22731" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="22768:22830" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="22871:22934" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="22979:23046" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="23097:23165" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="23221:23286" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="23697:23729" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="24190:24277" placeholder="SELECT * FRO..." />
+            <marker date="1440836478000" expanded="true" signature="24530:24564" placeholder="SELECT Preci..lotes..." />
+            <marker date="1440836478000" expanded="true" signature="24913:24949" placeholder="SELECT * FRO..." />
+            <marker date="1440836478000" expanded="true" signature="25701:25753" placeholder="SELECT `user..." />
+            <marker date="1440836478000" expanded="true" signature="26363:26474" placeholder="SELECT `Id_h..." />
+            <marker date="1440836478000" expanded="true" signature="26891:26993" placeholder="SELECT `Id`,..." />
+            <marker date="1440836478000" expanded="true" signature="27377:27413" placeholder="SELECT * FRO..." />
+            <marker date="1440836478000" expanded="true" signature="27512:27552" placeholder="SELECT * FRO..." />
+            <marker date="1440836478000" expanded="true" signature="27646:27693" placeholder="SELECT * FRO..." />
+            <marker date="1440836478000" expanded="true" signature="27907:28054" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="28096:28253" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="28299:28469" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="28519:28696" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="29028:29183" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="29368:29525" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="29700:29914" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="30124:30267" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="30441:30619" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="31163:31378" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="31477:31522" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="31565:31596" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="36653:36716" placeholder="SELECT vendo..macinfo..." />
+            <marker date="1440836478000" expanded="true" signature="41947:41986" placeholder="SELECT * FRO..." />
+            <marker date="1440836478000" expanded="true" signature="42417:42526" placeholder="SELECT perfi..lotes..." />
+            <marker date="1440836478000" expanded="true" signature="43292:43401" placeholder="SELECT perfi..lotes..." />
+            <marker date="1440836478000" expanded="true" signature="44211:44312" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="44314:44400" placeholder="SELECT MAX(`..." />
+            <marker date="1440836478000" expanded="true" signature="44434:44571" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="44572:44843" placeholder="SELECT MAX(`..." />
+            <marker date="1440836478000" expanded="true" signature="44881:44981" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="44982:45086" placeholder="SELECT MAX(`..." />
+            <marker date="1440836478000" expanded="true" signature="45262:45310" placeholder="SELECT MAX(`..." />
+            <marker date="1440836478000" expanded="true" signature="45968:46008" placeholder="SELECT * FRO..." />
+            <marker date="1440836478000" expanded="true" signature="46949:46994" placeholder="INSERT INTO ..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controller/login.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1440829858000" expanded="true" signature="-1:-1" placeholder="SELECT users..." />
+            <marker date="1440829858000" expanded="true" signature="-1:-1" placeholder="SELECT users..." />
+            <marker date="1440829858000" expanded="true" signature="-1:-1" placeholder="UPDATE users..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/settings.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/settings.php">
+      <provider editor-type-id="com.intellij.database.editor.CsvTableFileEditorProvider">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-8.75">
+          <caret line="14" column="46" selection-start-line="14" selection-start-column="46" selection-end-line="14" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-10.625">
+          <caret line="17" column="27" selection-start-line="17" selection-start-column="27" selection-end-line="17" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/defines.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.25">
+          <caret line="12" column="25" selection-start-line="12" selection-start-column="25" selection-end-line="12" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controller/login.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1440829858000" expanded="true" signature="-1:-1" placeholder="SELECT users..." />
+            <marker date="1440829858000" expanded="true" signature="-1:-1" placeholder="SELECT users..." />
+            <marker date="1440829858000" expanded="true" signature="-1:-1" placeholder="UPDATE users..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.9505766">
+          <caret line="287" column="13" selection-start-line="287" selection-start-column="13" selection-end-line="287" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/header.tpl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-4.375">
+          <caret line="7" column="45" selection-start-line="7" selection-start-column="45" selection-end-line="7" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/functions.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.52369076">
+          <caret line="63" column="20" selection-start-line="63" selection-start-column="20" selection-end-line="63" selection-end-column="20" />
+          <folding>
+            <marker date="1440836478000" expanded="true" signature="1938:2129" placeholder="SELECT clien..." />
+            <marker date="1440836478000" expanded="true" signature="2132:2216" placeholder="SELECT clien..." />
+            <marker date="1440836478000" expanded="true" signature="7455:7501" placeholder="SELECT * FRO..users..." />
+            <marker date="1440836478000" expanded="true" signature="8478:8538" placeholder="UPDATE users..." />
+            <marker date="1440836478000" expanded="true" signature="9261:9468" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="9471:9577" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="10096:10250" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="10375:10527" placeholder="SELECT clien..clientes..." />
+            <marker date="1440836478000" expanded="true" signature="11295:11423" placeholder="SELECT clien..locales..." />
+            <marker date="1440836478000" expanded="true" signature="11779:11819" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="13489:13592" placeholder="UPDATE users..." />
+            <marker date="1440836478000" expanded="true" signature="13795:13814" placeholder="ALTER TABLE ..." />
+            <marker date="1440836478000" expanded="true" signature="14225:14275" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="14317:14420" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="14504:14556" placeholder="SELECT * FRO..hotspots..." />
+            <marker date="1440836478000" expanded="true" signature="15293:15325" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="16203:16232" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="17523:17592" placeholder="SELECT * FRO..radusergroup..." />
+            <marker date="1440836478000" expanded="true" signature="17799:17940" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="17978:18130" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="18172:18336" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="18627:18777" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="18938:19090" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="19241:19449" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="19635:19773" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="19923:20096" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="20509:20731" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="21164:21447" placeholder="..." />
+            <marker date="1440836478000" expanded="true" signature="21172:21270" placeholder="..." />
+            <marker date="1440836478000" expanded="true" signature="21198:21261" placeholder="..." />
+            <marker date="1440836478000" expanded="true" signature="21208:21251" placeholder="{...}" />
+            <marker date="1440836478000" expanded="true" signature="21278:21439" placeholder="..." />
+            <marker date="1440836478000" expanded="true" signature="21286:21347" placeholder="..." />
+            <marker date="1440836478000" expanded="true" signature="21355:21430" placeholder="..." />
+            <marker date="1440836478000" expanded="true" signature="21729:21850" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="22239:22323" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="22668:22731" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="22768:22830" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="22871:22934" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="22979:23046" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="23097:23165" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="23221:23286" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="23697:23729" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="24190:24277" placeholder="SELECT * FRO..." />
+            <marker date="1440836478000" expanded="true" signature="24530:24564" placeholder="SELECT Preci..lotes..." />
+            <marker date="1440836478000" expanded="true" signature="24913:24949" placeholder="SELECT * FRO..." />
+            <marker date="1440836478000" expanded="true" signature="25701:25753" placeholder="SELECT `user..." />
+            <marker date="1440836478000" expanded="true" signature="26363:26474" placeholder="SELECT `Id_h..." />
+            <marker date="1440836478000" expanded="true" signature="26891:26993" placeholder="SELECT `Id`,..." />
+            <marker date="1440836478000" expanded="true" signature="27377:27413" placeholder="SELECT * FRO..." />
+            <marker date="1440836478000" expanded="true" signature="27512:27552" placeholder="SELECT * FRO..." />
+            <marker date="1440836478000" expanded="true" signature="27646:27693" placeholder="SELECT * FRO..." />
+            <marker date="1440836478000" expanded="true" signature="27907:28054" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="28096:28253" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="28299:28469" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="28519:28696" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="29028:29183" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="29368:29525" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="29700:29914" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="30124:30267" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="30441:30619" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="31163:31378" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="31477:31522" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="31565:31596" placeholder="DELETE FROM ..." />
+            <marker date="1440836478000" expanded="true" signature="36653:36716" placeholder="SELECT vendo..macinfo..." />
+            <marker date="1440836478000" expanded="true" signature="41947:41986" placeholder="SELECT * FRO..." />
+            <marker date="1440836478000" expanded="true" signature="42417:42526" placeholder="SELECT perfi..lotes..." />
+            <marker date="1440836478000" expanded="true" signature="43292:43401" placeholder="SELECT perfi..lotes..." />
+            <marker date="1440836478000" expanded="true" signature="44211:44312" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="44314:44400" placeholder="SELECT MAX(`..." />
+            <marker date="1440836478000" expanded="true" signature="44434:44571" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="44572:44843" placeholder="SELECT MAX(`..." />
+            <marker date="1440836478000" expanded="true" signature="44881:44981" placeholder="INSERT INTO ..." />
+            <marker date="1440836478000" expanded="true" signature="44982:45086" placeholder="SELECT MAX(`..." />
+            <marker date="1440836478000" expanded="true" signature="45262:45310" placeholder="SELECT MAX(`..." />
+            <marker date="1440836478000" expanded="true" signature="45968:46008" placeholder="SELECT * FRO..." />
+            <marker date="1440836478000" expanded="true" signature="46949:46994" placeholder="INSERT INTO ..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
