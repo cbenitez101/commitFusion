@@ -3,12 +3,11 @@
  * Defines the GLOBAL parameters
  */
 global $includeheader;
-$includeheader=array('js' => array(), 'css' => array());
+$includeheader=array();
 global $includebody;
 $includebody=array();
 global $fulldomain;
-//$fulldomain='/var/www/vhosts/servibyte.com/servibyte.net';
-$fulldomain=getcwd();
+$fulldomain='/var/www/vhosts/servibyte.com/servibyte.net';
 global $mediapath;
 $mediapath = $fulldomain;
 

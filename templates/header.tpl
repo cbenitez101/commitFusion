@@ -5,14 +5,8 @@
         <title>{$title}</title>
         <meta charset="UTF-8">
         <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-        {*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">*}
-	    {*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">*}
-    {foreach item=code from=$includeheadercss}
-	    {$code}
-    {/foreach}
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-	    {*<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>*}
-    {foreach item=code from=$includeheaderjs}
+    {foreach item=code from=$includeheader}
         {$code}
     {/foreach}
     </head>
