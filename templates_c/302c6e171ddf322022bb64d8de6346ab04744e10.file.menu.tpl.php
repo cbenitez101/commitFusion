@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.18, created on 2015-08-31 05:56:46
+<?php /* Smarty version Smarty-3.1.18, created on 2015-08-31 07:08:54
          compiled from "/volume1/web/www-sb/templates/menu.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:154520906755e3d881e2cfa9-83312546%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '302c6e171ddf322022bb64d8de6346ab04744e10' => 
     array (
       0 => '/volume1/web/www-sb/templates/menu.tpl',
-      1 => 1440996329,
+      1 => 1441001316,
       2 => 'file',
     ),
   ),
@@ -19,55 +19,126 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   'unifunc' => 'content_55e3d88214e1b0_15955925',
   'variables' => 
   array (
-    'item' => 0,
     'key' => 0,
+    'item' => 0,
     'submenu' => 0,
   ),
   'has_nocache_code' => false,
 ),false); /*/%%SmartyHeaderCode%%*/?>
 <?php if ($_valid && !is_callable('content_55e3d88214e1b0_15955925')) {function content_55e3d88214e1b0_15955925($_smarty_tpl) {?><?php if (!is_callable('smarty_modifier_capitalize')) include '/volume1/web/www-sb/includes/../libs/plugins/modifier.capitalize.php';
-?><div class="container align_center">
-	<img src="<?php echo @constant('DOMAIN');?>
+?><div id="wrapper">
+	<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<img class="navbar-brand"src="<?php echo @constant('DOMAIN');?>
 /images/logos/<?php echo $_SESSION['cliente'];?>
 <?php if (isset($_SESSION['local'])) {?>.<?php echo $_SESSION['local'];?>
-<?php }?>.png" <?php if ((@constant('TEMPLATE_NAME')!='login')&&(@constant('TEMPLATE_NAME')!='contrasena')) {?> width="150px"<?php }?>>
-</div>
-<br>
-<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
-<script>$(document).ready(function(){
-    $(".menu  .m1 span:not('.noop')").on("click", function() {window.location='<?php echo @constant('DOMAIN');?>
-/' +this.textContent.toLocaleLowerCase().trim();});
-    $(".menu  .m2 span").on("click", function() {window.location='<?php echo @constant('DOMAIN');?>
-/'+$(this).parent().parent().prev().text().toLocaleLowerCase().trim()+'/' +this.textContent.toLocaleLowerCase().trim();});
-    $(".menu .m1 span").hover(function() {$(this).next('li .m2').css('display', 'inline');});
-    $('.menu').menu({position: {my:'center bottom', at:'center bottom'}});
-});</script>
-<ul class="menu align_center">
-    <li class="m1"><span>Inicio</span></li>
-    <?php  $_smarty_tpl->tpl_vars['item'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['item']->_loop = false;
+<?php }?>.png" />
+		</div>
+
+		<ul class="nav navbar-top-links navbar-right">
+			<li class="dropdown">
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+					<i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+				</a>
+				<ul class="dropdown-menu dropdown-user">
+					
+					
+					
+					
+					
+					<li><a href="/salir"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+					</li>
+				</ul>
+				<!-- /.dropdown-user -->
+			</li>
+		</ul>
+		<div class="navbar-default sidebar" role="navigation">
+			<div class="sidebar-nav navbar-collapse">
+				<ul class="nav" id="side-menu">
+					<li>
+						<a href="/inicio"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+					</li>
+					<?php  $_smarty_tpl->tpl_vars['item'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['item']->_loop = false;
  $_smarty_tpl->tpl_vars['key'] = new Smarty_Variable;
  $_from = $_SESSION['menu']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
 foreach ($_from as $_smarty_tpl->tpl_vars['item']->key => $_smarty_tpl->tpl_vars['item']->value) {
 $_smarty_tpl->tpl_vars['item']->_loop = true;
  $_smarty_tpl->tpl_vars['key']->value = $_smarty_tpl->tpl_vars['item']->key;
 ?>
-    <li class="m1"><span<?php if (count($_smarty_tpl->tpl_vars['item']->value)>0) {?> class="noop" onclick="$('.menu').menu('expand');"<?php }?>><?php echo smarty_modifier_capitalize($_smarty_tpl->tpl_vars['key']->value);?>
-</span>
-            <?php if (count($_smarty_tpl->tpl_vars['item']->value)>0) {?>
-                <ul>
-            <?php }?>
-            <?php  $_smarty_tpl->tpl_vars['submenu'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['submenu']->_loop = false;
+						<li>
+							<a href="#">
+								<i class="fa
+								 <?php if ($_smarty_tpl->tpl_vars['key']->value=='configuracion') {?>
+									fa-gear
+								<?php } elseif ($_smarty_tpl->tpl_vars['key']->value=='tickets') {?>
+									fa-ticket
+								<?php } elseif ($_smarty_tpl->tpl_vars['key']->value=='contabilidad') {?>
+									fa-bar-chart-o
+								<?php }?>
+								 fa-fw"></i>
+								<?php echo smarty_modifier_capitalize($_smarty_tpl->tpl_vars['key']->value);?>
+<?php if (count($_smarty_tpl->tpl_vars['item']->value)>0) {?><span class="fa arrow"></span><?php }?></a>
+							<?php if (count($_smarty_tpl->tpl_vars['item']->value)>0) {?>
+							<ul class="nav nav-second-level">
+							<?php }?>
+							<?php  $_smarty_tpl->tpl_vars['submenu'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['submenu']->_loop = false;
  $_from = $_smarty_tpl->tpl_vars['item']->value; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
 foreach ($_from as $_smarty_tpl->tpl_vars['submenu']->key => $_smarty_tpl->tpl_vars['submenu']->value) {
 $_smarty_tpl->tpl_vars['submenu']->_loop = true;
 ?>
-                <li class="m2"><span><?php echo smarty_modifier_capitalize($_smarty_tpl->tpl_vars['submenu']->value);?>
-</span></li>
-            <?php } ?>
-            <?php if (count($_smarty_tpl->tpl_vars['item']->value)>0) {?>
-                </ul>
-            <?php }?>
-        </li>
-    <?php } ?>
-    <li class="m1"><span>Salir</span></li>
-</ul><?php }} ?>
+								<li>
+									<a href="/<?php echo $_smarty_tpl->tpl_vars['key']->value;?>
+/<?php echo $_smarty_tpl->tpl_vars['submenu']->value;?>
+"><?php echo smarty_modifier_capitalize($_smarty_tpl->tpl_vars['submenu']->value);?>
+</a>
+								</li>
+							<?php } ?>
+							<?php if (count($_smarty_tpl->tpl_vars['item']->value)>0) {?>
+							</ul>
+							<?php }?>
+						</li>
+					<?php } ?>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<div id="page-wrapper">
+
+
+
+
+
+
+	
+
+
+
+
+    
+    
+    
+    
+
+
+    
+    
+    
+            
+                
+            
+            
+                
+            
+            
+                
+            
+        
+    
+    
+<?php }} ?>

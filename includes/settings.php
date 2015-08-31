@@ -9,7 +9,7 @@ $database= new mysqli(__DBHOST__, __DBUSER__, __DBPASS__, __DBNAME__);
 $radius= new mysqli(__RAHOST__, __RAUSER__, __RAPASS__, __RANAME__);
 $database->query("SET NAMES 'utf8'");
 include_header_file('default');
-$smarty = new Smarty();                                                     // Initialize new Smarty-Instance
+$smarty = new Smarty();                                      // Initialize new Smarty-Instance
 $smarty->setTemplateDir(__DIR__.'/../templates/');
 $smarty->setCompileDir(__DIR__.'/../templates_c/');
 $smarty->setConfigDir(__DIR__.'/../configs/');

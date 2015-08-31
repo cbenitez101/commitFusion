@@ -1,10 +1,9 @@
 {* Displays the login formular *}
+{strip}
 <div class="container">
 	<div class="row">
 		<div class="col-md-4 col-md-offset-4">
-			<div class="align_center">
-				<img src="{$smarty.const.DOMAIN}/images/logos/{$smarty.session.cliente}{if isset($smarty.session.local)}.{$smarty.session.local}{/if}.png" {if ($smarty.const.TEMPLATE_NAME != 'login') && ($smarty.const.TEMPLATE_NAME != 'contrasena')} width="150px"{/if}>
-			</div>
+			<img src="{$smarty.const.DOMAIN}/images/logos/{$smarty.session.cliente}{if isset($smarty.session.local)}.{$smarty.session.local}{/if}.png" width="100%  ">
 		</div>
 	</div>
     <div class="row">
@@ -28,8 +27,8 @@
 				    </form>
 			    </div>
 		    </div>
+		    {$err_msg}
 	    </div>
     </div>
-
-    {$err_msg}
 </div>
+{/strip}

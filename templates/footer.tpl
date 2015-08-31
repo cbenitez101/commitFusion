@@ -1,4 +1,6 @@
 {* The end of each page *}{strip}
+	</div>
+</div>
 {if count($includebody)>0}
     <script type="text/javascript">
 /* <![CDATA[ */

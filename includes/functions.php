@@ -26,7 +26,7 @@ function getTemplateData($getparams) {
                 }
             }
         } else {
-            header('Location: '.DOMAIN.'/main');
+            header('Location: '.DOMAIN.'/inicio');
             die();
         }
     }
