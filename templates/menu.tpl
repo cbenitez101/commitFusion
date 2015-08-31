@@ -1,3 +1,7 @@
+<div class="container align_center">
+	<img src="{$smarty.const.DOMAIN}/images/logos/{$smarty.session.cliente}{if isset($smarty.session.local)}.{$smarty.session.local}{/if}.png" {if ($smarty.const.TEMPLATE_NAME != 'login') && ($smarty.const.TEMPLATE_NAME != 'contrasena')} width="150px"{/if}>
+</div>
+<br>
 <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 <script>$(document).ready(function(){
     $(".menu  .m1 span:not('.noop')").on("click", function() {literal}{window.location='{/literal}{$smarty.const.DOMAIN}{literal}/' +this.textContent.toLocaleLowerCase().trim();});{/literal}

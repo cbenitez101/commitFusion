@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.18, created on 2015-08-31 05:30:57
+<?php /* Smarty version Smarty-3.1.18, created on 2015-08-31 05:56:46
          compiled from "/volume1/web/www-sb/templates/menu.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:154520906755e3d881e2cfa9-83312546%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '302c6e171ddf322022bb64d8de6346ab04744e10' => 
     array (
       0 => '/volume1/web/www-sb/templates/menu.tpl',
-      1 => 1440829858,
+      1 => 1440996329,
       2 => 'file',
     ),
   ),
@@ -15,6 +15,8 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   'function' => 
   array (
   ),
+  'version' => 'Smarty-3.1.18',
+  'unifunc' => 'content_55e3d88214e1b0_15955925',
   'variables' => 
   array (
     'item' => 0,
@@ -22,11 +24,16 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'submenu' => 0,
   ),
   'has_nocache_code' => false,
-  'version' => 'Smarty-3.1.18',
-  'unifunc' => 'content_55e3d88214e1b0_15955925',
 ),false); /*/%%SmartyHeaderCode%%*/?>
 <?php if ($_valid && !is_callable('content_55e3d88214e1b0_15955925')) {function content_55e3d88214e1b0_15955925($_smarty_tpl) {?><?php if (!is_callable('smarty_modifier_capitalize')) include '/volume1/web/www-sb/includes/../libs/plugins/modifier.capitalize.php';
-?><script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+?><div class="container align_center">
+	<img src="<?php echo @constant('DOMAIN');?>
+/images/logos/<?php echo $_SESSION['cliente'];?>
+<?php if (isset($_SESSION['local'])) {?>.<?php echo $_SESSION['local'];?>
+<?php }?>.png" <?php if ((@constant('TEMPLATE_NAME')!='login')&&(@constant('TEMPLATE_NAME')!='contrasena')) {?> width="150px"<?php }?>>
+</div>
+<br>
+<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 <script>$(document).ready(function(){
     $(".menu  .m1 span:not('.noop')").on("click", function() {window.location='<?php echo @constant('DOMAIN');?>
 /' +this.textContent.toLocaleLowerCase().trim();});
