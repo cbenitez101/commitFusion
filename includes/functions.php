@@ -458,7 +458,7 @@ function external_informepdf(){
         if (count($in)>0) {
             $result = $database->query("SELECT * FROM `hotspots` WHERE id = ".$aux['id_hotspot']);
             $hotspot = $result->fetch_assoc();
-            pdf($in, $hotspot, TRUE, spanish(date('F', strtotime($_GET['fecha']))));
+            pdf($in, $hotspot, TRUE, spanish(date('F', strtotime('- 1 month',strtotime($_GET['fecha'])))));
         }
         die();
     }
@@ -812,7 +812,8 @@ function cierreinforme($pdf, $total, $comision) {
     return $subtotal;
 }
 function pdf($in, $local, $print = false, $mes = FALSE) {
-    require './scripts/fpdf/fpdf.php';
+    global $fulldomain;
+    require $fulldomain.'/scripts/fpdf/fpdf.php';
     global $suma;
     global $database;
     $suma= array();
