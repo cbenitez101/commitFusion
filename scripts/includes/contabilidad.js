@@ -1,44 +1,49 @@
 $(document).ready(function(){
-    $('#table-search').filterTable({ // apply filterTable to all tables on this page
-        inputSelector: '#input-filter', // use the existing input instead of creating a new one
-        minRows: 1
-    });
+    //$('#table-search').filterTable({ // apply filterTable to all tables on this page
+    //    inputSelector: '#input-filter', // use the existing input instead of creating a new one
+    //    minRows: 1
+    //});
+    $('#table-search').DataTable();
+
+    //var modalgasto =$('.modal_gasto').modal({"show": false});
     var gasto;
     $('.gastotable tbody tr').on('click', function() {
+        console.log('clicked');
         gasto = this;
-        modalgasto.dialog("open");
+        //modalgasto.dialog("open");
+        $('#modal_gasto').modal();
     });
-    var modalgasto = $('.modal_gasto').dialog({
-        autoOpen: false,
-        modal: true,
-        dialogClass: "no-close",
-        buttons: {
-            "Guardar": function() {guardar_gasto(0); modalgasto.dialog("close");},
-            "Borrar": function() {guardar_gasto(1); modalgasto.dialog("close");},
-            "Cancelar": function() {modalgasto.dialog("close");}
-        },
-        open: function() {
-            $(gasto).children().each(function(index, element){
-                switch (index) {
-                    case 0:
-                        $('#modal_gastoid').val($(element).text().trim());
-                        break;
-                    case 1:
-                        $('#modal_gastohotspot').val($(element).text().trim());
-                        break;
-                    case 2:
-                        $('#modal_gastocantidad').val($(element).text().trim());
-                        break;
-                    case 3:
-                        $('#modal_gastodescripcion').val($(element).text().trim());
-                        break;
-                    case 4:
-                        $('#modal_gastoprecio').val($(element).text().trim());
-                        break;
-                }
-            });
-        }
-    });
+    //var modalgasto = $('.modal_gasto').dialog({
+    //    autoOpen: false,
+    //    modal: true,
+    //    dialogClass: "no-close",
+    //    buttons: {
+    //        "Guardar": function() {guardar_gasto(0); modalgasto.dialog("close");},
+    //        "Borrar": function() {guardar_gasto(1); modalgasto.dialog("close");},
+    //        "Cancelar": function() {modalgasto.dialog("close");}
+    //    },
+    //    open: function() {
+    //        $(gasto).children().each(function(index, element){
+    //            switch (index) {
+    //                case 0:
+    //                    $('#modal_gastoid').val($(element).text().trim());
+    //                    break;
+    //                case 1:
+    //                    $('#modal_gastohotspot').val($(element).text().trim());
+    //                    break;
+    //                case 2:
+    //                    $('#modal_gastocantidad').val($(element).text().trim());
+    //                    break;
+    //                case 3:
+    //                    $('#modal_gastodescripcion').val($(element).text().trim());
+    //                    break;
+    //                case 4:
+    //                    $('#modal_gastoprecio').val($(element).text().trim());
+    //                    break;
+    //            }
+    //        });
+    //    }
+    //});
     $('.hisorialtable tbody tr').on('click', function(){
         window.open('http://servibyte.net/informepdf?id='+$(this).children().first().text()+'&fecha='+$(this).children().first().next().text(), '_blank','menubar=no,status=no,titlebar=no,toolbar=no,scrollbars=yes,location=no');
     });

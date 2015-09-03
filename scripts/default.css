@@ -60,7 +60,7 @@ div.dashboard {
     width: 49%;
 }
 .dashboard > div, tbody {
-    border: 2px dotted #4F7327;
+    /*border: 2px dotted #4F7327;*/
     margin-bottom: 5px;
     border-radius: 5px;
 }
@@ -103,62 +103,62 @@ div.dashboard {
 .filter-table .quick { margin-left: 0.5em; font-size: 0.8em; text-decoration: none; }
 .fitler-table .quick:hover { text-decoration: underline; }
 td.alt { background-color: #ffc; background-color: rgba(255, 255, 0, 0.2); }
-.modal, .ui-dialog-buttonset, .eliminar, .menueliminar, .modal_ventana {background-color: white; border: 1px solid #4F7327;}
-.ui-dialog-buttonset, .eliminar, .menueliminar, .modal_ventana {text-align: center;}
-.modal table {width: 400px} 
-.modal, .ui-dialog-buttonset {width: 414px !important;} 
+/*.modal, .ui-dialog-buttonset, .eliminar, .menueliminar, .modal_ventana {background-color: white; border: 1px solid #4F7327;}*/
+/*.ui-dialog-buttonset, .eliminar, .menueliminar, .modal_ventana {text-align: center;}*/
+/*.modal table {width: 400px} */
+/*.modal, .ui-dialog-buttonset {width: 414px !important;} */
 #tdmodalcorreo, #tdmodallogo, #tdmodallocal {display:none;}
 .no-close .ui-dialog-titlebar-close {display: none;}
 #tdmodalnombre {display: inherit}
 #confmenu table th {cursor: pointer;}
 #confmenu table td {text-align: center}
-#ui-datepicker-div {background-color: #4F7327; color: white;}
-#ui-datepicker-div a, .ui-datepicker-calendar th {color: black}
-.ui-datepicker .ui-datepicker-prev,
-.ui-datepicker .ui-datepicker-next {
-	position: absolute;
-	top: 2px;
-	width: 1.8em;
-	height: 1.8em;
-}
-.ui-datepicker .ui-datepicker-prev-hover,
-.ui-datepicker .ui-datepicker-next-hover {
-	top: 1px;
-}
-.ui-datepicker .ui-datepicker-prev {
-	left: 2px;
-}
-.ui-datepicker .ui-datepicker-next {
-	right: 2px;
-}
-.ui-datepicker .ui-datepicker-prev-hover {
-	left: 1px;
-}
-.ui-datepicker .ui-datepicker-next-hover {
-	right: 1px;
-}
-.ui-datepicker .ui-datepicker-prev span,
-.ui-datepicker .ui-datepicker-next span {
-	display: block;
-	position: absolute;
-	left: 50%;
-	margin-left: -8px;
-	top: 50%;
-	margin-top: -8px;
-}
-.ui-icon {
-	width: 16px;
-	height: 16px;
-}
-.ui-icon,
-.ui-widget-content .ui-icon {
-	background-image: url("/images/ui-icons_222222_256x240.png");
-}
+/*#ui-datepicker-div {background-color: #4F7327; color: white;}*/
+/*#ui-datepicker-div a, .ui-datepicker-calendar th {color: black}*/
+/*.ui-datepicker .ui-datepicker-prev,*/
+/*.ui-datepicker .ui-datepicker-next {*/
+	/*position: absolute;*/
+	/*top: 2px;*/
+	/*width: 1.8em;*/
+	/*height: 1.8em;*/
+/*}*/
+/*.ui-datepicker .ui-datepicker-prev-hover,*/
+/*.ui-datepicker .ui-datepicker-next-hover {*/
+	/*top: 1px;*/
+/*}*/
+/*.ui-datepicker .ui-datepicker-prev {*/
+	/*left: 2px;*/
+/*}*/
+/*.ui-datepicker .ui-datepicker-next {*/
+	/*right: 2px;*/
+/*}*/
+/*.ui-datepicker .ui-datepicker-prev-hover {*/
+	/*left: 1px;*/
+/*}*/
+/*.ui-datepicker .ui-datepicker-next-hover {*/
+	/*right: 1px;*/
+/*}*/
+/*.ui-datepicker .ui-datepicker-prev span,*/
+/*.ui-datepicker .ui-datepicker-next span {*/
+	/*display: block;*/
+	/*position: absolute;*/
+	/*left: 50%;*/
+	/*margin-left: -8px;*/
+	/*top: 50%;*/
+	/*margin-top: -8px;*/
+/*}*/
+/*.ui-icon {*/
+	/*width: 16px;*/
+	/*height: 16px;*/
+/*}*/
+/*.ui-icon,*/
+/*.ui-widget-content .ui-icon {*/
+	/*background-image: url("/images/ui-icons_222222_256x240.png");*/
+/*}*/
 
-.ui-icon-circle-triangle-e { background-position: -48px -192px; }
-.ui-icon-circle-triangle-s { background-position: -64px -192px; }
-.ui-icon-circle-triangle-w { background-position: -80px -192px; }
-.ui-icon-circle-triangle-n { background-position: -96px -192px; }
+/*.ui-icon-circle-triangle-e { background-position: -48px -192px; }*/
+/*.ui-icon-circle-triangle-s { background-position: -64px -192px; }*/
+/*.ui-icon-circle-triangle-w { background-position: -80px -192px; }*/
+/*.ui-icon-circle-triangle-n { background-position: -96px -192px; }*/
 span.ui-menu-icon {display: none}
 .logo_td {
     max-height: 50px;
