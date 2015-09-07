@@ -436,7 +436,12 @@ function external_guardar_gasto(){
         if ($_POST['action'] == 1) {
             if ($database->query("DELETE FROM `gastos` WHERE id = ".$_POST['id'])) die();
         } elseif ($_POST['action'] == 0) {
-            if ($database->query("UPDATE `gastos` SET `hotspot`=".$_POST['hotspot'].",`cantidad`=".$_POST['cantidad'].",`Descripcion`='".$_POST['Descripcion']."',`precio`=".$_POST['precio']." WHERE `id`=".$_POST['id'])) die();
+            if (empty($_POST['id'])) {
+                if ($database->query("INSERT INTO `gastos`(`hotspot`, `cantidad`, `Descripcion`, `precio`) VALUES (".$_POST['hotspot'].",".$_POST['cantidad'].",'".$_POST['Descripcion']."',".$_POST['precio'].")")) die();
+            } else {
+                if ($database->query("UPDATE `gastos` SET `hotspot`=".$_POST['hotspot'].",`cantidad`=".$_POST['cantidad'].",`Descripcion`='".$_POST['Descripcion']."',`precio`=".$_POST['precio']." WHERE `id`=".$_POST['id'])) die();
+            }
+
         }
     }
 }

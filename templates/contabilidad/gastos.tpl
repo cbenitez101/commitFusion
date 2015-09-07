@@ -1,3 +1,15 @@
+{*<div class="alert alert-success alert-dismissable" id="alertok" role="alert">*}
+	{*<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>*}
+	{*Se ha guardado la entrada.*}
+{*</div>*}
+{*<div class="alert alert-success alert-dismissable" id="alertdelete" role="alert">*}
+	{*<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>*}
+	{*Se ha guardado la entrada.*}
+{*</div>*}
+{*<div class="alert alert-danger alert-dismissable" id="alerterror" role="alert">*}
+	{*<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>*}
+	{*No se ha podido finalizar la acción.*}
+{*</div>*}
 <div class="row">
 	<div class="col-lg-12">
 		<h1 class="page-header">Gastos de los hotspots</h1>
@@ -27,8 +39,17 @@
 						{*<input class="ui-button" type="submit" value="Crear" name="create_gasto" />*}
 					{*</div>*}
 				{*</form>*}
-				<div class="dataTable_wrapper">
-					{html_table cols=$cols  table_attr='border="0" class="tabledit gastotable" id="table-search"' loop=$gastos}
+				<div class="dataTable_wrapper row">
+					<div class="col-md-12">
+						{html_table cols=$cols  table_attr='border="0" class="tabledit gastotable" id="table-search"' loop=$gastos}
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-1 col-md-offset-11">
+						<button type="button" class="btn btn-success" data-toggle="modal" data-target=".modal">
+							Crear
+						</button>
+					</div>
 				</div>
 				<div class="modal fade" id="modal_gasto" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 					<div class="modal-dialog">
@@ -64,8 +85,9 @@
 
 							</div>
 							<div class="modal-footer">
-								<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-								<button type="button" class="btn btn-primary">Save changes</button>
+								<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+								<button type="button" class="btn btn-danger action" data-dismiss="modal">Eliminar</button>
+								<button type="button" class="btn btn-primary action" data-dismiss="modal">Guardar</button>
 							</div>
 						</div><!-- /.modal-content -->
 					</div><!-- /.modal-dialog -->
