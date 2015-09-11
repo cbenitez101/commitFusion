@@ -82,7 +82,7 @@ div.dashboard {
     text-align: left;
     padding-left: 20px;
 }
-#messageresult {
+#messageresult{
     position: fixed;
     text-align: center;
     top: 0px;
@@ -163,4 +163,11 @@ span.ui-menu-icon {display: none}
 .logo_td {
     max-height: 50px;
     max-width: 50px;
+}
+
+.mensajealerta {
+    position: fixed;
+    left: 33.3%;
+    width: 50%;
+    text-align: center;
 }

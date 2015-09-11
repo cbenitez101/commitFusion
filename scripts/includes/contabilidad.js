@@ -1,6 +1,7 @@
 $(document).ready(function(){
     // Manejador de la tabla, se le pone que al hacer lick en una fila llame al modal y guarda los datos de la tabla
     // en data.
+    $('.alert').hide();
     $('#table-search').DataTable({
         "initComplete" : function() {
             if (!$('table').hasClass('historialtable')) {
@@ -78,11 +79,15 @@ function guardar_gasto(action) {
                 row.data(dataok);
                 dataok = [];
             }
-            //$('#alertok').alert();
+            $('#alertok').fadeIn();
+            //$("#alertok").fadeTo(2000, 500).slideUp(500, function(){
+            //    $("#alertok").alert('close');
+            //});
+            //mensajealert('Tabla modificada');
         } else {
             row.remove().draw();
-            //$('#alertdelete').alert();
+            $('#alertdelete').show();
         }
-        //setTimeout(function(){$('.alert').alert('close')}, 2000);
+        setTimeout(function(){$('.alert').fadeOut()}, 2000);
     });
 }

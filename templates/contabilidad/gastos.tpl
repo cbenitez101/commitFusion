@@ -1,15 +1,20 @@
-{*<div class="alert alert-success alert-dismissable" id="alertok" role="alert">*}
-	{*<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>*}
-	{*Se ha guardado la entrada.*}
-{*</div>*}
-{*<div class="alert alert-success alert-dismissable" id="alertdelete" role="alert">*}
-	{*<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>*}
-	{*Se ha guardado la entrada.*}
-{*</div>*}
-{*<div class="alert alert-danger alert-dismissable" id="alerterror" role="alert">*}
-	{*<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>*}
-	{*No se ha podido finalizar la acción.*}
-{*</div>*}
+<div class="row mensajealerta">
+	<div class="col-md-12">
+		<div class="alert alert-success alert-dismissable" id="alertok" role="alert">
+			<button type="button" class="close" data-dismiss="alert" aria-label="close"><span aria-hidden="true">&times;</span>
+			</button>
+			Se ha guardado la entrada.
+		</div>
+		<div class="alert alert-success alert-dismissable" id="alertdelete" role="alert">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			Se ha eliminado la entrada.
+		</div>
+		<div class="alert alert-danger alert-dismissable" id="alerterror" role="alert">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			No se ha podido finalizar la acción.
+		</div>
+	</div>
+</div>
 <div class="row">
 	<div class="col-lg-12">
 		<h1 class="page-header">Gastos de los hotspots</h1>
@@ -24,21 +29,6 @@
 			{*</div>*}
 			<!-- /.panel-heading -->
 			<div class="panel-body">
-				{*<form method="POST">*}
-					{*<div>*}
-						{*Añadir Gastos:*}
-						{*<select name="gasto_hotspot">*}
-							{*<option>HotSpot</option>*}
-							{*{foreach item=item from=$hotspot }*}
-								{*<option value="{$item.0}">{$item.1}</option>*}
-							{*{/foreach}*}
-						{*</select>*}
-						{*<input type="text" name="gasto_cantidad" placeholder="Cantidad">*}
-						{*<input type="text" name="gasto_descripcion" placeholder="Descripcion">*}
-						{*<input type="text" name="gasto_precio" placeholder="Precio">*}
-						{*<input class="ui-button" type="submit" value="Crear" name="create_gasto" />*}
-					{*</div>*}
-				{*</form>*}
 				<div class="dataTable_wrapper row">
 					<div class="col-md-12">
 						{html_table cols=$cols  table_attr='border="0" class="tabledit gastotable" id="table-search"' loop=$gastos}
