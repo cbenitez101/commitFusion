@@ -1,20 +1,3 @@
-<div class="row mensajealerta">
-	<div class="col-md-12">
-		<div class="alert alert-success alert-dismissable" id="alertok" role="alert">
-			<button type="button" class="close" data-dismiss="alert" aria-label="close"><span aria-hidden="true">&times;</span>
-			</button>
-			Se ha guardado la entrada.
-		</div>
-		<div class="alert alert-success alert-dismissable" id="alertdelete" role="alert">
-			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-			Se ha eliminado la entrada.
-		</div>
-		<div class="alert alert-danger alert-dismissable" id="alerterror" role="alert">
-			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-			No se ha podido finalizar la acción.
-		</div>
-	</div>
-</div>
 <div class="row">
 	<div class="col-lg-12">
 		<h1 class="page-header">Gastos de los hotspots</h1>
