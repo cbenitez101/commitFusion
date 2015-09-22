@@ -6,7 +6,7 @@
 		<!-- /.col-lg-12 -->
 	</div>
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-6 col-md-offset-3">
 			<div class="panel panel-default">
 				<div class="panel-body">
 					<div class="dataTable_wrapper row">
