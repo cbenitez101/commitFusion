@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.18, created on 2015-09-11 04:41:01
+<?php /* Smarty version Smarty-3.1.18, created on 2015-09-11 06:51:58
          compiled from "/volume1/web/www-sb/templates/contabilidad/gastos.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:197977658655e3f0d74fdce9-77243566%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'b3ff55febe05f59aa5daba98a01e0d2073539c14' => 
     array (
       0 => '/volume1/web/www-sb/templates/contabilidad/gastos.tpl',
-      1 => 1441942857,
+      1 => 1441950691,
       2 => 'file',
     ),
   ),
@@ -27,24 +27,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   'has_nocache_code' => false,
 ),false); /*/%%SmartyHeaderCode%%*/?>
 <?php if ($_valid && !is_callable('content_55e3f0d76022b6_52546150')) {function content_55e3f0d76022b6_52546150($_smarty_tpl) {?><?php if (!is_callable('smarty_function_html_table')) include '/volume1/web/www-sb/includes/../libs/plugins/function.html_table.php';
-?><div class="row mensajealerta">
-	<div class="col-md-12">
-		<div class="alert alert-success alert-dismissable" id="alertok" role="alert">
-			<button type="button" class="close" data-dismiss="alert" aria-label="close"><span aria-hidden="true">&times;</span>
-			</button>
-			Se ha guardado la entrada.
-		</div>
-		<div class="alert alert-success alert-dismissable" id="alertdelete" role="alert">
-			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-			Se ha eliminado la entrada.
-		</div>
-		<div class="alert alert-danger alert-dismissable" id="alerterror" role="alert">
-			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-			No se ha podido finalizar la acción.
-		</div>
-	</div>
-</div>
-<div class="row">
+?><div class="row">
 	<div class="col-lg-12">
 		<h1 class="page-header">Gastos de los hotspots</h1>
 	</div>

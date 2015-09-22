@@ -25,3 +25,6 @@ function mensajealert(texto) {
         $('#messageresult').fadeOut();
     }, 2000);
 }
+$(document).ready(function() {
+    $('.mensajealerta').hide();
+});

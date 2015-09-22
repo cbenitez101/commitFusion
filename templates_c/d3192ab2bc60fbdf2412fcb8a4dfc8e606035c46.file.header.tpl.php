@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.18, created on 2015-08-31 05:56:33
+<?php /* Smarty version Smarty-3.1.18, created on 2015-09-11 06:51:48
          compiled from "/volume1/web/www-sb/templates/header.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:85723436955e211b239aae7-85067962%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'd3192ab2bc60fbdf2412fcb8a4dfc8e606035c46' => 
     array (
       0 => '/volume1/web/www-sb/templates/header.tpl',
-      1 => 1440996987,
+      1 => 1441950691,
       2 => 'file',
     ),
   ),
@@ -38,6 +38,6 @@ $_smarty_tpl->tpl_vars['code']->_loop = true;
 foreach ($_from as $_smarty_tpl->tpl_vars['code']->key => $_smarty_tpl->tpl_vars['code']->value) {
 $_smarty_tpl->tpl_vars['code']->_loop = true;
 ?><?php echo $_smarty_tpl->tpl_vars['code']->value;?>
-<?php } ?></head><body>
+<?php } ?></head><body><div class="row mensajealerta"><div class="col-md-12"><div class="alert alert-success alert-dismissable" id="alertok" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="close"><span aria-hidden="true">&times;</span></button>Se ha guardado la entrada.</div><div class="alert alert-success alert-dismissable" id="alertdelete" role="alert"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Se ha eliminado la entrada.</div><div class="alert alert-danger alert-dismissable" id="alerterror" role="alert"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>No se ha podido finalizar la acción.</div></div></div>
         
 <?php }} ?>

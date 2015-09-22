@@ -1,55 +1,50 @@
 {if isset($busqueda)}
-    <form method="GET" action="/tickets/resultado">
-        <table>
-            <tr>
-                <th>
-                    Usuario:
-                </th>
-                <td>
-                    <input type="text" name="user" placeholder="Usuario">
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    Rango Fecha: 
-                </th>
-                <td>
-                    <input type="text" name="fechainicio" id="datepicker1" placeholder="Inicio">
-                </td>
-                <td>
-                    <input type="text" name="fechafin" id="datepicker2" placeholder="Fin">
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    Identificador:
-                </th>
-                <td>
-                    <input type="text" name="identificador" placeholder="Identificador">
-                </td>
-            </tr>
-	    {if isset($servers)}
-            <tr>
-                <th>
-                    Servidor:
-                </th>
-                <td>
-                    <select name="server">
-                        <option value="">Elija Hotspot</option>
-                        {foreach item=item from=$servers}
-                            <option value="{$item}">{$item}</option>
-                        {/foreach}
-                    </select>
-                </td>
-            </tr>
-	    {/if}
-            <tr>
-                <td>
-                    <input type="submit" value="Buscar" class="ptitle"/>
-                </td>
-            </tr>
-        </table>
-    </form>
+	<div class="row">
+		<div class="col-lg-12">
+			<h1 class="page-header">Buscar Tickets</h1>
+		</div>
+		<!-- /.col-lg-12 -->
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<div class="dataTable_wrapper row">
+						<div class="col-md-12">
+							<form role="form" class="form-horizontal" method="GET" action="/tickets/resultado">
+								<div class="form-group input-group">
+									<span class="input-group-addon"><i class="fa fa-user"></i></span>
+									<input class="form-control" type="text" name="user" placeholder="Usuario">
+								</div>
+								<div class="form-group input-group">
+									<span class="input-group-addon"><i class="fa fa-calendar"></i> </span>
+									<input class="form-control" type="text" name="fechainicio" placeholder="Inicio">
+									<input class="form-control" type="text" name="fechafin" placeholder="Fin">
+								</div>
+								<div class="form-group input-group">
+									<span class="input-group-addon"><i class="fa fa-flag"></i></span>
+									<input class="form-control" type="text" name="identificador"
+									       placeholder="Identificador">
+								</div>
+								{if isset($servers)}
+									<div class="form-group input-group">
+										<span class="input-group-addon"><i class="fa fa-hdd-o"></i> </span>
+										<select class="form-control" name="server">
+											<option value="">Elija Hotspot</option>
+											{foreach item=item from=$servers}
+												<option value="{$item}">{$item}</option>
+											{/foreach}
+										</select>
+									</div>
+								{/if}
+								<button type="submit" class="btn btn-success">Buscar</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 {else}
     <div>
         <table id="infoticket">
@@ -315,15 +310,15 @@
         </div>
     {/if}
 {/if}
-<div class="modal_ticket modal_ventana">
-    <table>
-        <tr>
-            <td>
-                Motivo Anulacion:
-            </td>
-            <td>
-                <input type="text" name="ticketcancel" id="modal_ticketcancel">
-            </td>
-        </tr>
-    </table>
-</div>
+{*<div class="modal_ticket modal_ventana">*}
+    {*<table>*}
+        {*<tr>*}
+            {*<td>*}
+                {*Motivo Anulacion:*}
+            {*</td>*}
+            {*<td>*}
+                {*<input type="text" name="ticketcancel" id="modal_ticketcancel">*}
+            {*</td>*}
+        {*</tr>*}
+    {*</table>*}
+{*</div>*}

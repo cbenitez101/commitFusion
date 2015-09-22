@@ -1,7 +1,6 @@
 $(document).ready(function(){
     // Manejador de la tabla, se le pone que al hacer lick en una fila llame al modal y guarda los datos de la tabla
     // en data.
-    $('.alert').hide();
     $('#table-search').DataTable({
         "initComplete" : function() {
             if (!$('table').hasClass('historialtable')) {

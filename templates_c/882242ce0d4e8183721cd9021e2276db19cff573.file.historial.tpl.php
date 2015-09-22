@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.18, created on 2015-09-03 07:04:33
+<?php /* Smarty version Smarty-3.1.18, created on 2015-09-11 06:59:42
          compiled from "/volume1/web/www-sb/templates/contabilidad/historial.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:61467339055e3f0cf6c4aa9-62897654%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '882242ce0d4e8183721cd9021e2276db19cff573' => 
     array (
       0 => '/volume1/web/www-sb/templates/contabilidad/historial.tpl',
-      1 => 1441260269,
+      1 => 1441950691,
       2 => 'file',
     ),
   ),
