@@ -531,7 +531,7 @@ function external_importar_bloc() {
             if ($radius->query("INSERT INTO `radusergroup`(`username`, `groupname`, `priority`) VALUES ('".$perfil['ServerName'].'_'.$aux['user']."','".$perfil['ServerName']."',1)")) {
                 if ($radius->query("INSERT INTO `radcheck`( `username`, `attribute`, `op`, `value`) VALUES ('".$perfil['ServerName'].'_'.$aux['user']."','Cleartext-Password',':=','$contrasena')")) {
                     if ($radius->query("INSERT INTO `radcheck`( `username`, `attribute`, `op`, `value`) VALUES ('".$perfil['ServerName'].'_'.$aux['user']."','Called-Station-Id','==','".$perfil['ServerName']."')")) {
-                        if ($radius->query("INSERT INTO `radcheck`( `username`, `attribute`, `op`, `value`) VALUES ('".$perfil['ServerName'].'_'.$aux['user']."','".$perfil['ModoConsumo']."','==','".$perfil['Duracion']."')")) {
+                        if ($radius->query("INSERT INTO `radcheck`( `username`, `attribute`, `op`, `value`) VALUES ('".$perfil['ServerName'].'_'.$aux['user']."','".$perfil['ModoConsumo']."',':=','".$perfil['Duracion']."')")) {
                             foreach ($perfil as $key => $elem) {
                                 if ((!empty($elem)) && ($elem!= '0000-00-00')) {
                                     switch ($key) {

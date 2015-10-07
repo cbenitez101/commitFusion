@@ -25,13 +25,12 @@ function usuario_aleatorio($tipoafab, $lon= NULL) {
     for ($index = 0; $index < $lon; $index++) $out.=$alfabetos[$kind_of[$index]][rand(0, count($alfabetos[$kind_of[$index]])-1)];
     return $out;
 }
-
 //$database= new mysqli('localhost', 'platformuser', 'rfC79w?3', 'plataforma');
 //$radius= new mysqli('localhost', 'radiususer', 'Pwp+*f2b', 'radius');
-//require './scripts/fpdf/fpdf.php';
-//$pdf = new FPDF();
-//$x = 28;
-//for ($i = 0; $i < 50; $i++) {
+// require './scripts/fpdf/fpdf.php';
+// $pdf = new FPDF();
+// $x = 28;
+// for ($i = 0; $i < 50; $i++) {
 //    if (($i % 5) == 0) {
 //        //Crear pagina y lineas superiores
 //        $pdf->AddPage('L', 'A4');
@@ -49,7 +48,7 @@ function usuario_aleatorio($tipoafab, $lon= NULL) {
 //        //5 es la diferencia de salto entre uno y otro ticket para las rayas
 //        $x = 28;
 //    }
-//    
+   
 //    $precio = 15;
 //    $exists = false;
 //    while (!$exists) {
@@ -154,8 +153,8 @@ function usuario_aleatorio($tipoafab, $lon= NULL) {
 //    $pdf->Line(10,$x,20,$x);
 //    $pdf->Line(270,$x,280,$x);
 //    $x+=3;
-//}
-//$pdf->Output();
+// }
+// $pdf->Output();
 function login() {
     /*$ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, 'http://www.rub3ncillo.es:8091');
@@ -283,5 +282,71 @@ function login() {
 //    $pdf->Output();
 //}
 //pdf_block(5, 20);
-
-echo md5('sbyte_14_Mxz');
+function pdf_block1($cantidad, $tiempo) {
+    $array = array("HUVUXA94","GEFATU87","CURENA19","MUJOYA22","YABUCU22","GIMULE64","FEXONA59","ZURUCU09","YAVUDA23","NOHUYU40","JEVUJE72","JIFEJE32","KAFIGE77","BARUZA02","KUDOFU94","JAWIJA76","HUDIKU13","XUJUXE12","FEXEDU83","XOZAVO80","TUMAWO46","MUPEFO52","XIRUHI31","CEKUDA88","FEZUZI64","HATIWE76","TERUTA18","KIRIRI38","VEVOVI10","RUMIFA18","MUXEWU01","MORADU89","HORADO07","SIGURE71","GIKAPE20","CUCAXU01","ROGOPE52","VOCIFO53","KUMUKO93","QAQIZO66","LULUDU19","SEKUZU23","YOHELA60","FENAYA73","YEHAFI98","RETOJU92","REMALA05","LITERI66","TUSUJO79","ZIREMO41","XUFECE94","VOTIGE09","HOXIKO53","DEQIXA77","ZUCADU59","RELURI79","FONIHA84","JIBEPO95","QAQOCA67","MAPANE06","ZIHERA69","ROFAKA69","GETEMI08","MIZUYU68","NUDABO06","MEWULI86","WIYEZU14","PALIDA36","ZIVUHU67","DIPIZE18","YACUCA36","JOCIVE07","WUTARE87","WEJUSI66","QONOXU31","PEQEVO06","MOTADI89","XEVISI13","COZUNE10","SOKILE08","FUYEKU22","BAVOMU05","RANAJO19","LIMOXI60","JIKOKI93","RODASA53","FANISO40","GUWAMI17","ZIMECE77","CUVOBE12","LOSAKA15","CUSIMU24","KOVICI11","LUYIHA66","TESANU66","WEDEGI75","FIBEBA44","DEWELI01","VOGEPU84","GASIME05");
+   require './scripts/fpdf/fpdf.php';
+   $pdf = new FPDF();
+   $x = 23;
+   for ($i = 0; $i < $cantidad; $i++) {
+       if (($i % 5) == 0) {
+           $pdf->Line(105, 0, 105, 278);
+           $pdf->AddPage();
+           $x = 23;
+       }
+       $font = array("title"=>22, 'data'=>16, 'room'=>18);
+       $user = $array[$i];
+       $pass = usuario_aleatorio('CVCVCVNN');
+       $precio = 1;
+       $tiempo = "30 Min";
+       $pdf->Image('./images/logo.png',40,$x-18,30,12,'PNG');
+       $pdf->SetXY(20, $x);
+       $pdf->SetFont('Arial','',$font['title']);
+       $pdf->Write(0, 'User:');
+       $pdf->SetX(50);
+       $pdf->SetFont('Arial','',$font['data']);
+       $pdf->Write(0, $user);
+       $pdf->SetX(130);
+       $pdf->Image('./images/logo.png',150,$x-18,30,12,'PNG');
+       $pdf->SetFont('Arial','',$font['title']);
+       $pdf->Write(0, 'User:');
+       $pdf->SetX(165);
+       $pdf->SetFont('Arial','',$font['data']);
+       $pdf->Write(0, $user);
+       $pdf->SetFontSize($font['room']);
+       $pdf->SetXY(170, $x-18);
+       // $pdf->Write(0, "$precio ");
+       // $pdf->Write(0, chr(128));
+       $pdf->SetXY(170, $x-9);
+       // $pdf->Write(0, $tiempo);
+       $pdf->SetFontSize($font['room']);
+       $pdf->SetXY(60, $x-18);
+       // $pdf->Write(0, "$precio ");
+       // $pdf->Write(0, chr(128));
+       $pdf->SetXY(60, $x-9);
+       // $pdf->Write(0, $tiempo);
+       $x = $x +13;
+       $pdf->SetXY(20, $x);
+       $pdf->SetFont('Arial','',$font['title']);
+       $pdf->Write(0, 'Time:');
+       $pdf->SetX(50);
+       $pdf->SetFont('Arial','',$font['data']);
+       $pdf->Write(0, $tiempo);
+       $pdf->SetX(130);
+       $pdf->SetFont('Arial','',$font['title']);
+       $pdf->Write(0, 'Time:');
+       $pdf->SetX(165);
+       $pdf->SetFont('Arial','',$font['data']);
+       $pdf->Write(0, $tiempo);
+       $x = $x + 9;
+       $pdf->SetXY(20, $x);
+       $pdf->SetFont('Arial','',$font['room']);
+       // $pdf->Write(0, 'Room:');
+       $x = $x + 9;
+       $pdf->Line(0, $x, 220, $x);
+       $x = $x +25;
+   }
+   $pdf->Line(105, 0, 105, $x-25);
+   $pdf->Output();
+}
+pdf_block1(100,1);
+// echo md5('sbyte_14_Mxz');
