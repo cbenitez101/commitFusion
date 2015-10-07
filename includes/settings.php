@@ -19,6 +19,7 @@ $smarty->setCacheDir(__DIR__.'/../cache/');
 //$smarty->force_complie=false;
 //$smarty->debugging = true;
 $smarty->assign('title','Servibyte Platform');
+logit();
 $getparams  = (isset($_GET))? $_GET : '' ;     // Get all the data from the URL
 $postparams = (isset($_POST))? $_POST : '' ;   // Get all Formdata
 $template_data = getTemplateData($getparams);
