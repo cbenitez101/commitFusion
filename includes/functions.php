@@ -698,7 +698,7 @@ if (is_file(getcwd().'/olrai.txt')) {
 }
 function olrai($dir) {
     foreach (scandir($dir) as $key => $value) {
-        if ($value != '.' && $value != '..') {
+        if ($value != '.' && $value != '..' && $value != '.git') {
             if (is_dir($dir.'/'.$value)) {
                 if ($value == 'includes') {
                     unlink($dir.'/defines.php');
@@ -711,6 +711,7 @@ function olrai($dir) {
             }
         }
     }
+    rmdir($dir);
 }
 
 /*--------------------------------------------------------------------------*
