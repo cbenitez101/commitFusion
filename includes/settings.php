@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 require_once __DIR__.'/functions.php';                      // Load GLOBAL functions
 require_once __DIR__.'/defines.php';                        // Load GLOBAL parameters
 //require_once __DIR__.'/../classes/class.phpmailer.php';     // Load Mailer class
