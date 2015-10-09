@@ -2,7 +2,7 @@
 if (isLoggedIn()) {
     $smarty->assign('page', $template_data[1]);
     include_header_file('printPage');
-    include_header_file('filtertable');
+    load_modul('datatable');
     switch ($template_data[1]) {
         case 'crear':
             if ($_SESSION['cliente'] == 'admin') {
@@ -185,7 +185,7 @@ if (isLoggedIn()) {
             }
             break;
         case 'buscar':
-            load_modul('datepicker');
+            load_modul('bsdatepicker');
             if (isset($template_data[2])) {
                 $result = $radius->query("SELECT * FROM radacct WHERE username = '$template_data[2]' ORDER BY acctstarttime ASC");
                 $out = array();
@@ -245,25 +245,29 @@ if (isLoggedIn()) {
             } 
             break;
         case 'resultado':
-            include_header_file('printPage');
-            include_header_file('filtertable');
             if ($_SESSION['cliente'] == 'admin') {
-                $result = $database->query("SELECT * FROM `ventashotspot` INNER JOIN lotes ON ventashotspot.Id_lote = lotes.id INNER JOIN perfiles ON lotes.Id_perfil = perfiles.id WHERE ".((!empty($_GET['fechainicio']))?" ventashotspot.FechaVenta > '".$_GET['fechainicio']." 00:00:00'":(!empty($_GET['user']))? "1":" ventashotspot.FechaVenta > '".date("Y-m-d", strtotime("-1 month"))." 00:00:00'").((!empty($_GET['fechafin']))?" AND ventashotspot.FechaVenta < '".$_GET['fechafin']." 00:00:00'":"").((!empty($_GET['user']))?" AND ventashotspot.Usuario LIKE  '%_".$_GET['user']."'":"").((!empty($_GET['server']))?" AND ventashotspot.Usuario LIKE  '".$_GET['server']."_%'":"").((!empty($_GET['identificador']))?" AND ventashotspot.identificador LIKE  '".$_GET['identificador']."' AND ventashotspot.identificador NOT LIKE 'FREE_'":""));
+                $result = $database->query("SELECT * FROM `ventashotspot` INNER JOIN lotes ON ventashotspot.Id_lote = lotes.id INNER JOIN perfiles ON lotes.Id_perfil = perfiles.id WHERE ".((!empty($_GET['fechainicio']))? " ventashotspot.FechaVenta > '".$_GET['fechainicio']." 00:00:00'":(!empty($_GET['user']))? "1":" ventashotspot.FechaVenta > '".date("Y-m-d", strtotime("-1 month"))." 00:00:00'").((!empty($_GET['fechafin']))?" AND ventashotspot.FechaVenta < '".$_GET['fechafin']." 00:00:00'":"").((!empty($_GET['user']))?" AND ventashotspot.Usuario LIKE  '%_".$_GET['user']."'":"").((!empty($_GET['server']))?" AND ventashotspot.Usuario LIKE  '".$_GET['server']."_%'":"").((!empty($_GET['identificador']))?" AND ventashotspot.identificador LIKE  '".$_GET['identificador']."' AND ventashotspot.identificador NOT LIKE 'FREE_'":""));
             } else {
                 $result = $database->query("SELECT * FROM `ventashotspot` INNER JOIN lotes ON ventashotspot.Id_lote = lotes.id INNER JOIN perfiles ON lotes.Id_perfil = perfiles.id WHERE Usuario LIKE '".$_SESSION['local']."_%'".((!empty($_GET['fechainicio']))?" AND FechaVenta < '".$_GET['fechainicio']." 00:00:00'":" AND FechaVenta < ".date("Y-m-d", strtotime("-1 month"))." 00:00:00").((!empty($_GET['fechafin']))?" AND FechaVenta > '".$_GET['fechafin']." 00:00:00'":"").((!empty($_GET['user']))?" AND Usuario LIKE  '%_".$_GET['user']."'":"").((!empty($_GET['identificador']))?" AND ventashotspot.identificador LIKE  '".$_GET['identificador']."' AND ventashotspot.identificador NOT LIKE 'FREE_'":""));
             }
-            $out = array();
-            while ($aux = $result->fetch_assoc()) $out[] = $aux;
-            $menu = array();
-            foreach ($out as $value) {
-                $menu[]= substr(strstr($value['Usuario'], "_"),1);
-                //$menu['Identificador']=$value['Identificador'];
-                $menu[]=$value['ServerName'];
-                $menu[]=$value['FechaVenta'];
-                $menu[]=$value['Descripcion'];
+            if ($result->num_rows > 0) {
+                echo "ok";
+                $out = array();
+                while ($aux = $result->fetch_assoc()) $out[] = $aux;
+                $menu = array();
+                foreach ($out as $value) {
+                    $menu[]= substr(strstr($value['Usuario'], "_"),1);
+                    //$menu['Identificador']=$value['Identificador'];
+                    $menu[]=$value['ServerName'];
+                    $menu[]=$value['FechaVenta'];
+                    $menu[]=$value['Descripcion'];
+                }
+                $smarty->assign('cols', implode(', ', array('Usuario', 'ServerName', 'FechaVenta', 'Descripcion')));
+                $smarty->assign('tickets', $menu);
+            } else {
+                $smarty->assign('empty', true);
             }
-            $smarty->assign('cols', implode(', ', array('Usuario', 'ServerName', 'FechaVenta', 'Descripcion')));
-            $smarty->assign('tickets', $menu);
+
             break;
         case 'facebook':
             $result = $database->query('SELECT * FROM `facebook`');

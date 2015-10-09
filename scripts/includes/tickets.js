@@ -7,15 +7,97 @@ $(document).ready(function(){
         ticket = $(this).data();
         creaticket.dialog("open");
     });
-    $('#table-search').filterTable({ // apply filterTable to all tables on this page
-        inputSelector: '#input-filter', // use the existing input instead of creating a new one
-        minRows: 1
+    // Manejador de la tabla, se le pone que al hacer lick en una fila llame al modal y guarda los datos de la tabla
+    // en data.
+    $('#table-search').DataTable({
+        "initComplete" : function() {
+            if (!$('table').hasClass('historialtable')) {
+                // Caso especial en el que la tabla historial no tiene modal.
+                var api = this.api();
+                $('#table-search tbody tr').click(function() {
+                    row = api.row(this);
+                    data = api.row(this).data();
+                    $('.modal').modal();
+                });
+            }
+        }
     });
-    $('#datepicker1').datepicker({firstDay: 1, maxDate: 0, minDate: -30, dateFormat: 'yy-mm-dd',onClose: function( selectedDate ) {$( "#datepicker2" ).datepicker( "option", "minDate", selectedDate );}});
-    $('#datepicker2').datepicker({firstDay: 1, maxDate: 0, minDate: -30, dateFormat: 'yy-mm-dd',onClose: function( selectedDate ) {$( "#datepicker1" ).datepicker( "option", "maxDate", selectedDate );}});
-    $('#table-search tr').on('click', function(){
-        window.location = "/tickets/buscar/"+$(this).children().first('td').next().text()+'_'+$(this).children().first('td').text();
+    // Pone los datos de la variable modal en la tabla
+    $('.modal').on('show.bs.modal', function(){
+        //console.log(data);
+        if (data != null) {
+            var i = 0;
+            $('.modal-body [id^="modal_gasto"]').each(function(elem) {
+                $(this).val(data[i]);
+                i++;
+            });
+        }
     });
+    // Resetea los campos del formulario
+    $('.modal').on('hidden.bs.modal', function(){
+        data = null;
+        $('.modal input').val('');
+        $('.modal select').val('');
+    });
+    // Acciones de los botones
+    $('.modal button.action').click(function(){
+        if ($(this).text() == 'Guardar') {
+            // Guardo los valores en dataok para actualizar la tabla
+            if ($('#modal_gastoid').val() !== "") {
+                $('.modal-body [id^="modal_gasto"]').each(function(elem) {
+                    dataok.push($(this).val());
+                });
+                dataok[5] = data[5];
+            }
+            //console.log(dataok);
+            guardar_gasto(0);
+        } else if ($(this).text() == 'Eliminar') {
+            if (($('#modal_gastoid').val()!== "")) {
+                //Si estamos creando no hay id asignado y no se llama a la función
+                guardar_gasto(1);
+            }
+        }
+    });
+
+    /*-----------------------------------------------------------------------------------------------------------------
+                                                Parte para el datepicker de la búsqueda
+     ----------------------------------------------------------------------------------------------------------------*/
+    var nowTemp = new Date();
+    var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+
+    var checkin = $('#fecha_inicio').datepicker({
+        onRender: function(date) {
+            return date.valueOf() > now.valueOf() ? 'disabled' : '';
+        },
+        format: 'yyyy-mm-dd',
+        weekStart: 1
+    }).on('changeDate', function(ev) {
+        if (ev.date.valueOf() > checkout.date.valueOf()) {
+            var newDate = new Date(ev.date)
+            newDate.setDate(newDate.getDate() + 1);
+            checkout.setValue(newDate);
+        }
+        checkin.hide();
+        $('#fecha_fin')[0].focus();
+
+    }).data('datepicker');
+    var checkout = $('#fecha_fin').datepicker({
+        onRender: function(date) {
+            return date.valueOf() <= checkin.date.valueOf() ? 'disabled' : (date.valueOf() > now.valueOf() ? 'disabled' : '');
+        },
+        format: 'yyyy-mm-dd',
+        weekStart: 1
+    }).on('changeDate', function(ev) {
+        checkout.hide();
+    }).data('datepicker');
+    //$('#datepicker1').datepicker({firstDay: 1, maxDate: 0, minDate: -30, dateFormat: 'yy-mm-dd',onClose: function( selectedDate ) {$( "#datepicker2" ).datepicker( "option", "minDate", selectedDate );}});
+    //$('#datepicker2').datepicker({firstDay: 1, maxDate: 0, minDate: -30, dateFormat: 'yy-mm-dd',onClose: function( selectedDate ) {$( "#datepicker1" ).datepicker( "option", "maxDate", selectedDate );}});
+    /*-----------------------------------------------------------------------------------------------------------------
+                                                            Fin
+     ----------------------------------------------------------------------------------------------------------------*/
+    //$('#table-search tr').on('click', function(){
+    //    window.location = "/tickets/buscar/"+$(this).children().first('td').next().text()+'_'+$(this).children().first('td').text();
+    //});
     $('#anularticket').on('click', function(){
         eliminaticket.dialog("open");
     });

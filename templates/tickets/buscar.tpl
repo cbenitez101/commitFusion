@@ -18,8 +18,10 @@
 								</div>
 								<div class="form-group input-group">
 									<span class="input-group-addon"><i class="fa fa-calendar"></i> </span>
-									<input class="form-control" type="text" name="fechainicio" placeholder="Inicio">
-									<input class="form-control" type="text" name="fechafin" placeholder="Fin">
+									<input class="form-control" type="text" name="fechainicio" placeholder="Inicio"
+                                           id="fecha_inicio">
+									<input class="form-control" type="text" name="fechafin" placeholder="Fin"
+									       id="fecha_fin">
 								</div>
 								<div class="form-group input-group">
 									<span class="input-group-addon"><i class="fa fa-flag"></i></span>
