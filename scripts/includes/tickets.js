@@ -11,7 +11,7 @@ $(document).ready(function(){
     // en data.
     $('#table-search').DataTable({
         "initComplete" : function() {
-            if (!$('table').hasClass('historialtable')) {
+            if (!$('table').hasClass('tickettable') && !$('table').hasClass('fbtable')) {
                 // Caso especial en el que la tabla historial no tiene modal.
                 var api = this.api();
                 $('#table-search tbody tr').click(function() {
@@ -57,6 +57,13 @@ $(document).ready(function(){
                 guardar_gasto(1);
             }
         }
+    });
+    $('.tickettable tbody tr').on('click', function(){
+        window.location = "/tickets/buscar/"+$(this).children().first('td').next().text()+'_'+$(this).children().first('td').text();
+    });
+
+    $('.fbtable tbody tr').on('click', function(){
+        window.location = "/tickets/buscar/"+$(this).children().first('td').text()+'_'+$(this).children().last('td').text();
     });
 
     /*-----------------------------------------------------------------------------------------------------------------
@@ -148,9 +155,6 @@ $(document).ready(function(){
                     mensajealert('No se ha podido borrar el ticket');
                 });
         }
-    });
-    $('#table-search-fb tr').on('click', function(){
-        window.location = "/tickets/buscar/"+$(this).children().first('td').text()+'_'+$(this).children().last('td').text();
     });
     
     $('#table-search-fb').filterTable({ // apply filterTable to all tables on this page

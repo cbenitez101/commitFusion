@@ -251,7 +251,6 @@ if (isLoggedIn()) {
                 $result = $database->query("SELECT * FROM `ventashotspot` INNER JOIN lotes ON ventashotspot.Id_lote = lotes.id INNER JOIN perfiles ON lotes.Id_perfil = perfiles.id WHERE Usuario LIKE '".$_SESSION['local']."_%'".((!empty($_GET['fechainicio']))?" AND FechaVenta < '".$_GET['fechainicio']." 00:00:00'":" AND FechaVenta < ".date("Y-m-d", strtotime("-1 month"))." 00:00:00").((!empty($_GET['fechafin']))?" AND FechaVenta > '".$_GET['fechafin']." 00:00:00'":"").((!empty($_GET['user']))?" AND Usuario LIKE  '%_".$_GET['user']."'":"").((!empty($_GET['identificador']))?" AND ventashotspot.identificador LIKE  '".$_GET['identificador']."' AND ventashotspot.identificador NOT LIKE 'FREE_'":""));
             }
             if ($result->num_rows > 0) {
-                echo "ok";
                 $out = array();
                 while ($aux = $result->fetch_assoc()) $out[] = $aux;
                 $menu = array();
