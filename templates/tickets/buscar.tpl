@@ -137,6 +137,54 @@
 							{/if}
 						</div>
 					</div>
+					<div class="modal fade" id="modal_anula" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+					     aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+									<h4 class="modal-title">Motivo de la anulación</h4>
+								</div>
+								<div class="modal-body">
+									<form role="form">
+										<div class="form-group">
+											<label>Motivo</label>
+											<input class="form-control" name="gastocantidad" id="modal_ticketcancel">
+										</div>
+									</form>
+
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+									<button type="button" class="btn btn-danger action"
+									        data-dismiss="modal" id="anularbutton">Anular</button>
+								</div>
+							</div><!-- /.modal-content -->
+						</div><!-- /.modal-dialog -->
+					</div><!-- /.modal -->
+					<div class="modal fade" id="modal_borra" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+					     aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+									<h4 class="modal-title">Borrar Ticket</h4>
+								</div>
+								<div class="modal-body">
+									<div class="row">
+										<div class="col-md-6 col-md-offset-3">
+											¿Está seguro que quiere borrar el ticket?
+										</div>
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+									<button type="button" class="btn btn-danger action"
+									        data-dismiss="modal" id="borrarbutton">Borrar</button>
+								</div>
+							</div><!-- /.modal-content -->
+						</div><!-- /.modal-dialog -->
+					</div><!-- /.modal -->
 				</div>
 			</div>
 		</div>
@@ -145,7 +193,7 @@
 				<div class="panel panel-default">
 					<div class="panel-body">
 						<div class="dataTable_wrapper">
-							<table border="0" class="tabledit" id="table-search">
+							<table border="0" class="tabledit" id="table-search" width="100%">
 								<thead>
 								<tr>
 									<th>
@@ -171,7 +219,7 @@
 									</th>
 								</tr>
 								</thead>
-								<tbody class="accountingtable">
+								<tbody>
 								{foreach item=item from=$out['accounting']}
 									<tr>
 										<td>

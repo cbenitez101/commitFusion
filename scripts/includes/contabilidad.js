@@ -1,18 +1,24 @@
 $(document).ready(function(){
     // Manejador de la tabla, se le pone que al hacer lick en una fila llame al modal y guarda los datos de la tabla
     // en data.
-    $('#table-search').DataTable({
+    table = $('#table-search').DataTable({
         "initComplete" : function() {
             if (!$('table').hasClass('historialtable')) {
                 // Caso especial en el que la tabla historial no tiene modal.
                 var api = this.api();
-                $('#table-search tbody tr').click(function() {
-                    row = api.row(this);
-                    data = api.row(this).data();
-                    $('.modal').modal();
+                $('#table-search tbody td').click(function() {
+                    if (!$(this).hasClass('sorting_1')) {
+                        row = api.row($(this).parent());
+                        data = api.row($(this).parent()).data();
+                        $('.modal').modal();
+                    }
                 });
             }
-        }
+        },
+        "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json"
+        },
+        "responsive" : true
     });
     // Pone los datos de la variable modal en la tabla
     $('.modal').on('show.bs.modal', function(){
@@ -50,10 +56,15 @@ $(document).ready(function(){
             }
         }
     });
-    $('.hisorialtable tbody tr').on('click', function(){
-        window.open('http://servibyte.net/informepdf?id='+$(this).children().first().text()+'&fecha='+$(this).children().first().next().text(), '_blank','menubar=no,status=no,titlebar=no,toolbar=no,scrollbars=yes,location=no');
+    $('.hisorialtable tbody td').on('click', function(){
+        var data = table.row($(this).parent()).data();
+        if (!$(this).hasClass('sorting_1')) {
+            window.open('http://servibyte.net/informepdf?id='+data[0]+'&fecha='+data[1], '_blank','menubar=no,status=no,titlebar=no,toolbar=no,scrollbars=yes,location=no');
+        }
+
     })
 });
+var table;
 var data;
 var row;
 var dataok = [];

@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.18, created on 2015-09-11 06:59:42
+<?php /* Smarty version Smarty-3.1.18, created on 2015-10-21 05:23:48
          compiled from "/volume1/web/www-sb/templates/contabilidad/historial.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:61467339055e3f0cf6c4aa9-62897654%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '882242ce0d4e8183721cd9021e2276db19cff573' => 
     array (
       0 => '/volume1/web/www-sb/templates/contabilidad/historial.tpl',
-      1 => 1441950691,
+      1 => 1445401411,
       2 => 'file',
     ),
   ),
@@ -40,7 +40,8 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 			<!-- /.panel-heading -->
 			<div class="panel-body">
 				<div class="dataTable_wrapper">
-					<?php echo smarty_function_html_table(array('cols'=>$_smarty_tpl->tpl_vars['cols']->value,'table_attr'=>'border="0" class="tabledit hisorialtable" id="table-search"','loop'=>$_smarty_tpl->tpl_vars['tabla']->value),$_smarty_tpl);?>
+					<?php echo smarty_function_html_table(array('cols'=>$_smarty_tpl->tpl_vars['cols']->value,'table_attr'=>'border="0" class="tabledit hisorialtable hover"
+					id="table-search"','loop'=>$_smarty_tpl->tpl_vars['tabla']->value),$_smarty_tpl);?>
 
 				</div>
 			</div>

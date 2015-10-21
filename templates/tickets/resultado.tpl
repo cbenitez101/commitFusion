@@ -23,7 +23,7 @@
 				{else}
 				<div class="dataTable_wrapper row">
 					<div class="col-md-12">
-						{html_table cols=$cols  table_attr='border="0" class="tabledit tickettable" id="table-search"' loop=$tickets}
+						{html_table cols=$cols  table_attr='border="0" class="tabledit tickettable hover" id="table-search" width="100%"' loop=$tickets}
 					</div>
 				</div>
 				{/if}

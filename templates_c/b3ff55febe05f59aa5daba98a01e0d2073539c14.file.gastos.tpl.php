@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.18, created on 2015-09-11 06:51:58
+<?php /* Smarty version Smarty-3.1.18, created on 2015-10-21 06:59:22
          compiled from "/volume1/web/www-sb/templates/contabilidad/gastos.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:197977658655e3f0d74fdce9-77243566%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'b3ff55febe05f59aa5daba98a01e0d2073539c14' => 
     array (
       0 => '/volume1/web/www-sb/templates/contabilidad/gastos.tpl',
-      1 => 1441950691,
+      1 => 1445403712,
       2 => 'file',
     ),
   ),
@@ -43,7 +43,8 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 			<div class="panel-body">
 				<div class="dataTable_wrapper row">
 					<div class="col-md-12">
-						<?php echo smarty_function_html_table(array('cols'=>$_smarty_tpl->tpl_vars['cols']->value,'table_attr'=>'border="0" class="tabledit gastotable" id="table-search"','loop'=>$_smarty_tpl->tpl_vars['gastos']->value),$_smarty_tpl);?>
+						<?php echo smarty_function_html_table(array('cols'=>$_smarty_tpl->tpl_vars['cols']->value,'table_attr'=>'border="0" class="tabledit gastotable hover"
+						id="table-search" width="100%"','loop'=>$_smarty_tpl->tpl_vars['gastos']->value),$_smarty_tpl);?>
 
 					</div>
 				</div>
