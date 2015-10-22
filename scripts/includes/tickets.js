@@ -30,13 +30,19 @@ $(document).ready(function(){
     });
     // Pone los datos de la variable modal en la tabla
     $('.modal').on('show.bs.modal', function(){
-        //console.log(data);
         if (data != null) {
+            // En el caso de que exista el id de la entrada, se puede importar y generar excel, y no se puede
+            // modificar el tiempo
             var i = 0;
-            $('.modal-body [id^="modal_gasto"]').each(function(elem) {
+            $('.modal-body [id^="modal_bloc"]').each(function(elem) {
                 $(this).val(data[i]);
                 i++;
             });
+            $('#modal_bloctiempo').attr('disabled', true);
+            $('#modal_bloccantidad').parent().hide();
+        } else {
+            $('#excel').hide();
+            $('#importar').hide();
         }
     });
     // Resetea los campos del formulario
@@ -44,24 +50,36 @@ $(document).ready(function(){
         data = null;
         $('.modal input').val('');
         $('.modal select').val('');
+        $('#modal_bloctiempo').removeAttr('disabled');
+        $('#excel').show();
+        $('#importar').show();
+        $('#modal_bloccantidad').parent().show();
     });
     // Acciones de los botones
     $('.modal button.action').click(function(){
         if ($(this).text() == 'Guardar') {
+            console.log('guardar');
             // Guardo los valores en dataok para actualizar la tabla
             if ($('#modal_gastoid').val() !== "") {
-                $('.modal-body [id^="modal_gasto"]').each(function(elem) {
+                $('.modal-body [id^="modal_bloc"]').each(function(elem) {
                     dataok.push($(this).val());
                 });
-                dataok[5] = data[5];
+                //dataok[5] = data[5];
             }
             //console.log(dataok);
-            guardar_gasto(0);
+            guardar_bloc(0);
         } else if ($(this).text() == 'Eliminar') {
             if (($('#modal_gastoid').val()!== "")) {
                 //Si estamos creando no hay id asignado y no se llama a la función
-                guardar_gasto(1);
+                $('.modal-body [id^="modal_bloc"]').each(function(elem) {
+                    dataok.push($(this).val());
+                });
+                guardar_bloc(1);
             }
+        } else if ($(this).text() == 'Importar') {
+
+        } else if ($(this).text() == 'Excel') {
+            window.location='/bloc_excel?bloc='+$('#modal_blocid').val();
         }
     });
     $('.tickettable tbody td').on('click', function(){
@@ -116,32 +134,11 @@ $(document).ready(function(){
     /*-----------------------------------------------------------------------------------------------------------------
                                                             Fin
      ----------------------------------------------------------------------------------------------------------------*/
-    //$('#table-search tr').on('click', function(){
-    //    window.location = "/tickets/buscar/"+$(this).children().first('td').next().text()+'_'+$(this).children().first('td').text();
-    //});
     $('#anularticket').on('click', function(){
         //eliminaticket.dialog("open");
         $('#modal_anula').modal();
     });
     $('#anularbutton').click(function(){anularticket()});
-    //var eliminaticket = $(".modal_ticket").dialog({
-    //    autoOpen: false,
-    //    modal: true,
-    //    dialogClass: "no-close",
-    //    buttons: {
-    //        "Anular": function() {anularticket(); eliminaticket.dialog("close");},
-    //        "Cancelar": function() {eliminaticket.dialog("close");}
-    //    }
-    //});
-    //var creaticket = $(".modal_creaticket").dialog({
-    //    autoOpen: false,
-    //    modal: true,
-    //    dialogClass: "no-close",
-    //    buttons: {
-    //        "Crear": function() {creatickets(); creaticket.dialog("close");},
-    //        "Cancelar": function() {creaticket.dialog("close");}
-    //    }
-    //});
     $('#desanularticket').on('click', function(){
         $.ajax({
                 url: '/desanular_ticket',
@@ -159,85 +156,18 @@ $(document).ready(function(){
         $('#modal_borra').modal();
     });
     $('#borrarbutton').click(function(){borrarticket();});
-    
-    //$('#table-search-fb').filterTable({ // apply filterTable to all tables on this page
-    //    inputSelector: '#input-filter', // use the existing input instead of creating a new one
-    //    minRows: 1
-    //});
-    //
-    //$('#table-search-bloc').filterTable({ // apply filterTable to all tables on this page
-    //    inputSelector: '#input-filter', // use the existing input instead of creating a new one
-    //    minRows: 1
-    //});
+
     var bloc;
     $('.bloctable tbody tr td:not(:last-child)').on('click', function() {
         bloc = $(this).parent();
         modalbloc.dialog("open");
-    });
-    //var modalbloc = $('.modal_bloc').dialog({
-    //    autoOpen: false,
-    //    modal: true,
-    //    dialogClass: "no-close",
-    //    buttons: {
-    //        "Guardar": function() {guardar_bloc(); modalbloc.dialog("close");},
-    //        "Cancelar": function() {modalbloc.dialog("close");}
-    //    },
-    //    open: function() {
-    //        $(bloc).children().each(function(index, element){
-    //            switch (index) {
-    //                case 0:
-    //                    $('#modal_blocid').val($(element).text().trim());
-    //                    break;
-    //                case 1:
-    //                    $('#modal_blocnombre').val($(element).text().trim());
-    //                    break;
-    //                case 2:
-    //                    $('#modal_bloctiempo').text($(element).text().trim());
-    //                    break;
-    //                case 3:
-    //                    $('#modal_blocdescripcion').val($(element).text().trim());
-    //                    break;
-    //            }
-    //        });
-    //    }
-    //});
-    $("#excel_button").click(function(){
-        console.log('clicked');
-        window.location='http://servibyte.net/bloc_excel?bloc='+$('#modal_blocid').val();
     });
     var importar;
     $(".import_bloc").click(function(){
         importar = this;
         modalimport.dialog("open");
     });
-    //var modalimport = $('.modal_import').dialog({
-    //    autoOpen: false,
-    //    modal: true,
-    //    dialogClass: "no-close",
-    //    buttons: {
-    //        "Importar": function() {
-    //            importar_bloc();
-    //            modalimport.dialog("close");
-    //        },
-    //        "Cancelar": function() {modalimport.dialog("close");}
-    //    },
-    //    open: function() {
-    //        $('#modal_importid').val($(importar).data('id'));
-    //        $.ajax({
-    //            url: 'http://servibyte.net/importbloc_hotspot',
-    //            method: 'POST',
-    //            data: {duracion: $(importar).data('tiempo')}
-    //        }).done(function(data){
-    //            // Se crea el contenido de los options
-    //            $('#modal_importhotspot').append(data);
-    //        });
-    //        $(".ui-dialog-buttonpane button:contains('Importar')").button("disable");
-    //    },
-    //    beforeClose: function() {
-    //        $('#modal_importperfil option:not(:first-of-type)').remove();
-    //        $('#modal_importhotspot option:not(:first-of-type)').remove();
-    //    }
-    //});
+
     $('#modal_importhotspot').change(function(){
         $.ajax({
             url: 'http://servibyte.net/importbloc_perfil',
@@ -259,6 +189,8 @@ var data;
 var ticket;
 var checkin;
 var checkout;
+var row;
+var dataok = [];
 function anularticket(){
     $.ajax({
             url: '/cancela_ticket',
@@ -298,13 +230,29 @@ function creatickets(){
         $('#modal_ticketid').val("");
     });
 }
-function guardar_bloc(){
+function guardar_bloc(action){
+    //console.log({id: dataok[0], nombre: dataok[1], descripcion: dataok[3], action: action, tiempo: dataok[2], cantidad: dataok[4]});
+    //console.log({id: $('#modal_blocid').val(), nombre: $('#modal_blocnombre').val(), descripcion: $('#modal_blocdescripcion').val(), action: action, tiempo: $('#modal_bloctiempo').val(), cantidad: $('#modal_bloccantidad').val()});
     $.ajax({
-        url: 'http://servibyte.net/guardar_bloc',
+        url: '/guardar_bloc',
         type: 'POST',
-        data: {id: $('#modal_blocid').val(), nombre: $('#modal_blocnombre').val(), descripcion: $('#modal_blocdescripcion').val()}
+        data: {id: dataok[0], nombre: dataok[1], descripcion: dataok[3], action: action, tiempo: dataok[2], cantidad: dataok[4]}
     }).done(function(){
-        window.location = document.URL;
+        if (action === 0) {
+            if (dataok[0] === '') {
+                window.location = document.URL;
+            } else {
+                dataok[3] = dataok[3]+'('+dataok[4]+')';
+                row.data(dataok);
+                dataok = [];
+            }
+            mensajealert('ok');
+        } else {
+            dataok = [];
+            row.remove().draw();
+            mensajealert('delete');
+        }
+        //window.location = document.URL;
     });
 }
 function importar_bloc(){

@@ -470,10 +470,22 @@ function external_informepdf(){
 }
 
 function external_guardar_bloc(){
-    if (isset($_POST['nombre']) && isset($_POST['descripcion']) && isset($_POST['id'])) {
+    if (isset($_POST['nombre']) && isset($_POST['descripcion']) && isset($_POST['id']) && isset($_POST['action'])) {
         global $database;
-        $database->query('UPDATE `blocs` SET `nombre`="'.$_POST['nombre'].'",`descripcion`="'.$_POST['descripcion'].'" WHERE `id`='.$_POST['id']);
-        die();
+        if ($_POST['action'] == 1) {
+            if ($database->query("DELETE FROM `blocs` WHERE id = ".$_POST['id'])) if ($database->query("DELETE FROM `bloc_usuarios` WHERE bloc_id = ".$_POST['id'])) die();
+        } elseif ($_POST['action'] == 0) {
+            if (empty($_POST['id'])) {
+                if ($database->query('INSERT INTO `blocs`(`nombre`, `tiempo`, `descripcion`, `fecha`) VALUES ("'.$_POST['nombre'].'","'.$_POST['tiempo'].'","'.$_POST['descripcion']." (".$_POST['cantidad'].')",NOW())')) {
+                    $blocid = $database->insert_id;
+                    for ($index = 0; $index < $_POST['cantidad']; $index++) $database->query("INSERT INTO `bloc_usuarios`(`user`, `bloc_id`) VALUES ('".  usuario_aleatorio('CVCVCVNN')."',$blocid)");
+//                    $smarty->assign('excel', $blocid);
+                }
+            } else {
+                if ($database->query('UPDATE `blocs` SET `nombre`="'.$_POST['nombre'].'",`descripcion`="'.$_POST['descripcion'].'" WHERE `id`='.$_POST['id'])) die();
+            }
+        }
+
     }
 }
 

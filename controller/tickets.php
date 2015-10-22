@@ -295,9 +295,10 @@ if (isLoggedIn()) {
             $menu = array();
             foreach ($out as $value) {
                 foreach($value as $item) $menu[]=$item;
-                $menu[]= '<input type="button" class="import_bloc ui-button" value="Importar" data-id="'.$value['id'].'" data-tiempo="'.$value['tiempo'].'">';
+//                $menu[]= '<input type="button" class="import_bloc ui-button" value="Importar" data-id="'.$value['id'].'" data-tiempo="'.$value['tiempo'].'">';
             }
-            $smarty->assign('cols', implode(',', array_keys($out[0])).((count($out) > 0)?",Importar":""));
+//            $smarty->assign('cols', implode(',', array_keys($out[0])).((count($out) > 0)?",Importar":""));
+            $smarty->assign('cols', implode(',', array_keys($out[0])));
             $smarty->assign('bloc', $menu);
             break;
     }

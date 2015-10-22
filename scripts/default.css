@@ -170,4 +170,5 @@ span.ui-menu-icon {display: none}
     left: 33.3%;
     width: 50%;
     text-align: center;
+    z-index: 5000;
 }

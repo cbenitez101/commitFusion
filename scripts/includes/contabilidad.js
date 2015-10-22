@@ -89,15 +89,10 @@ function guardar_gasto(action) {
                 row.data(dataok);
                 dataok = [];
             }
-            $('#alertok').fadeIn();
-            //$("#alertok").fadeTo(2000, 500).slideUp(500, function(){
-            //    $("#alertok").alert('close');
-            //});
-            //mensajealert('Tabla modificada');
+            mensajealert('ok');
         } else {
             row.remove().draw();
-            $('#alertdelete').show();
+            mensajealert('delete');
         }
-        setTimeout(function(){$('.alert').fadeOut()}, 2000);
     });
 }
