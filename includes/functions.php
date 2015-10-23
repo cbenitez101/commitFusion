@@ -380,7 +380,7 @@ function external_imprimeticket(){
 	</head>
 	<body>
 		<div>
-			<img src="http://servibyte.net/images/logo.png">
+			<img src="/images/logo.png">
 		</div>
 		<div>
 			<p>User '.$_GET['user'].'</p>

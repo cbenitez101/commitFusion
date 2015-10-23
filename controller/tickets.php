@@ -5,12 +5,13 @@ if (isLoggedIn()) {
     load_modul('datatable');
     switch ($template_data[1]) {
         case 'crear':
-            if ($_SESSION['cliente'] == 'admin') {
-                $result = $database->query("SELECT * FROM `blocs`");
-            } else {
+            // dump($_SESSION, true);
+            // if ($_SESSION['cliente'] == 'admin') {
+            //     $result = $database->query("SELECT * FROM `blocs`");
+            // } else {
                 $result = $database->query("select hotspots.*, perfiles.*, lotes.*, lotes.id as lotesid from locales left join clientes on locales.cliente = clientes.id left join hotspots on hotspots.Local = locales.id
     right join perfiles on hotspots.id = perfiles.Id_hotspot left join lotes on lotes.Id_perfil = perfiles.Id
-    where clientes.nombre = '".$_SESSION['cliente']."' and locales.nombre = '".$_SESSION['local']."' and hotspots.Status = 'ONLINE'");
+    where clientes.nombre = '".$_SESSION['cliente']."' and locales.nombre = '".(empty($_SESSION['local'])? 'Ofi-Hotspot' : $_SESSION['local'] )."' and hotspots.Status = 'ONLINE'");
                 $tickets = array();
                 while ($aux = $result->fetch_assoc()) {
                     $ticket = array();
@@ -182,7 +183,7 @@ if (isLoggedIn()) {
                     $tickets[] = $ticket;
                 }
                 $smarty->assign("tickets",$tickets);
-            }
+            // }
             break;
         case 'buscar':
             load_modul('bsdatepicker');

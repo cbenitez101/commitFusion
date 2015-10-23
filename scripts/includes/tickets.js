@@ -5,7 +5,10 @@ $(document).ready(function(){
     });
     $('.ticket').on('click', function() {
         ticket = $(this).data();
-        creaticket.dialog("open");
+        // creaticket.dialog("open");
+    });
+    $('#modal_creaticket').click(function(){
+        creatickets();
     });
     // Manejador de la tabla, se le pone que al hacer lick en una fila llame al modal y guarda los datos de la tabla
     // en data.
@@ -220,6 +223,7 @@ function borrarticket(){
 }
 function creatickets(){
     ticket['identificador']=$('#modal_ticketid').val();
+    console.log('creando');
     $.ajax({
         url: "/crea_ticket",
         method: "POST",

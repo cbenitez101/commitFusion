@@ -30,7 +30,7 @@ and open the template in the editor.
     </head>
     <body>
         <div class='logo'>
-            <img src="http://servibyte.net/images/logo.png">
+            <img src="/images/logo.png">
         </div>
         <div class='data'>
             <div class='border'>
