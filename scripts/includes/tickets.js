@@ -21,7 +21,7 @@ $(document).ready(function(){
                     if (!$(this).hasClass('sorting_1')) {
                         row = api.row($(this).parent());
                         data = api.row($(this).parent()).data();
-                        $('.modal').modal();
+                        $('.modal:not(#modal_importar)').modal();
                     }
                 });
             }
@@ -32,7 +32,8 @@ $(document).ready(function(){
         responsive: true
     });
     // Pone los datos de la variable modal en la tabla
-    $('.modal').on('show.bs.modal', function(){
+    $('.modal:not(#modal_importar)').on('show.bs.modal', function(){
+
         if (data != null) {
             // En el caso de que exista el id de la entrada, se puede importar y generar excel, y no se puede
             // modificar el tiempo
@@ -51,7 +52,7 @@ $(document).ready(function(){
     // Resetea los campos del formulario
     $('.modal').on('hidden.bs.modal', function(){
         data = null;
-        $('.modal input').val('');
+        $('.modal:not(#modal_importar) input').val('');
         $('.modal select').val('');
         $('#modal_bloctiempo').removeAttr('disabled');
         $('#excel').show();
@@ -80,9 +81,21 @@ $(document).ready(function(){
                 guardar_bloc(1);
             }
         } else if ($(this).text() == 'Importar') {
-
+            $('#modal_importid').val($('#modal_blocid').val());
+            $('#modal_importtime').val($('#modal_bloctiempo').val());
+            $.ajax({
+                url: '/importbloc_hotspot',
+                method: 'POST',
+                data: {duracion: $('#modal_bloctiempo').val()}
+            }).done(function(data){
+                // Se crea el contenido de los options
+                $('#modal_importhotspot').append(data);
+            });
+            $('#modal_button_agregar').attr("disabled", "disabled");
         } else if ($(this).text() == 'Excel') {
             window.location='/bloc_excel?bloc='+$('#modal_blocid').val();
+        } else if ($(this).text() == 'Agregar') {
+            importar_bloc();
         }
     });
     $('.tickettable tbody td').on('click', function(){
@@ -165,27 +178,6 @@ $(document).ready(function(){
         bloc = $(this).parent();
         modalbloc.dialog("open");
     });
-    var importar;
-    $(".import_bloc").click(function(){
-        importar = this;
-        modalimport.dialog("open");
-    });
-
-    $('#modal_importhotspot').change(function(){
-        $.ajax({
-            url: 'http://servibyte.net/importbloc_perfil',
-            method: 'POST',
-            data: {hotspot: $(this).val(), tiempo: $(importar).data('tiempo')}
-        }).done(function(data){
-            $('#modal_importperfil').removeAttr('disabled');
-            $('#modal_importperfil option:not(:first-of-type)').remove();
-            $('#modal_importperfil').append(data);
-        });
-    });
-    $('#modal_importperfil').change(function(){
-        if ($('#modal_importperfil').val() !== 'Selecciona un Perfil') $(".ui-dialog-buttonpane button:contains('Importar')").button("enable");
-        else $(".ui-dialog-buttonpane button:contains('Importar')").button("disable");
-    });
 });
 var table;
 var data;
@@ -259,12 +251,35 @@ function guardar_bloc(action){
         //window.location = document.URL;
     });
 }
+
+function importar_blocchange(){
+    $.ajax({
+        url: '/importbloc_perfil',
+        method: 'POST',
+        data: {hotspot: $('#modal_importhotspot').val(), tiempo: $('#modal_importtime').val()}
+    }).done(function(data){
+        $('#modal_importperfil').removeAttr('disabled');
+        //$('#modal_button_agregar').removeAttr('disabled');
+        $('#modal_importperfil option:not(:first-of-type)').remove();
+        $('#modal_importperfil').append(data);
+    });
+}
+
+function importar_blocchange1(){
+    if ($('#modal_importperfil').val() !== 'Selecciona un Perfil') $('#modal_button_agregar').removeAttr('disabled');
+    else $('#modal_button_agregar').attr('disabled', 'disabled');
+}
+
 function importar_bloc(){
     $.ajax({
-        url: 'http://servibyte.net/importar_bloc',
+        url: '/importar_bloc',
         type: 'POST',
         data: {id: $('#modal_importid').val(), perfil: $('#modal_importperfil').val()}
     }).done(function(){
         window.location = document.URL;
     });
+}
+function crear_server_ticket(name) {
+    $('[id^="Server_"]').addClass('serverhidden');
+    $('#Server_'+name).removeClass('serverhidden');
 }

@@ -6,9 +6,185 @@ if (isLoggedIn()) {
     switch ($template_data[1]) {
         case 'crear':
             // dump($_SESSION, true);
-            // if ($_SESSION['cliente'] == 'admin') {
-            //     $result = $database->query("SELECT * FROM `blocs`");
-            // } else {
+//             if ($_SESSION['cliente'] == 'admin') {
+//                 // Se puede hacer con un if de parentesis en la query y cuando se añade a tickets en vez de hacerlo
+//                 // como[] se pone el ServerName.
+//                 $result = $database->query("select hotspots.*, perfiles.*, lotes.*, lotes.id as lotesid from locales left join clientes on locales.cliente = clientes.id left join hotspots on hotspots.Local = locales.id
+//    right join perfiles on hotspots.id = perfiles.Id_hotspot left join lotes on lotes.Id_perfil = perfiles.Id
+//    where hotspots.Status = 'ONLINE'");
+//                 $tickets = array();
+//                 while ($aux = $result->fetch_assoc()) {
+//                     $ticket = array();
+//                     foreach ($aux as  $key => $value) {
+//                         if (($key == 'Precio') || ($key == 'Duracion') || ($key == 'Movilidad') || ($key == 'ServerName') || ($key == 'ModoConsumo') || ($key == 'Acct-Interim-Interval') || ($key == 'Idle-Timeout') || ($key == 'Simultaneous-Use') || ($key == 'Login-Time') || ($key == 'Expiration') || ($key == 'WISPr-Bandwidth-Max-Down') || ($key == 'WISPr-Bandwidth-Max-Up') || ($key == 'TraficoDescarga') || ($key == 'lotesid')  || ($key == 'Password') ) {
+//                             $ticket[$key] = $value;
+//                         }
+//                         if ($key == 'Duracion') {
+//                             switch ($value) {
+//                                 case 300:
+//                                     $ticket['duraciontexto']="5 minutos";
+//                                     break;
+//                                 case 600:
+//                                     $ticket['duraciontexto']="10 minutos";
+//                                     break;
+//                                 case 900:
+//                                     $ticket['duraciontexto']="15 minutos";
+//                                     break;
+//                                 case 1800:
+//                                     $ticket['duraciontexto']="30 minutos";
+//                                     break;
+//                                 case 3600:
+//                                     $ticket['duraciontexto']="1 hora";
+//                                     break;
+//                                 case 7200:
+//                                     $ticket['duraciontexto']="2 horas";
+//                                     break;
+//                                 case 14400:
+//                                     $ticket['duraciontexto']="4 horas";
+//                                     break;
+//                                 case 21600:
+//                                     $ticket['duraciontexto']="6 horas";
+//                                     break;
+//                                 case 28800:
+//                                     $ticket['duraciontexto']="8 horas";
+//                                     break;
+//                                 case 43200:
+//                                     $ticket['duraciontexto']="12 horas";
+//                                     break;
+//                                 case 86400:
+//                                     $ticket['duraciontexto']="1 día";
+//                                     break;
+//                                 case 172800:
+//                                     $ticket['duraciontexto']="2 días";
+//                                     break;
+//                                 case 259200:
+//                                     $ticket['duraciontexto']="3 días";
+//                                     break;
+//                                 case 345600:
+//                                     $ticket['duraciontexto']="4 días";
+//                                     break;
+//                                 case 432000:
+//                                     $ticket['duraciontexto']="5 días";
+//                                     break;
+//                                 case 518400:
+//                                     $ticket['duraciontexto']="6 días";
+//                                     break;
+//                                 case 604800:
+//                                     $ticket['duraciontexto']="7 días";
+//                                     break;
+//                                 case 691200:
+//                                     $ticket['duraciontexto']="8 días";
+//                                     break;
+//                                 case 777600:
+//                                     $ticket['duraciontexto']="9 días";
+//                                     break;
+//                                 case 864000:
+//                                     $ticket['duraciontexto']="10 días";
+//                                     break;
+//                                 case 950400:
+//                                     $ticket['duraciontexto']="11 días";
+//                                     break;
+//                                 case 1036800:
+//                                     $ticket['duraciontexto']="12 días";
+//                                     break;
+//                                 case 1123200:
+//                                     $ticket['duraciontexto']="13 días";
+//                                     break;
+//                                 case 1209600:
+//                                     $ticket['duraciontexto']="14 días";
+//                                     break;
+//                                 case 1296000:
+//                                     $ticket['duraciontexto']="15 días";
+//                                     break;
+//                                 case 1382400:
+//                                     $ticket['duraciontexto']="16 días";
+//                                     break;
+//                                 case 1468800:
+//                                     $ticket['duraciontexto']="17 días";
+//                                     break;
+//                                 case 1555200:
+//                                     $ticket['duraciontexto']="18 días";
+//                                     break;
+//                                 case 1641600:
+//                                     $ticket['duraciontexto']="19 días";
+//                                     break;
+//                                 case 1728000:
+//                                     $ticket['duraciontexto']="20 días";
+//                                     break;
+//                                 case 1814400:
+//                                     $ticket['duraciontexto']="21 días";
+//                                     break;
+//                                 case 1900800:
+//                                     $ticket['duraciontexto']="22 días";
+//                                     break;
+//                                 case 1987200:
+//                                     $ticket['duraciontexto']="23 días";
+//                                     break;
+//                                 case 2073600:
+//                                     $ticket['duraciontexto']="24 días";
+//                                     break;
+//                                 case 2160000:
+//                                     $ticket['duraciontexto']="25 días";
+//                                     break;
+//                                 case 2246400:
+//                                     $ticket['duraciontexto']="26 días";
+//                                     break;
+//                                 case 2332800:
+//                                     $ticket['duraciontexto']="27 días";
+//                                     break;
+//                                 case 2419200:
+//                                     $ticket['duraciontexto']="28 días";
+//                                     break;
+//                                 case 2505600:
+//                                     $ticket['duraciontexto']="29 días";
+//                                     break;
+//                                 case 2592000:
+//                                     $ticket['duraciontexto']="30 días";
+//                                     break;
+//                                 case 2678400:
+//                                     $ticket['duraciontexto']="31 días";
+//                                     break;
+//                                 case 5184000:
+//                                     $ticket['duraciontexto']="2 meses";
+//                                     break;
+//                                 case 7776000:
+//                                     $ticket['duraciontexto']="3 meses";
+//                                     break;
+//                                 case 10368000:
+//                                     $ticket['duraciontexto']="4 meses";
+//                                     break;
+//                                 case 12960000:
+//                                     $ticket['duraciontexto']="5 meses";
+//                                     break;
+//                                 case 15552000:
+//                                     $ticket['duraciontexto']="6 meses";
+//                                     break;
+//                                 case 18144000:
+//                                     $ticket['duraciontexto']="7 meses";
+//                                     break;
+//                                 case 20736000:
+//                                     $ticket['duraciontexto']="8 meses";
+//                                     break;
+//                                 case 23328000:
+//                                     $ticket['duraciontexto']="9 meses";
+//                                     break;
+//                                 case 25920000:
+//                                     $ticket['duraciontexto']="10 meses";
+//                                     break;
+//                                 case 28512000:
+//                                     $ticket['duraciontexto']="11 meses";
+//                                     break;
+//                                 case 31104000:
+//                                     $ticket['duraciontexto']="1 año";
+//                                     break;
+//                             }
+//                         }
+//                     }
+//                     $tickets[$aux['ServerName']][] = $ticket;
+//                 }
+//                 $smarty->assign("tickets",$tickets);
+//                 $smarty->assign('servers', array_keys($tickets));
+//             } else {
                 $result = $database->query("select hotspots.*, perfiles.*, lotes.*, lotes.id as lotesid from locales left join clientes on locales.cliente = clientes.id left join hotspots on hotspots.Local = locales.id
     right join perfiles on hotspots.id = perfiles.Id_hotspot left join lotes on lotes.Id_perfil = perfiles.Id
     where clientes.nombre = '".$_SESSION['cliente']."' and locales.nombre = '".(empty($_SESSION['local'])? 'Ofi-Hotspot' : $_SESSION['local'] )."' and hotspots.Status = 'ONLINE'");
@@ -183,7 +359,7 @@ if (isLoggedIn()) {
                     $tickets[] = $ticket;
                 }
                 $smarty->assign("tickets",$tickets);
-            // }
+//             }
             break;
         case 'buscar':
             load_modul('bsdatepicker');
@@ -237,7 +413,7 @@ if (isLoggedIn()) {
                 $smarty->assign('estado', (($cancelado)?"CANCELADO":$estado));
                 $smarty->assign('out', $out);
             } else {
-                if ($_SESSION['cliente'] == 'admin') {
+                if (($_SESSION['cliente'] == 'admin') && ($_SESSION['user'] != 'ejemplo')) {        //vitoko
                     $result = $database->query("SELECT distinct(perfiles.ServerName) FROM `ventashotspot` INNER JOIN lotes ON ventashotspot.Id_lote = lotes.id INNER JOIN perfiles ON lotes.Id_perfil = perfiles.id");
                     while($aux = $result->fetch_assoc()) $out[] = $aux['ServerName'];
                     $smarty->assign('servers', $out);
@@ -247,7 +423,7 @@ if (isLoggedIn()) {
             break;
         case 'resultado':
             if ($_SESSION['cliente'] == 'admin') {
-                $result = $database->query("SELECT * FROM `ventashotspot` INNER JOIN lotes ON ventashotspot.Id_lote = lotes.id INNER JOIN perfiles ON lotes.Id_perfil = perfiles.id WHERE ".((!empty($_GET['fechainicio']))? " ventashotspot.FechaVenta > '".$_GET['fechainicio']." 00:00:00'":(!empty($_GET['user']))? "1":" ventashotspot.FechaVenta > '".date("Y-m-d", strtotime("-1 month"))." 00:00:00'").((!empty($_GET['fechafin']))?" AND ventashotspot.FechaVenta < '".$_GET['fechafin']." 00:00:00'":"").((!empty($_GET['user']))?" AND ventashotspot.Usuario LIKE  '%_".$_GET['user']."'":"").((!empty($_GET['server']))?" AND ventashotspot.Usuario LIKE  '".$_GET['server']."_%'":"").((!empty($_GET['identificador']))?" AND ventashotspot.identificador LIKE  '".$_GET['identificador']."' AND ventashotspot.identificador NOT LIKE 'FREE_'":""));
+                $result = $database->query("SELECT * FROM `ventashotspot` INNER JOIN lotes ON ventashotspot.Id_lote = lotes.id INNER JOIN perfiles ON lotes.Id_perfil = perfiles.id WHERE ".((!empty($_GET['fechainicio']))? " ventashotspot.FechaVenta > '".$_GET['fechainicio']." 00:00:00'":(!empty($_GET['user']))? "1":" ventashotspot.FechaVenta > '".date("Y-m-d", strtotime("-1 month"))." 00:00:00'").((!empty($_GET['fechafin']))?" AND ventashotspot.FechaVenta < '".$_GET['fechafin']." 00:00:00'":"").((!empty($_GET['user']))?" AND ventashotspot.Usuario LIKE  '%_".$_GET['user']."'":"").((!empty($_GET['server']))?" AND ventashotspot.Usuario LIKE  '".(($_SESSION['user'] == "ejemplo")?'Ofi-Hotspot' /*vitoko*/:$_GET['server'])."_%'":"").((!empty($_GET['identificador']))?" AND ventashotspot.identificador LIKE  '".$_GET['identificador']."' AND ventashotspot.identificador NOT LIKE 'FREE_'":""));
             } else {
                 $result = $database->query("SELECT * FROM `ventashotspot` INNER JOIN lotes ON ventashotspot.Id_lote = lotes.id INNER JOIN perfiles ON lotes.Id_perfil = perfiles.id WHERE Usuario LIKE '".$_SESSION['local']."_%'".((!empty($_GET['fechainicio']))?" AND FechaVenta < '".$_GET['fechainicio']." 00:00:00'":" AND FechaVenta < ".date("Y-m-d", strtotime("-1 month"))." 00:00:00").((!empty($_GET['fechafin']))?" AND FechaVenta > '".$_GET['fechafin']." 00:00:00'":"").((!empty($_GET['user']))?" AND Usuario LIKE  '%_".$_GET['user']."'":"").((!empty($_GET['identificador']))?" AND ventashotspot.identificador LIKE  '".$_GET['identificador']."' AND ventashotspot.identificador NOT LIKE 'FREE_'":""));
             }

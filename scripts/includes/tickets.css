@@ -30,3 +30,6 @@ h4 {
 .ticket {
     text-align: center;
 }
+.serverhidden{
+    display: none;
+}
