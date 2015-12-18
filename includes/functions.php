@@ -893,9 +893,9 @@ function pdf($in, $local, $print = false, $mes = FALSE) {
     $factura = cierreinforme($pdf, $totalfin, 50);
     $out = array();
     foreach ($in as $key => $value) {
-        if ($value['cantidad'] !=  count($value['usuario'])) {
-            foreach ($value['usuario'] as $item) {
-                if (strlen($item) != 8) {
+        if ($value['cantidad'] !=  count($value['usuarios'])) {
+            foreach ($value['usuarios'] as $item) {
+                if (strstr($item, ' ')) {
                     $lote = $database->query("SELECT perfiles.Descripcion FROM lotes INNER JOIN perfiles ON perfiles.id = lotes.Id_perfil WHERE lotes.id = $key");
                     $duracion = $lote->fetch_assoc();
                     $out[]= strstr($item, ' ', TRUE)." -  ".$duracion['Descripcion'];

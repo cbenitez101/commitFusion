@@ -348,5 +348,6 @@ function pdf_block1($cantidad, $tiempo) {
    $pdf->Line(105, 0, 105, $x-25);
    $pdf->Output();
 }
-pdf_block1(100,1);
-// echo md5('sbyte_14_Mxz');
+// pdf_block1(100,1);
+echo md5('sbejemplo');
+// file_put_contents('prueba', 'pl');

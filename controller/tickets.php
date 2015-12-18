@@ -283,7 +283,7 @@ if (isLoggedIn()) {
             if (!empty($postparams)) {
                  $database->query('INSERT INTO `blocs`(`nombre`, `tiempo`, `descripcion`, `fecha`) VALUES ("'.$postparams['bloc_nombre'].'","'.$postparams['bloc_tiempo'].'","'.$postparams['bloc_descripcion']." (".$postparams['bloc_cantidad'].')",NOW())');
                  $blocid = $database->insert_id;
-                for ($index = 0; $index < $postparams['bloc_cantidad']; $index++) $database->query("INSERT INTO `bloc_usuarios`(`user`, `bloc_id`) VALUES ('".  usuario_aleatorio('CVCVCVNN')."',$blocid)");
+                for ($index = 0; $index < $postparams['bloc_cantidad']; $index++) $database->query("INSERT INTO `bloc_usuarios`(`user`, `bloc_id`) VALUES ('".  usuario_aleatorio('CVCVCVNNNN')."',$blocid)");
                 $smarty->assign('excel', $blocid);
             }
             $result = $database->query('SELECT * FROM `blocs`');
