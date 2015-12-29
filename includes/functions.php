@@ -918,17 +918,17 @@ function pdf($in, $local, $print = false, $mes = FALSE) {
     } 
 }
 function simplefactura($pdf) {
-    $mysqli = new mysqli('83.56.10.172', 'servibyte', 'sbyte_15_Mxz', 'simpleinvoices', 8092); 
+    $mysqli = new mysqli('217.125.25.165', 'servibyte', 'sbyte_15_Mxz', 'simpleinvoices', 8092); 
     if ($mysqli->query("INSERT INTO `si_invoices`(`index_id` ,`biller_id`, `customer_id`, `type_id`, `preference_id`, `date`)  SELECT MAX(`index_id`)+1 ,'1', '".$pdf[2]['si']."', '2', '1', NOW() FROM `si_invoices`")) {
         if ($mysqli->query("INSERT INTO `si_invoice_items`(`invoice_id`, `quantity`, `product_id`, `unit_price`, `tax_amount`, `gross_total`, `description`, `total`) SELECT MAX(`index_id`) ,1,3,".number_format((($pdf[1]*100)/107), 2,'.','.').",".number_format((($pdf[1]*100)/107)*0.07, 2,'.','.').",".number_format((($pdf[1]*100)/107), 2,'.','.').",'Mes de ".spanish(date('F'))."',".number_format($pdf[1], 2,'.','.')." FROM `si_invoices`")) {
             if ($mysqli->query("INSERT INTO `si_invoice_item_tax`(`invoice_item_id`, `tax_id`, `tax_type`, `tax_rate`, `tax_amount`) SELECT MAX(`id`) ,1,'%',7,".number_format((($pdf[1]*100)/107)*0.07, 2,'.','.')." FROM `si_invoice_items`")) {
-                $ok = file_get_contents('http://83.56.10.172:8091/access.php?info=a');
+                $ok = file_get_contents('http://217.125.25.165:8091/access.php?info=a');
                 if ($ok == 'done') {
                     $result = $mysqli->query("SELECT MAX(`index_id`) as idd FROM `si_invoices`");
                     $id = $result->fetch_assoc();
-                    $get=file_get_contents('http://83.56.10.172:8091/index.php?module=export&view=invoice&id='.$id['idd'].'&format=pdf');
+                    $get=file_get_contents('http://217.125.25.165:8091/index.php?module=export&view=invoice&id='.$id['idd'].'&format=pdf');
                     file_put_contents('Factura '.$pdf[0], $get);
-                    file_get_contents('http://83.56.10.172:8091/access.php?info=c');
+                    file_get_contents('http://217.125.25.165:8091/access.php?info=c');
                     return $pdf;
                 }
             }
@@ -938,7 +938,7 @@ function simplefactura($pdf) {
 function enviaemail($pdf) {
     global $fulldomain;
     require 'scripts/phpmailer/PHPMailerAutoload.php';
-    $mysqli = new mysqli('83.56.10.172', 'servibyte', 'sbyte_15_Mxz', 'simpleinvoices', 8092); 
+    $mysqli = new mysqli('217.125.25.165', 'servibyte', 'sbyte_15_Mxz', 'simpleinvoices', 8092); 
     $result = $mysqli->query("SELECT * FROM `si_customers` WHERE `id`=".$pdf[2]['si']);
     $aux = $result->fetch_assoc();
     $mail = new PHPMailer;

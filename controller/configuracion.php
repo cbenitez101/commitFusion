@@ -138,7 +138,7 @@ if (isLoggedIn()) {
                     $radius->query('INSERT INTO `radgroupcheck`(`groupname`, `attribute`, `op`, `value`) VALUES ("'.$postparams['hot_name'].'","Called-Station-Id","==","'.$postparams['hot_name'].'")');
                     $radius->query("INSERT INTO `radius`.`radgroupreply` (`groupname`, `attribute`, `op`, `value`) VALUES ('".$postparams['hot_name']."', 'Acct-Interim-Interval', ':=', '600')");
                 }
-                $si = new mysqli('83.56.10.172', 'servibyte', 'sbyte_15_Mxz', 'simpleinvoices', 8092);
+                $si = new mysqli('217.125.25.165', 'servibyte', 'sbyte_15_Mxz', 'simpleinvoices', 8092);
                 $result = $si->query("SELECT id, name FROM `si_customers`");
                 $siout = array();
                 while ($aux = $result->fetch_assoc()) $siout[] = $aux;
