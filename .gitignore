@@ -3,4 +3,4 @@ templates_c/*
 *.pdf
 /.idea
 /templates_c/
-@eaDir/
+/@eaDir/
