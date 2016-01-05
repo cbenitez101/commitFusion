@@ -1,6 +1,6 @@
 <?php
 if (isLoggedIn()) {
-    include_header_file('filtertable');
+    load_modul('datatable');
     $smarty->assign('page', $template_data[1]);
     switch ($template_data[1]) {
         case 'usuarios':
@@ -133,12 +133,12 @@ if (isLoggedIn()) {
             }
         case 'hotspots':
             if ($_SESSION['cliente'] == 'admin') {
-                if (!empty($postparams)) {
-                    $database->query('INSERT INTO `hotspots`(`ServerName`, `SerialNumber`, `Status`, `Local`, `Informe`,`si`) VALUES ("'.$postparams['hot_name'].'","'.$postparams['hot_number'].'","'.$postparams['hot_status'].'","'.$postparams['hot_local'].'","'.$postparams['hot_informe'].'",'.((empty($postparams['hot_s']))?'NULL':'"'.$postparams['hot_s'].'"').')');
-                    $radius->query('INSERT INTO `radgroupcheck`(`groupname`, `attribute`, `op`, `value`) VALUES ("'.$postparams['hot_name'].'","Called-Station-Id","==","'.$postparams['hot_name'].'")');
-                    $radius->query("INSERT INTO `radius`.`radgroupreply` (`groupname`, `attribute`, `op`, `value`) VALUES ('".$postparams['hot_name']."', 'Acct-Interim-Interval', ':=', '600')");
-                }
-                $si = new mysqli('83.56.10.172', 'servibyte', 'sbyte_15_Mxz', 'simpleinvoices', 8092);
+                // if (!empty($postparams)) {
+                //     $database->query('INSERT INTO `hotspots`(`ServerName`, `SerialNumber`, `Status`, `Local`, `Informe`,`si`) VALUES ("'.$postparams['hot_name'].'","'.$postparams['hot_number'].'","'.$postparams['hot_status'].'","'.$postparams['hot_local'].'","'.$postparams['hot_informe'].'",'.((empty($postparams['hot_s']))?'NULL':'"'.$postparams['hot_s'].'"').')');
+                //     $radius->query('INSERT INTO `radgroupcheck`(`groupname`, `attribute`, `op`, `value`) VALUES ("'.$postparams['hot_name'].'","Called-Station-Id","==","'.$postparams['hot_name'].'")');
+                //     $radius->query("INSERT INTO `radius`.`radgroupreply` (`groupname`, `attribute`, `op`, `value`) VALUES ('".$postparams['hot_name']."', 'Acct-Interim-Interval', ':=', '600')");
+                // }
+                $si = new mysqli('217.125.25.165', 'servibyte', 'sbyte_15_Mxz', 'simpleinvoices', 8092);
                 $result = $si->query("SELECT id, name FROM `si_customers`");
                 $siout = array();
                 while ($aux = $result->fetch_assoc()) $siout[] = $aux;
@@ -173,13 +173,13 @@ if (isLoggedIn()) {
             }
         case 'perfiles':
             if ($_SESSION['cliente'] == 'admin') {
-                if (!empty($postparams)) {
-                    $sql='INSERT INTO `perfiles`(`Id_hotspot`, `Descripcion`, `Duracion`, `Movilidad`, `ServerName`, `ModoConsumo`, `Acct-Interim-Interval`, `Idle-Timeout`, `Simultaneous-Use`, `Login-Time`, `Expiration`, `WISPr-Bandwidth-Max-Down`, `WISPr-Bandwidth-Max-Up`, `TraficoDescarga`, `Password`) VALUES (';
-                    for ($index = 0; $index < 15; $index++) $sql.='"'.((!empty($postparams['per_'.$index]))?$postparams['per_'.$index]:'').'",';
-                    $sql = substr($sql, 0, -1).')';
-                    $database->query($sql);
-                }
-                load_modul('datepicker');
+                // if (!empty($postparams)) {
+                //     $sql='INSERT INTO `perfiles`(`Id_hotspot`, `Descripcion`, `Duracion`, `Movilidad`, `ServerName`, `ModoConsumo`, `Acct-Interim-Interval`, `Idle-Timeout`, `Simultaneous-Use`, `Login-Time`, `Expiration`, `WISPr-Bandwidth-Max-Down`, `WISPr-Bandwidth-Max-Up`, `TraficoDescarga`, `Password`) VALUES (';
+                //     for ($index = 0; $index < 15; $index++) $sql.='"'.((!empty($postparams['per_'.$index]))?$postparams['per_'.$index]:'').'",';
+                //     $sql = substr($sql, 0, -1).')';
+                //     $database->query($sql);
+                // }
+                load_modul('bsdatepicker');
                 $result = $database->query("SELECT * FROM perfiles");
                 $out = array();
                 while ($aux = $result->fetch_assoc()) $out[] = $aux;
@@ -198,9 +198,10 @@ if (isLoggedIn()) {
             }
         case 'lotes':
             if ($_SESSION['cliente'] == 'admin') {
-                if (!empty($postparams)) {
+                /*if (!empty($postparams)) {
                     $database->query('INSERT INTO `lotes`(`Id_perfil`, `Duracion`, `Costo`, `Precio`) VALUES ("'.$postparams['lot_Id_perfil'].'", "'.$postparams['lot_duration'].'", "'.$postparams['lot_costo'].'", "'.$postparams['lot_precio'].'")');
-                }
+                }*/
+                load_modul('bsdatepicker');
                 $result = $database->query("SELECT lotes.*, perfiles.ServerName, perfiles.Descripcion FROM lotes INNER JOIN  perfiles ON lotes.Id_perfil = perfiles.id");
                 $out = array();
                 while ($aux = $result->fetch_assoc()) $out[] = $aux;

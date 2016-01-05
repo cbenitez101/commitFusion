@@ -22,7 +22,7 @@ function getTemplateData($getparams) {
                     call_user_func_array('external_'.$get_values[0], $_GET);
                 } else {
                     // If no function and page is found send 404 code
-                    header('Location: http://servibyte.net/404.html');
+                    header('Location:'.DOMAIN.'/404.html');
                 }
             }
         } else {
@@ -48,7 +48,7 @@ function get_subdoamin() {
             $_SESSION['cliente'] = $cliente;
             if (isset($local)) $_SESSION['local']=$local;
         } else {
-            header('Location: http://servibyte.net/404.html');
+            header('Location: '.DOMAIN.'/404.html');
         }
     } else {
         $_SESSION['cliente'] = 'admin';
@@ -282,7 +282,9 @@ function external_quitar_menu() {
     }
 }
 function external_guardar_hotspot(){
-    if ((!empty($_POST['id'])) && (!empty($_POST['name'])) && (!empty($_POST['number'])) && (!empty($_POST['status'])) && (!empty($_POST['local'])) && (!empty($_POST['informe'])) && (!empty($_POST['si']))) {
+    //global $fulldomain;
+    //file_put_contents('hotspots', print_r($_POST, true));
+    if ((!empty($_POST['name'])) && (!empty($_POST['number'])) && (!empty($_POST['status'])) && (!empty($_POST['local'])) && (!empty($_POST['informe']))) {
         global $database;
         global $radius;
         if ($_POST['action'] == 1) {
@@ -290,29 +292,52 @@ function external_guardar_hotspot(){
                 if ($radius->query('DELETE FROM `radgroupcheck` WHERE `groupname` = "'.$_POST['local'].'" AND `value`= "'.$_POST['name'].'"')) die();
             }
         } else {
-            $temporal = $database->query('SELECT * FROM hotspots WHERE id = "'.$_POST['id'].'"');
-            $aux = $temporal->fetch_assoc();
-            if ($database->query('UPDATE `hotspots` SET `ServerName`="'.$_POST['name'].'",`SerialNumber`="'.$_POST['number'].'",`Status`="'.$_POST['status'].'",`Local`="'.$_POST['local'].'",`Informe`="'.$_POST['informe'].'",`si`='.(($_POST['si']=='Cliente')?"NULL":'"'.$_POST['si'].'"').' WHERE id="'.$_POST['id'].'"')) {
-                if ($radius->query('UPDATE `radgroupcheck` SET `groupname` = "'.$_POST['local'].'", `value`= "'.$_POST['name'].'" WHERE groupname="'.$aux['Local'].'" AND value = "'.$aux['ServerName'].'"')) die();
+            if (empty($_POST['id'])){
+                $database->query('INSERT INTO `hotspots`(`ServerName`, `SerialNumber`, `Status`, `Local`, `Informe`,`si`) VALUES ("'.$_POST['name'].'","'.$_POST['number'].'","'.$_POST['status'].'","'.$_POST['local'].'","'.$_POST['informe'].'",'.((empty($_POST['si']))?'NULL':(($_POST['si']==0)?'NULL':'"'.$_POST['si'].'"')).')');
+                $radius->query('INSERT INTO `radgroupcheck`(`groupname`, `attribute`, `op`, `value`) VALUES ("'.$_POST['name'].'","Called-Station-Id","==","'.$_POST['name'].'")');
+                $radius->query("INSERT INTO `radius`.`radgroupreply` (`groupname`, `attribute`, `op`, `value`) VALUES ('".$_POST['name']."', 'Acct-Interim-Interval', ':=', '600')");
+            } else {
+                $temporal = $database->query('SELECT * FROM hotspots WHERE id = "'.$_POST['id'].'"');
+                $aux = $temporal->fetch_assoc();
+                if ($database->query('UPDATE `hotspots` SET `ServerName`="'.$_POST['name'].'",`SerialNumber`="'.$_POST['number'].'",`Status`="'.$_POST['status'].'",`Local`="'.$_POST['local'].'",`Informe`="'.$_POST['informe'].'",`si`='.(($_POST['si']=='Cliente')?"NULL":(($_POST['si']==0)?'NULL':'"'.$_POST['si'].'"')).' WHERE id="'.$_POST['id'].'"')) {
+                    if ($radius->query('UPDATE `radgroupcheck` SET `groupname` = "'.$_POST['local'].'", `value`= "'.$_POST['name'].'" WHERE groupname="'.$aux['Local'].'" AND value = "'.$aux['ServerName'].'"')) die();
+                }
             }
+                
         }
     }
 }
 function external_guardar_perfil() {
     global $database;
-    if ($_POST['action']== 1) {
-        if ($database->query('DELETE FROM perfiles WHERE Id = '.$_POST['modal_perfilid'])) die();
-    } elseif ($_POST['action']== 0) {
-        if ($database->query('UPDATE `perfiles` SET `Id_hotspot`="'.$_POST['per_0'].'",`ServerName`="'.$_POST['per_1'].'",`Descripcion`="'.$_POST['per_2'].'",`Duracion`="'.$_POST['per_3'].'",`Movilidad`="'.$_POST['per_4'].'",`ModoConsumo`="'.$_POST['per_5'].'",`Acct-Interim-Interval`="'.$_POST['per_6'].'",`Idle-Timeout`="'.$_POST['per_7'].'",`Simultaneous-Use`="'.$_POST['per_8'].'",`Login-Time`="'.$_POST['per_9'].'",`Expiration`="'.$_POST['per_10'].'",`WISPr-Bandwidth-Max-Down`="'.$_POST['per_11'].'",`WISPr-Bandwidth-Max-Up`="'.$_POST['per_12'].'",`TraficoDescarga`="'.$_POST['per_13'].'",`Password`="'.$_POST['per_14'].'" WHERE id = '.$_POST['modal_perfilid'])) die ();
+    if (count($_POST) > 14) {
+        if ($_POST['action']== 1) {
+            if ($database->query('DELETE FROM perfiles WHERE Id = '.$_POST['per_0'])) die();
+        } else {
+            if (empty($_POST['per_0'])) {
+                $sql='INSERT INTO `perfiles`(`Id_hotspot`, `ServerName`, `Descripcion`, `Duracion`, `Movilidad`, `ModoConsumo`, `Acct-Interim-Interval`, `Idle-Timeout`, `Simultaneous-Use`, `Login-Time`, `Expiration`, `WISPr-Bandwidth-Max-Down`, `WISPr-Bandwidth-Max-Up`, `TraficoDescarga`, `Password`) VALUES (';
+                for ($index = 1; $index < 16; $index++) $sql.='"'.((!empty($_POST['per_'.$index]))?$_POST['per_'.$index]:'').'",';
+                $sql = substr($sql, 0, -1).')';
+                file_put_contents('perfiles', $sql, 8);
+                $database->query($sql);
+            } else {
+                if ($database->query('UPDATE `perfiles` SET `Id_hotspot`="'.$_POST['per_1'].'",`ServerName`="'.$_POST['per_2'].'",`Descripcion`="'.$_POST['per_3'].'",`Duracion`="'.$_POST['per_4'].'",`Movilidad`="'.$_POST['per_5'].'",`ModoConsumo`="'.$_POST['per_6'].'",`Acct-Interim-Interval`="'.$_POST['per_7'].'",`Idle-Timeout`="'.$_POST['per_8'].'",`Simultaneous-Use`="'.$_POST['per_9'].'",`Login-Time`="'.$_POST['per_10'].'",`Expiration`="'.$_POST['per_11'].'",`WISPr-Bandwidth-Max-Down`="'.$_POST['per_12'].'",`WISPr-Bandwidth-Max-Up`="'.$_POST['per_13'].'",`TraficoDescarga`="'.$_POST['per_14'].'",`Password`="'.$_POST['per_15'].'" WHERE id = '.$_POST['per_0'])) die ();
+            }
+        }
     }
 }
 function external_guardar_lote() {
     global $database;
-    if ($_POST['action']== 1) {
-        if ($database->query('DELETE FROM lotes WHERE Id = '.$_POST['modal_Id'])) die();
-    } elseif ($_POST['action']== 0) {
-        if ($database->query('UPDATE `lotes` SET `Id_perfil`="'.$_POST['modal_Id_perfil'].'",`Duracion`="'.$_POST['modal_Duracion'].'",`Costo`="'.$_POST['modal_Costo'].'",`Precio`="'.$_POST['modal_Precio'].'" WHERE `Id`='.$_POST['modal_Id'])) die ();
-    }
+    if (!empty($_POST['id_perfil']) && !empty($_POST['duracion']) && !empty($_POST['costo']) && !empty($_POST['precio'])) {
+        if ($_POST['action']== 1) {
+            if ($database->query('DELETE FROM lotes WHERE Id = '.$_POST['id'])) die();
+        } elseif ($_POST['action']== 0) {
+            if (empty($_POST['id'])) {
+                $database->query('INSERT INTO `lotes`(`Id_perfil`, `Duracion`, `Costo`, `Precio`) VALUES ("'.$_POST['id_perfil'].'", "'.$_POST['duracion'].'", "'.$_POST['costo'].'", "'.$_POST['precio'].'")');
+            } else {
+                if ($database->query('UPDATE `lotes` SET `Id_perfil`="'.$_POST['id_perfil'].'",`Duracion`="'.$_POST['duracion'].'",`Costo`="'.$_POST['costo'].'",`Precio`="'.$_POST['precio'].'" WHERE `Id`='.$_POST['id'])) die ();
+            }
+        }
+    } 
 }
 function external_crea_ticket() {
     global $fulldomain;
