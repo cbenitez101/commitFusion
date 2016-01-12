@@ -160,7 +160,7 @@ function load_modul($name) {
  * Send text given to vorgang id email given by email.
  * @global type $database
  */
-function external_send_mail($correo = NULL){
+function external_send_mail($correo = NULL, $pass = NULL){
     if ($correo == NULL) {
         if (isset($_POST['correoelec'])) {
             $correo = $_POST['correoelec'];         //Si no hay correo es que se llama de forma externa
@@ -187,11 +187,11 @@ function external_send_mail($correo = NULL){
         $mail->AddAddress($correo, utf8_decode($aux['nombre']));
         $mail->IsHTML();
         $mail->Subject = utf8_decode('Su nueva contraseña');
-        $pass = substr(md5(time()), 3, 6);
+        if ($pass == NULL) $pass = substr(md5(time()), 3, 6);
         $mail->msgHTML(utf8_decode('Contraseña generada:<br>'.$pass));
         if($mail->send()) {
             echo 'Se le ha enviado el correo con la nueva contraseña';
-            $database->query("UPDATE users SET pass=MD5('$pass') WHERE email='".$correo."'");
+            //$database->query("UPDATE users SET pass=MD5('$pass') WHERE email='".$correo."'");
         } else {
             echo 'No se pudo enviar el correo electrónico, por favor póngase en contacto con nosotros';
         }
@@ -261,6 +261,29 @@ function external_edita_usuarios($data = NULL) {
         } 
     }
 }
+
+function external_guardar_usuario() {
+    //file_put_contents('usuarios', print_r($_POST, true));
+    if ((!empty($_POST['nombre'])) && (!empty($_POST['correo'])) && (!empty($_POST['envia']))) {
+        global $database;
+        if ($_POST['action'] == 1) {
+            if ($database->query("DELETE FROM users WHERE id = ".$_POST['id'])) if ($database->query("DELETE from permisos WHERE usuario =".$_POST['id'])) die();
+        } else {
+            if (empty($_POST['id'])) {
+                if ($database->query("INSERT INTO `users`(`nombre`, `pass`, `email`) VALUES ('".$_POST['nombre']."','".md5($_POST['pass'])."','".$_POST['correo']."')")) {
+                    if ($_POST['envia'] == 'true') external_send_mail($_POST['correo'], $_POST['pass']);
+                    die();
+                }
+            } else {
+                if ($database->query("UPDATE `users` SET `nombre`='".$_POST['nombre']."',".((empty($_POST['pass']))?"":"`pass`='".md5($_POST['pass'])."',")."`email`='".$_POST['correo']."' WHERE `id`=".$_POST['id'])) {
+                    if ($_POST['envia'] == 'true') external_send_mail($_POST['correo'], $_POST['pass']);
+                    die();
+                }
+            }
+        }
+    }
+}
+
 function external_upload_logo() {
     global $fulldomain;
     file_put_contents($fulldomain.'/testo', print_r($_POST, TRUE));
@@ -609,6 +632,12 @@ function external_importar_bloc() {
         $database->query("DELETE FROM `blocs` WHERE `id`=".$_POST['id']);
         die();
     }  
+}
+function external_aleatorio() {
+    if (!empty($_POST['tipoalf'])) {
+        echo ((empty($_POST['lon']))?usuario_aleatorio($_POST['tipoalf']):usuario_aleatorio($_POST['tipoalf'], $_POST['lon']));
+        die();
+    }
 }
 /*--------------------------------------------------------------------------*
  *                                 END                                      *

@@ -64,7 +64,7 @@ div.dashboard {
     margin-bottom: 5px;
     border-radius: 5px;
 }
-.dashboard .title, .ptitle , #tabletitle, table[id^='table-search'] thead, .ui-button, #infoticket td:first-of-type  {
+.dashboard .title, .ptitle , #tabletitle, table[id^='table-search'] thead, .ui-button, #infoticket td:first-of-type, #tabletitle, table[id^='table-permisos'] thead , table[id^='table-menu'] thead {
     color: white;
     text-align: center;
     /*margin-top: 20px;*/
@@ -175,3 +175,10 @@ span.ui-menu-icon {display: none}
 .datepicker {
     z-index:10000;
 } 
+
+.disableed {
+    z-index: 1000;
+    background-color: lightgrey;
+    opacity: 0.6;
+    pointer-events: none;
+}
