@@ -25,7 +25,7 @@
         				<div class="dataTable_wrapper row">
         					<div class="col-md-12">
         						{html_table cols=$cols  table_attr='border="0" class="tabledit userstable hover"
-        						id="table-search" width="100%"' loop=$users}
+        						id="table-search" width="100%"' loop=$clientes}
         					</div>
         				</div>
         				<div class="row">
@@ -35,7 +35,7 @@
         						</button>
         					</div>
         				</div>
-        				<div class="modal fade" id="modal_lote" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        				<div class="modal fade" id="modal_cliente" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         					<div class="modal-dialog modal-lg">
         						<div class="modal-content">
         							<div class="modal-header">
@@ -44,7 +44,7 @@
         							</div>
         							<div class="modal-body">
         								<form role="form">
-        									<input class="perfil" type="hidden" name="loteid" id="modal_loteid">
+        									<input class="perfil" type="hidden" name="loteid" id="modal_clienteid">
         						            <div class="form-group">
         										<label>Id Hotspot</label>
         										<select class="form-control" name="idlote" id="modal_loteidperfil">
@@ -84,8 +84,8 @@
         			<div class="panel-body">
         				<div class="dataTable_wrapper row">
         					<div class="col-md-12">
-        						{html_table cols=$cols  table_attr='border="0" class="tabledit userstable hover"
-        						id="table-search" width="100%"' loop=$users}
+        						{html_table cols=$cols  table_attr='border="0" class="tabledit localestable hover"
+        						id="table-search" width="100%"' loop=$locales}
         					</div>
         				</div>
         				<div class="row">

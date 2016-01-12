@@ -131,6 +131,7 @@ $(document).ready(function(){
                 i++;
             });
             $('.modal-body [id^="modal_usuario"]').each(function(elem) {
+                $('form').validator();
                 if (!($(this).attr('id') == 'modal_usuariopass') && !($(this).attr('id') == 'modal_usuariopasssend')) {
                     $(this).val(data[i]);
                     i++;
@@ -157,6 +158,7 @@ $(document).ready(function(){
             $('#modal_usuariopasssend').prop('checked', true);
             $('#passrefresh').click();
             $('#tabholder').addClass('disableed');
+            $('.modal:not("#modal_borrar") .btn-danger').addClass('displaynone');
         }
     });
     // Resetea los campos del formulario
@@ -172,6 +174,7 @@ $(document).ready(function(){
         $('.table-menu').prop('checked', false);
         table2.page.len(10).draw();
         $('#tabholder').removeClass('disableed');
+        $('.btn-danger').removeClass('displaynone');
     });
     // Acciones de los botones
     $('.modal button.action').click(function(){
@@ -215,7 +218,10 @@ $(document).ready(function(){
                     });
                 }
                 guardar_usuario(0);
-            } 
+            }
+            if ($('#modal_menu').length !== 0) { // Solo entra aqui si existe el modal_hotspot
+                guardar_menu(0, $('#modal_menuname').val());
+            }
         } else if ($(this).text() == 'Eliminar') {
             if ($('#modal_hotspot').length !== 0) {
                 if (($('#modal_serverid').val()!== "")) {
@@ -237,8 +243,14 @@ $(document).ready(function(){
                     //Si estamos creando no hay id asignado y no se llama a la función
                     guardar_usuario(1);
                 }
+            } else if ($('#modal_borrar').length !== 0) {
+                if (($('#modal_menunameborrar').val()!== "")) {
+                    //Si estamos creando no hay id asignado y no se llama a la función
+                    guardar_menu(1, $('#modal_menunameborrar').val());
+                }
             }
         }
+            
     });
     //Controlador para el cambio en el modal de los perfiles para actualizar el servername
     $('#modal_perfilidhotspot').change(function(){
@@ -319,6 +331,22 @@ $(document).ready(function(){
         });
             
     });
+    $('.check_menu').change(function() {
+        $.ajax({
+            url: '/edita_menus',
+            type: 'POST',
+            data: {user: $(this).data('id'), menu: $(this).data('menu'), action: $(this).prop('checked') ? 'add' : 'del' }
+        })
+        .done(function(){
+            if ($(this).prop('checked')) {
+                mensajealert('ok');
+            } else {
+                mensajealert('delete');
+            }
+        }).fail(function(){
+            mensajealert('error');
+        });
+    });
     /*-----------------------------------------------------------------------------------------------------------------
                                                 Parte para el datepicker de la búsqueda
      ----------------------------------------------------------------------------------------------------------------*/
@@ -339,6 +367,7 @@ $(document).ready(function(){
      ----------------------------------------------------------------------------------------------------------------*/
     
 });
+var validado = false;
 var table;
 var data;
 var row;
@@ -475,4 +504,13 @@ function guardar_usuario(action) {
             }
         });
     } 
+}
+function guardar_menu(action, value) {
+    $.ajax({
+        url: '/quitar_menu',
+        type: 'POST',
+        data: {menu: 'menu_'+ value, action: action}
+    }).done(function(){
+        window.location = document.URL;
+    });
 }

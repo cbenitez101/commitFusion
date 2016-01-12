@@ -6,6 +6,7 @@ if (isLoggedIn()) {
     switch ($template_data[1]) {
         case 'usuarios':
             if ($_SESSION['cliente'] == 'admin') {
+                load_modul('bootstrap-validator');
                 $result = $database->query("SELECT * FROM users");  //Se selecciona todos los usuarios
                 $out = array();
                 while ($aux = $result->fetch_assoc()) $out[] = $aux;
@@ -68,12 +69,13 @@ if (isLoggedIn()) {
                 $smarty->assign('permisos', $permisos);
                 $smarty->assign('cols', 'id, nombre, email, lastlogin, ip, errlog');
                 $smarty->assign('usuarios', $menu);
+                break;
             } else {
                 header('Location: '.DOMAIN);
                 die();
             }
                 
-        case 'permisos':
+        /*case 'permisos':
             if ($_SESSION['cliente'] == 'admin') {  //Si no se es admin no se puede trabajar en este apartado
                 $result = $database->query("SELECT id, nombre, email FROM users");  //Se selecciona todos los usuarios
                 $users = array();    //Se genera el array para la función de smarty que crea la tabla
@@ -113,12 +115,30 @@ if (isLoggedIn()) {
             } else {
                 header('Location: '.DOMAIN);
                 die();
+            }*/
+        case 'clientes':
+            if ($_SESSION['cliente'] == 'admin') {  //Si no se es admin no se puede trabajar en este apartado
+                $result = $database->query("SELECT * FROM clientes");
+                $out = array();
+                while ($aux = $result->fetch_assoc()) $out[] = $aux;
+                $menu = array();
+                foreach ($out as $value) foreach ($value as $item) $menu[]=$item;
+                $smarty->assign('cols', implode(', ', array_keys($out[0])));
+                $smarty->assign('clientes', $menu);
+                $result = $database->query("SELECT locales.id, locales.nombre, clientes.nombre as cnombre, locales.cliente FROM locales left join clientes on locales.cliente=clientes.id");  //Se selecciona todos los locales
+                $out = array();
+                while ($aux = $result->fetch_assoc()) $out[] = $aux;
+                $menu = array();
+                foreach ($out as $value) foreach ($value as $item) $menu[]=$item;
+                $smarty->assign('cols', implode(', ', array_keys($out[0])));
+                $smarty->assign('locales', $menu);
+                break;
+            } else {
+                header('Location: '.DOMAIN);
+                die();
             }
         case 'menu':
             if ($_SESSION['cliente'] == 'admin') {
-                if (!empty($postparams)) {
-                    $database->query("ALTER TABLE `users` ADD `menu_".  strtolower($postparams['table_name'])."` INT(1) NOT NULL DEFAULT '0' ;");
-                }
                 $result = $database->query("SELECT * FROM users");
                 $out = array();
                 while ($aux = $result->fetch_assoc()) $out[] = $aux;
@@ -137,7 +157,7 @@ if (isLoggedIn()) {
                     }
                     $smarty->assign('cols', $cols);
                     $smarty->assign('users', $table);
-                    $smarty->assign('menus', array_keys($menu[0]));
+                    $smarty->assign('menus', array_slice(array_keys($menu[0]), 3));
                 }
                 //ALTER TABLE `users` ADD `menu_configuracion_menu` INT(1) NOT NULL DEFAULT '0' ;
                 break;

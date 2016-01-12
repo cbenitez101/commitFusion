@@ -301,7 +301,11 @@ function external_edita_menus() {
 function external_quitar_menu() {
     if (!empty($_POST['menu'])) if (substr($_POST['menu'], 0, 5) == 'menu_') {
         global $database;
-        if ($database->query('ALTER TABLE `users` DROP `'.$_POST['menu'].'`;'))die();
+        if ($_POST['action'] == 1) {
+            if ($database->query('ALTER TABLE `users` DROP `'.strtolower($_POST['menu']).'`;')) die();
+        } elseif ($_POST['action'] == 0) {
+            if ($database->query("ALTER TABLE `users` ADD `".  strtolower($_POST['menu'])."` INT(1) NOT NULL DEFAULT '0' ;")) die();
+        }  
     }
 }
 function external_guardar_hotspot(){

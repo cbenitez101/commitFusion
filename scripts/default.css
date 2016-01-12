@@ -107,7 +107,7 @@ td.alt { background-color: #ffc; background-color: rgba(255, 255, 0, 0.2); }
 /*.ui-dialog-buttonset, .eliminar, .menueliminar, .modal_ventana {text-align: center;}*/
 /*.modal table {width: 400px} */
 /*.modal, .ui-dialog-buttonset {width: 414px !important;} */
-#tdmodalcorreo, #tdmodallogo, #tdmodallocal {display:none;}
+#tdmodalcorreo, #tdmodallogo, #tdmodallocal {display: none;}
 .no-close .ui-dialog-titlebar-close {display: none;}
 #tdmodalnombre {display: inherit}
 #confmenu table th {cursor: pointer;}
@@ -181,4 +181,7 @@ span.ui-menu-icon {display: none}
     background-color: lightgrey;
     opacity: 0.6;
     pointer-events: none;
+}
+.displaynone {
+    display: none;
 }

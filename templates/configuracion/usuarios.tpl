@@ -34,17 +34,19 @@
     								<h4 class="modal-title">Cuenta</h4>
     							</div>
     							<div class="modal-body">
-    								<form role="form">
+    								<form data-toggle="validator" role="form">
     								    <div class="row">
     								        <div class="col-md-4">
     								            <input class="perfil" type="hidden" name="usuarioid" id="modal_usuarioid">
             									<div class="form-group">
             										<label>Nombre</label>
-            										<input class="form-control" name="nombre" id="modal_usuarionombre">
+            										<input class="form-control" name="nombre" id="modal_usuarionombre" required>
+            										<div class="help-block with-errors"></div>
             									</div>
             									<div class="form-group">
             										<label>E-Mail</label>
-            										<input class="form-control" name="email" id="modal_usuarioemail">
+            										<input type="email" class="form-control" name="email" id="modal_usuarioemail" required>
+            										<div class="help-block with-errors"></div>
             									</div>
             									<div class="form-group">
             										<label>

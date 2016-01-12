@@ -62,10 +62,10 @@
 								<form role="form">
 									<div class="form-group">
 										<label>borrar</label>
-										<select class="form-control" name="menuname" id="modal_menuname">
+										<select class="form-control" name="menuname" id="modal_menunameborrar">
                                             <option value="">Menu</option>
                                             {foreach item=item from=$menus}
-                                                <option>{$item}</option>
+                                                <option value="{$item}">{$item}</option>
                                             {/foreach}
 										</select>
 									</div>
