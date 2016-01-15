@@ -284,11 +284,71 @@ function external_guardar_usuario() {
     }
 }
 
+function external_guardar_cliente() {
+    if (!empty($_POST['nombre'])) {
+        global $database;
+        if ($_POST['action'] == 1) {
+            // Al borrar un cliente, habría que borrar los locales que tiene ese cliente, por lo que al borrar un local habría que borrar tambíen los hotspot de ese local con sus perfiles y lotes.
+            // Tambíen hay que modificar el nombre de las imagenes asociadas a ellos.
+            // Nota: Se podría cambiar el nombre de las imagenes a los ids de los locales y clientes para solucionar este problema.
+            if ($database->query("DELETE FROM `clientes` WHERE `id` = ".$_POST['id'])) if ($database->query("DELETE FROM `permisos` WHERE `cliente`=".$_POST['id'])) {
+                if (file_exists($fulldomain.'/images/logos/'.strtolower($_POST['nombre']).'.png')) {
+                    if (unlink($fulldomain.'/images/logos/'.strtolower($_POST['nombre']).'.png')) {
+                        die();
+                        // Aqui es donde se llamaría a eliminar local
+                    }
+                }
+            }
+        } else {
+            if (empty($_POST['id'])) {
+                if ($database->query("INSERT INTO `clientes`( `nombre`) VALUES ('".$_POST['nombre']."')")) die();
+            } else {
+                $result = $database->query("SELECT * FROM `clientes` WHERE `id`=".$_POST['id']);
+                $aux = $result->fetch_assoc();
+                global $fulldomain;
+                if ($database->query("UPDATE `clientes` SET `nombre`='".$_POST['nombre']."' WHERE `id`=".$_POST['id'])) {
+                    if (file_exists($fulldomain.'/images/logos/'.strtolower($aux['nombre']).'.png')) {
+                        if (rename($fulldomain.'/images/logos/'.strtolower($aux['nombre']).'.png', $fulldomain.'/images/logos/'.strtolower($_POST['nombre']).'.png')) die();   
+                    }
+                }
+            }
+        }
+    }
+}
+
+function external_guardar_local() {
+    if ((!empty($_POST['nombre'])) && (!empty($_POST['cliente'])) && (!empty($_POST['clientenombre']))) {
+        global $database;
+        if ($_POST['action'] == 1) {
+            if ($database->query("DELETE FROM `locales` WHERE `id` = ".$_POST['id'])) if ($database->query("DELETE FROM `permisos` WHERE `local`=".$_POST['id'])) {
+                if (file_exists($fulldomain.'/images/logos/'.strtolower($_POST['clientenombre']).'.'.strtolower($_POST['nombre']).'.png')) {
+                    if (unlink($fulldomain.'/images/logos/'.strtolower($_POST['clientenombre']).'.'.strtolower($_POST['nombre']).'.png')) {
+                        die();
+                        // Aqui es donde se llamaría a eliminar local
+                    }
+                }
+            }
+        } else {
+            if (empty($_POST['id'])) {
+                if ($database->query("INSERT INTO `locales`(`nombre`, `cliente`) VALUES ('".$_POST['nombre']."',".$_POST['cliente'].")")) die();
+            } else {
+                $result = $database->query("SELECT locales.nombre, clientes.nombre as clientenombre FROM `locales` INNER JOIN `clientes` ON locales.cliente = clientes.id  WHERE locales.id=".$_POST['id']);
+                $aux = $result->fetch_assoc();
+                global $fulldomain;
+                if ($database->query("UPDATE `locales` SET `nombre`='".$_POST['nombre']."', `cliente`=".$_POST['cliente']." WHERE `id`=".$_POST['id'])) {
+                    if (file_exists($fulldomain.'/images/logos/'.strtolower($aux['clientenombre']).'.'.strtolower($aux['nombre']).'.png')) {
+                        if (rename($fulldomain.'/images/logos/'.strtolower($aux['clientenombre']).'.'.strtolower($aux['nombre']).'.png', $fulldomain.'/images/logos/'.strtolower($_POST['clientenombre']).'.'.strtolower($_POST['nombre']).'.png')) die();   
+                    }
+                }
+            }
+        }
+    }
+}
+
 function external_upload_logo() {
     global $fulldomain;
-    file_put_contents($fulldomain.'/testo', print_r($_POST, TRUE));
     foreach ($_FILES as $file) {
-        if (move_uploaded_file($file['tmp_name'], $fulldomain.'/images/logos/'.(($_POST['local'])?strtolower($_POST['local']).'.':'').strtolower($_POST['nombre']).'.png')) die();
+        if (move_uploaded_file($file['tmp_name'], $fulldomain.'/images/logos/'.strtolower($_POST['nombre']).(($_POST['local'])?'.'.strtolower($_POST['local']):'').'.png')) die();
     }
     
 }

@@ -64,7 +64,7 @@ div.dashboard {
     margin-bottom: 5px;
     border-radius: 5px;
 }
-.dashboard .title, .ptitle , #tabletitle, table[id^='table-search'] thead, .ui-button, #infoticket td:first-of-type, #tabletitle, table[id^='table-permisos'] thead , table[id^='table-menu'] thead {
+.dashboard .title, .ptitle , #tabletitle, table[id^='table-search'] thead, .ui-button, #infoticket td:first-of-type, #tabletitle, table[id^='table-permisos'] thead , table[id^='table-menu'] thead, #table-cliente thead, #table-local thead {
     color: white;
     text-align: center;
     /*margin-top: 20px;*/

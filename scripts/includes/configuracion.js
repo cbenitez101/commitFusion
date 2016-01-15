@@ -35,11 +35,11 @@ $(document).ready(function(){
             ]
     });
     
-    table = $('#table-search:not(.hotspottable, .permisostable)').DataTable({
+    table = $('#table-search:not(.hotspottable, .permisostable, .clientestable, .localestable)').DataTable({
         //"iDisplayLength": 25, //Hay un error cuando se pasa de página que no me capta el evento onclick. Checkear eventos en la pagina del datatable
         "preDrawCallback" : function() {
             var api = this.api();
-            $('#table-search:not(.permisostable) tbody td').click(function() {
+            $('#table-search:not(.permisostable, .menutable) tbody td').click(function() {
                 if (!$(this).hasClass('sorting_1')) {
                     row = api.row($(this).parent());
                     data = api.row($(this).parent()).data();
@@ -82,6 +82,42 @@ $(document).ready(function(){
                     data1 = api1.row($(this).parent()).data();
                     
                     $('.modal').modal();
+                }
+            });
+        },
+        "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json"
+        },
+        "responsive" : true
+    });
+    
+    table = $('#table-cliente').DataTable({
+        //"iDisplayLength": 25, //Hay un error cuando se pasa de página que no me capta el evento onclick. Checkear eventos en la pagina del datatable
+        "preDrawCallback" : function() {
+            var api = this.api();
+            $('#table-cliente tbody td').click(function() {
+                if (!$(this).hasClass('sorting_1')) {
+                    row = api.row($(this).parent());
+                    data = api.row($(this).parent()).data();
+                    $('#modal_cliente').modal();
+                }
+            });
+        },
+        "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json"
+        },
+        "responsive" : true
+    });
+    
+    table1 = $('#table-local').DataTable({
+        //"iDisplayLength": 25, //Hay un error cuando se pasa de página que no me capta el evento onclick. Checkear eventos en la pagina del datatable
+        "preDrawCallback" : function() {
+            var api1 = this.api();
+            $('#table-local tbody td').click(function() {
+                if (!$(this).hasClass('sorting_1')) {
+                    row1 = api1.row($(this).parent());
+                    data1 = api1.row($(this).parent()).data();
+                    $('#modal_local').modal();
                 }
             });
         },
@@ -137,6 +173,15 @@ $(document).ready(function(){
                     i++;
                 }
             });
+            $('.modal-body [id^="modal_cliente"]').each(function(elem) {
+                if ($(this).attr('id') !== 'modal_clienteimagen') {
+                    $(this).val(data[i]);
+                    i++;
+                } else {
+                    $('#clienteimagen').html(data[i]);
+                    i++;
+                }
+            });
             if ($('#modal_usuario').length !== 0) {
                 $('#modal_usuariopasssend').prop('checked', false);
                 table1.page.len(-1).draw();
@@ -154,6 +199,17 @@ $(document).ready(function(){
                 });
                 table2.page.len(10).draw();
             }
+        } else if (data1 != null){
+            var i = 0;
+            $('.modal-body [id^="modal_local"]').each(function(elem) {
+                if ($(this).attr('id') !== 'modal_localimagen') {
+                    $(this).val(data1[i]);
+                    i++;
+                } else {
+                    $('#localimagen').html(data1[i + 1]);
+                    i++;
+                }
+            });
         } else {
             $('#modal_usuariopasssend').prop('checked', true);
             $('#passrefresh').click();
@@ -175,9 +231,12 @@ $(document).ready(function(){
         table2.page.len(10).draw();
         $('#tabholder').removeClass('disableed');
         $('.btn-danger').removeClass('displaynone');
+        $('#clienteimagen').html('');
+        $('#localimagen').html('');
     });
     // Acciones de los botones
-    $('.modal button.action').click(function(){
+    $('.modal button.action').click(function(e){
+        e.preventDefault();
         if ($(this).text() == 'Guardar') {
             // Guardo los valores en dataok para actualizar la tabla
             if ($('#modal_hotspot').length !== 0) { // Solo entra aqui si existe el modal_hotspot
@@ -222,6 +281,23 @@ $(document).ready(function(){
             if ($('#modal_menu').length !== 0) { // Solo entra aqui si existe el modal_hotspot
                 guardar_menu(0, $('#modal_menuname').val());
             }
+            if ($('#modal_cliente').length !== 0) { // Solo entra aqui si existe el modal_hotspot
+                if ($('#modal_clienteid').val() !== "") {
+                    $('.modal-body [id^="modal_cliente"]').each(function(elem) {
+                        dataok.push($(this).val());
+                    });
+                }
+                guardar_cliente(0);
+            }
+            if ($('#modal_local').length !== 0) { // Solo entra aqui si existe el modal_hotspot
+                if ($('#modal_localid').val() !== "") {
+                    $('.modal-body [id^="modal_local"]').each(function(elem) {
+                        dataok.push($(this).val());
+                    });
+                }
+                console.log(dataok);
+                guardar_local(0);
+            } 
         } else if ($(this).text() == 'Eliminar') {
             if ($('#modal_hotspot').length !== 0) {
                 if (($('#modal_serverid').val()!== "")) {
@@ -247,6 +323,16 @@ $(document).ready(function(){
                 if (($('#modal_menunameborrar').val()!== "")) {
                     //Si estamos creando no hay id asignado y no se llama a la función
                     guardar_menu(1, $('#modal_menunameborrar').val());
+                }
+            } else if ($('#modal_cliente').length !== 0) {
+                if (($('#modal_clienteid').val()!== "")) {
+                    //Si estamos creando no hay id asignado y no se llama a la función
+                    guardar_cliente(1);
+                }
+            } else if ($('#modal_local').length !== 0) {
+                if (($('#modal_local').val()!== "")) {
+                    //Si estamos creando no hay id asignado y no se llama a la función
+                    guardar_local(1);
                 }
             }
         }
@@ -347,6 +433,10 @@ $(document).ready(function(){
             mensajealert('error');
         });
     });
+    //Para la subida de ficheros
+    $('input[type=file]').on('change', function(event) {
+        files = event.target.files;
+    });
     /*-----------------------------------------------------------------------------------------------------------------
                                                 Parte para el datepicker de la búsqueda
      ----------------------------------------------------------------------------------------------------------------*/
@@ -376,6 +466,7 @@ var row1;
 var dataok = [];
 var checkout;
 var api1;
+var files;
 function guardar_hotspot(action) {
     var guardar = [];
     $('input[id^="modal_server"]').each(function(){
@@ -513,4 +604,107 @@ function guardar_menu(action, value) {
     }).done(function(){
         window.location = document.URL;
     });
+}
+function guardar_cliente(action) {
+    var guardar = [];
+    $('input[id^="modal_cliente"]').each(function(){
+        guardar.push($(this).val());
+    });
+    //guardar logo
+    if ((files !== 'undefined') && (guardar[2] !== "")) guardar_logo(guardar);
+    if (guardar.length > 0) {
+        $.ajax({
+            url: '/guardar_cliente',
+            type: 'POST',
+            data: {id: guardar[0], nombre: guardar[1], action: action}
+        }).done(function(){
+            if (action === 0) {
+                if (guardar[0] === '') {
+                    window.location = document.URL;
+                } else {
+                    if ((guardar[2] !== "")) {
+                        dataok[2] = '<img src="/images/logos/' + guardar[1].toLowerCase() + '.png?' + Date.now() + '" class="logo_td" id="' + guardar[0] + '-photo">';
+                    } else {
+                        var aux = row.data();
+                        dataok[2] = aux[2];
+                    }
+                    row.data(dataok);
+                    dataok = [];
+                    if ((guardar[2] !== "")) setTimeout(function(){
+                      $('#' + guardar[0] + '-photo').attr('src', '/images/logos/' + guardar[1].toLowerCase() + '.png?' + Date.now());
+                    }, 1000);
+                }
+                mensajealert('ok');
+            } else {
+                row.remove().draw();
+                mensajealert('delete');
+            }
+        });
+    } 
+}
+function guardar_logo(guardar){
+    var data = new FormData();
+    $.each(files, function(key, value){
+        console.log(value);
+        if (key !== 'logo') {
+            data.append(key, value);
+        }
+    });
+    //data.append('nombre', guardar [1]);
+    data.append('nombre', guardar.length > 3 ? guardar[4] : guardar [1]);
+    if (guardar.length > 3) data.append('local', guardar[1]);
+    console.log(data);
+    $.ajax({
+        url: '/upload_logo',
+        type: 'POST',
+        data: data,
+        dataType: 'json',
+        processData: false,
+        contentType: false
+    });
+    files = undefined;
+}
+function guardar_local(action) {
+    var guardar = [];
+    $('input[id^="modal_local"]').each(function(){
+        guardar.push($(this).val());
+    });
+    $('select[id^="modal_local"]').each(function(){
+        guardar.push($(this).val());
+        guardar.push($(this).find(':selected').text());
+    });
+    //guardar logo
+    if ((files !== 'undefined') && (guardar[2] !== "")) guardar_logo(guardar);
+    if (guardar.length > 0) {
+        $.ajax({
+            url: '/guardar_local',
+            type: 'POST',
+            data: {id: guardar[0], nombre: guardar[1], cliente: guardar[3], clientenombre: guardar[4], action: action}
+        }).done(function(){
+            if (action === 0) {
+                if (guardar[0] === '') {
+                    window.location = document.URL;
+                } else {
+                    dataok=[];
+                    /*if ((guardar[2] !== "")) {
+                        dataok[2] = '<img src="/images/logos/' + guardar[1].toLowerCase() + '.png?' + Date.now() + '" class="logo_td" id="' + guardar[0] + '-photo">';
+                    } else {
+                        var aux = row.data();
+                        dataok[2] = aux[2];
+                    }
+                    row.data(dataok);
+                    dataok = [];
+                    if ((guardar[2] !== "")) setTimeout(function(){
+                      $('#' + guardar[0] + '-photo').attr('src', '/images/logos/' + guardar[1].toLowerCase() + '.png?' + Date.now());
+                    }, 1000);*/
+                    
+                    //Hasta que no se arregle el autorecargado no hace falta esta parte
+                }
+                mensajealert('ok');
+            } else {
+                row.remove().draw();
+                mensajealert('delete');
+            }
+        });
+    }
 }

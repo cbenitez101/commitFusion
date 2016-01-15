@@ -122,15 +122,22 @@ if (isLoggedIn()) {
                 $out = array();
                 while ($aux = $result->fetch_assoc()) $out[] = $aux;
                 $menu = array();
-                foreach ($out as $value) foreach ($value as $item) $menu[]=$item;
-                $smarty->assign('cols', implode(', ', array_keys($out[0])));
+                foreach ($out as $value) {
+                    foreach ($value as  $item) $menu[]=$item;
+                    $menu[] = ((file_exists($fulldomain.'/images/logos/'.strtolower($value['nombre']).'.png'))?'<img src="/images/logos/'.strtolower($value['nombre']).'.png?'.time().'" class="logo_td" id="'.$value['id'].'-photo">':'');
+                }
+                $smarty->assign('cols', implode(', ', array_keys($out[0])).',logo');
                 $smarty->assign('clientes', $menu);
-                $result = $database->query("SELECT locales.id, locales.nombre, clientes.nombre as cnombre, locales.cliente FROM locales left join clientes on locales.cliente=clientes.id");  //Se selecciona todos los locales
+                $smarty->assign('clientelocales', $out);
+                $result = $database->query("SELECT locales.id, locales.nombre, locales.cliente, clientes.nombre as nombrecliente FROM locales left join clientes on locales.cliente=clientes.id");  //Se selecciona todos los locales
                 $out = array();
                 while ($aux = $result->fetch_assoc()) $out[] = $aux;
                 $menu = array();
-                foreach ($out as $value) foreach ($value as $item) $menu[]=$item;
-                $smarty->assign('cols', implode(', ', array_keys($out[0])));
+                foreach ($out as $value) {
+                    foreach ($value as $item) $menu[]=$item;
+                    $menu[] = ((file_exists($fulldomain.'/images/logos/'.strtolower($value['nombrecliente']).'.'.strtolower($value['nombre']).'.png'))?'<img src="/images/logos/'.strtolower($value['nombrecliente']).'.'.strtolower($value['nombre']).'.png?'.time().'" class="logo_td">':'');
+                }
+                $smarty->assign('cols1', implode(', ', array_keys($out[0])).',logo');
                 $smarty->assign('locales', $menu);
                 break;
             } else {
