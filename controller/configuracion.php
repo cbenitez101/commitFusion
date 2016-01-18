@@ -22,7 +22,7 @@ if (isLoggedIn()) {
                     foreach ($value as $key => $item) if ((strstr($key, '_')) && (!empty($item))) $barra[substr(strstr($key, '_'), 1)][] = $value['id'];
                 }
                 //dump($menu, true);
-                $tabla_menu = [];
+                $tabla_menu = array();
                 foreach ($barra as $key => $value) {
                     $tabla_menu[] = $key;
                     $tabla_menu[] = "<input type='checkbox' class='table-menu' id='$key' data-usuarios='[".implode(',',$value)."]'>";
@@ -49,7 +49,7 @@ if (isLoggedIn()) {
                         }
                     }
                 }
-                $tabla = []; 
+                $tabla = array();
                 foreach ($permisos as $key => $value) {
                     $tabla[]=$value['id'];
                     $tabla[]=$key;

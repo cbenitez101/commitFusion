@@ -1,22 +1,20 @@
-<?php /* Smarty version Smarty-3.1.18, created on 2015-08-29 12:59:21
+<?php /* Smarty version Smarty-3.1.18, created on 2016-01-18 11:03:03
          compiled from "/var/www/vhosts/servibyte.com/servibyte.net/templates/header.tpl" */ ?>
-<?php /*%%SmartyHeaderCode:438852858543ed6610989e6-41611247%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
+<?php /*%%SmartyHeaderCode:1106586870569cb857ddc7a2-37012478%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
   'file_dependency' => 
   array (
     '77c5ee063d129ae9304fb7364b915633e93d15d6' => 
     array (
       0 => '/var/www/vhosts/servibyte.com/servibyte.net/templates/header.tpl',
-      1 => 1440840872,
+      1 => 1453111140,
       2 => 'file',
     ),
   ),
-  'nocache_hash' => '438852858543ed6610989e6-41611247',
+  'nocache_hash' => '1106586870569cb857ddc7a2-37012478',
   'function' => 
   array (
   ),
-  'version' => 'Smarty-3.1.18',
-  'unifunc' => 'content_543ed66117e104_65882029',
   'variables' => 
   array (
     'title' => 0,
@@ -25,22 +23,21 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'includeheaderjs' => 0,
   ),
   'has_nocache_code' => false,
+  'version' => 'Smarty-3.1.18',
+  'unifunc' => 'content_569cb857e58cb9_54053105',
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_543ed66117e104_65882029')) {function content_543ed66117e104_65882029($_smarty_tpl) {?><!DOCTYPE html>
-<html lang="es"><head><title><?php echo $_smarty_tpl->tpl_vars['title']->value;?>
-</title><meta charset="UTF-8"><link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'><?php  $_smarty_tpl->tpl_vars['code'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['code']->_loop = false;
+<?php if ($_valid && !is_callable('content_569cb857e58cb9_54053105')) {function content_569cb857e58cb9_54053105($_smarty_tpl) {?><!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content=""><meta name="author" content="Servibyte SCP"><title><?php echo $_smarty_tpl->tpl_vars['title']->value;?>
+</title><link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"><!-- MetisMenu CSS --><link href="/scripts/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet"><!-- Custom CSS --><link href="/scripts/dist/css/sb-admin-2.css" rel="stylesheet"><!-- Custom Fonts --><link href="/scripts/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"><!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries --><!-- WARNING: Respond.js doesn't work if you view the page via file:// --><!--[if lt IE 9]><script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script><script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script><![endif]--><?php  $_smarty_tpl->tpl_vars['code'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['code']->_loop = false;
  $_from = $_smarty_tpl->tpl_vars['includeheadercss']->value; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
 foreach ($_from as $_smarty_tpl->tpl_vars['code']->key => $_smarty_tpl->tpl_vars['code']->value) {
 $_smarty_tpl->tpl_vars['code']->_loop = true;
 ?><?php echo $_smarty_tpl->tpl_vars['code']->value;?>
-<?php } ?><script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script><?php  $_smarty_tpl->tpl_vars['code'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['code']->_loop = false;
+<?php } ?><script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script><script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script><!-- Metis Menu Plugin JavaScript --><script src="/scripts/bower_components/metisMenu/dist/metisMenu.min.js"></script><!-- Custom Theme JavaScript --><script src="/scripts/dist/js/sb-admin-2.js"></script><?php  $_smarty_tpl->tpl_vars['code'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['code']->_loop = false;
  $_from = $_smarty_tpl->tpl_vars['includeheaderjs']->value; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
 foreach ($_from as $_smarty_tpl->tpl_vars['code']->key => $_smarty_tpl->tpl_vars['code']->value) {
 $_smarty_tpl->tpl_vars['code']->_loop = true;
 ?><?php echo $_smarty_tpl->tpl_vars['code']->value;?>
-<?php } ?></head><body><div class="align_center"><img src="<?php echo @constant('DOMAIN');?>
-/images/logos/<?php echo $_SESSION['cliente'];?>
-<?php if (isset($_SESSION['local'])) {?>.<?php echo $_SESSION['local'];?>
-<?php }?>.png" <?php if ((@constant('TEMPLATE_NAME')!='login')&&(@constant('TEMPLATE_NAME')!='contrasena')) {?> width="150px"<?php }?>></div><br>
+<?php } ?></head><body><div class="row mensajealerta"><div class="col-md-12"><div class="alert alert-success alert-dismissable" id="alertok" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="close"><span aria-hidden="true">&times;</span></button>Se ha guardado la entrada.</div><div class="alert alert-success alert-dismissable" id="alertdelete" role="alert"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Se ha eliminado la entrada.</div><div class="alert alert-danger alert-dismissable" id="alerterror" role="alert"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>No se ha podido finalizar la acción.</div></div></div>
         
 <?php }} ?>
