@@ -1,5 +1,11 @@
 /nbproject
+templates_c/*
 /templates_c/*
+/demoaebat
 *.pdf
 /.idea
-/demoaebat
+/templates_c/
+@eaDir
+@eaDir/
+/@eaDir/
+/.c9
