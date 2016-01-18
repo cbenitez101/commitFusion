@@ -62,7 +62,7 @@
         							</div>
         							<div class="modal-footer">
         								<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-        								<button type="button" class="btn btn-danger action" data-dismiss="modal">Eliminar</button>
+        								{*<button type="button" class="btn btn-danger action" data-dismiss="modal">Eliminar</button>*}
         								<button type="button" class="btn btn-primary action" data-dismiss="modal">Guardar</button>
         							</div>
         						</div><!-- /.modal-content -->
@@ -127,7 +127,7 @@
         							</div>
         							<div class="modal-footer">
         								<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-        								<button type="button" class="btn btn-danger action" data-dismiss="modal">Eliminar</button>
+        								{*<button type="button" class="btn btn-danger action" data-dismiss="modal">Eliminar</button>*}
         								<button type="button" class="btn btn-primary action" data-dismiss="modal">Guardar</button>
         							</div>
         						</div><!-- /.modal-content -->
