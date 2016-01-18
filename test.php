@@ -349,9 +349,5 @@ function pdf_block1($cantidad, $tiempo) {
    $pdf->Output();
 }
 // pdf_block1(100,1);
-// echo md5('sbejemplo');
+echo getcwd().'/scripts/fpdf/fpdf.php';
 // file_put_contents('prueba', 'pl');
-$mysqli = new mysqli('217.125.25.165', 'servibyte', 'sbyte_15_Mxz', 'simpleinvoices', 8092); 
-if ($mysqli->connect_errno) {
-    echo "Fallo al conectar a MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
-} else echo "ok";

