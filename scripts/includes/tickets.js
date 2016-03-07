@@ -13,7 +13,7 @@ $(document).ready(function(){
     // Manejador de la tabla, se le pone que al hacer lick en una fila llame al modal y guarda los datos de la tabla
     // en data.
     table = $('#table-search').DataTable({
-        "initComplete" : function() {
+        "preDrawCallback" : function() {
             if (!$('table').hasClass('tickettable') && !$('table').hasClass('fbtable')) {
                 // Caso especial en el que la tabla historial no tiene modal.
                 var api = this.api();
