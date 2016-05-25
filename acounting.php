@@ -40,7 +40,7 @@ if (isset($_SERVER['SHELL']) || isset($_GET['check'])) {
         }
         if (isset($_SERVER['SHELL'])) {
             historial($total, $lugar['id']);
-            simplefactura(pdf($total, $lugar));
+            //simplefactura(pdf($total, $lugar));
         } elseif (isset ($_GET['check'])) {
             pdf($total, $lugar, true);
             die();

@@ -3,16 +3,16 @@ if (isLoggedIn()) {
     $smarty->assign('page', $template_data[1]);
     include_header_file('printPage');
     load_modul('datatable');
+    load_modul('bsdatepicker');
     switch ($template_data[1]) {
         case 'crear':
-            load_modul('bsdatepicker');
             // dump($_SESSION, true);
             if ($_SESSION['cliente'] == 'admin') {
                 // Se puede hacer con un if de parentesis en la query y cuando se añade a tickets en vez de hacerlo
                 // como[] se pone el ServerName.
                 $result = $database->query("select hotspots.*, perfiles.*, lotes.*, lotes.id as lotesid from locales left join clientes on locales.cliente = clientes.id left join hotspots on hotspots.Local = locales.id
     right join perfiles on hotspots.id = perfiles.Id_hotspot left join lotes on lotes.Id_perfil = perfiles.Id
-    where hotspots.Status = 'ONLINE'");
+    where hotspots.Status = 'ONLINE' AND perfiles.Descripcion NOT LIKE '%PAYPAL'");
                 $tickets = array();
                 while ($aux = $result->fetch_assoc()) {
                     $ticket = array();
@@ -363,7 +363,7 @@ if (isLoggedIn()) {
             }
             break;
         case 'buscar':
-            load_modul('bsdatepicker');
+            //load_modul('bsdatepicker');
             if (isset($template_data[2])) {
                 $result = $radius->query("SELECT * FROM radacct WHERE username = '$template_data[2]' ORDER BY acctstarttime ASC");
                 $out = array();
@@ -434,12 +434,12 @@ if (isLoggedIn()) {
                 $menu = array();
                 foreach ($out as $value) {
                     $menu[]= substr(strstr($value['Usuario'], "_"),1);
-                    //$menu['Identificador']=$value['Identificador'];
                     $menu[]=$value['ServerName'];
                     $menu[]=$value['FechaVenta'];
                     $menu[]=$value['Descripcion'];
+                    $menu[]=$value['identificador'];
                 }
-                $smarty->assign('cols', implode(', ', array('Usuario', 'ServerName', 'FechaVenta', 'Descripcion')));
+                $smarty->assign('cols', implode(', ', array('Usuario', 'ServerName', 'FechaVenta', 'Descripcion', 'Identificador')));
                 $smarty->assign('tickets', $menu);
             } else {
                 $smarty->assign('empty', true);
@@ -478,6 +478,21 @@ if (isLoggedIn()) {
 //            $smarty->assign('cols', implode(',', array_keys($out[0])).((count($out) > 0)?",Importar":""));
             $smarty->assign('cols', implode(',', array_keys($out[0])));
             $smarty->assign('bloc', $menu);
+            break;
+        case 'bonos':
+            $result = $database->query('SELECT bonos.*, hotspots.ServerName FROM `bonos` INNER JOIN hotspots ON hotspots.id = bonos.id_hotspot');
+            $out = array();
+            while ($aux = $result->fetch_assoc()) $out[]=$aux;
+            $menu = array();
+            foreach ($out as $value) {
+                foreach($value as $item) $menu[]=$item;
+            }
+            $smarty->assign('cols', implode(',', array_keys($out[0])));
+            $smarty->assign('bonos', $menu);
+            $result = $database->query("SELECT id, ServerName FROM hotspots");
+            $out = array();
+            while ($aux = $result->fetch_assoc()) $out[]=$aux;
+            $smarty->assign('hotspots', $out);
             break;
     }
 } else {

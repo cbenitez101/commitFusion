@@ -415,7 +415,7 @@ function external_guardar_perfil() {
 }
 function external_guardar_lote() {
     global $database;
-    if (!empty($_POST['id_perfil']) && !empty($_POST['duracion']) && !empty($_POST['costo']) && !empty($_POST['precio'])) {
+    if (!empty($_POST['id_perfil']) && !empty($_POST['duracion']) && (strlen($_POST['costo'])>0) && (strlen($_POST['precio'])>0)) {
         if ($_POST['action']== 1) {
             if ($database->query('DELETE FROM lotes WHERE Id = '.$_POST['id'])) die();
         } elseif ($_POST['action']== 0) {

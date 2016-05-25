@@ -38,7 +38,7 @@ $(document).ready(function(){
             // En el caso de que exista el id de la entrada, se puede importar y generar excel, y no se puede
             // modificar el tiempo
             var i = 0;
-            $('.modal-body [id^="modal_bloc"]').each(function(elem) {
+            $('.modal-body [id^="modal_bloc"], .modal-body [id^="modal_bono"]').each(function(elem) {
                 $(this).val(data[i]);
                 i++;
             });

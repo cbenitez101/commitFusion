@@ -46,6 +46,25 @@ $(document).ready(function(){
                     $('.modal').modal();
                 }
             });
+            $('tbody tr td:first-child').click(function() {
+                $('tr.child .check_menu').change(function() {
+                    console.log('menu clicked');
+                    $.ajax({
+                        url: '/edita_menus',
+                        type: 'POST',
+                        data: {user: $(this).data('id'), menu: $(this).data('menu'), action: $(this).prop('checked') ? 'add' : 'del' }
+                    })
+                    .done(function(){
+                        if ($(this).prop('checked')) {
+                            mensajealert('ok');
+                        } else {
+                            mensajealert('delete');
+                        }
+                    }).fail(function(){
+                        mensajealert('error');
+                    });
+                });
+            })
         },
         "language": {
             "url": "https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json"
@@ -417,7 +436,12 @@ $(document).ready(function(){
         });
             
     });
-    $('.check_menu').change(function() {
+    //Para la subida de ficheros
+    $('input[type=file]').on('change', function(event) {
+        files = event.target.files;
+    });
+    $(document).on("change", ".check_menu" ,function() {
+        console.log('menu clicked');
         $.ajax({
             url: '/edita_menus',
             type: 'POST',
@@ -432,10 +456,6 @@ $(document).ready(function(){
         }).fail(function(){
             mensajealert('error');
         });
-    });
-    //Para la subida de ficheros
-    $('input[type=file]').on('change', function(event) {
-        files = event.target.files;
     });
     /*-----------------------------------------------------------------------------------------------------------------
                                                 Parte para el datepicker de la búsqueda
