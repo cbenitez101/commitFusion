@@ -447,7 +447,7 @@ if (isLoggedIn()) {
 
             break;
         case 'facebook':
-            $result = $database->query('SELECT * FROM `facebook`');
+            $result = $database->query('SELECT `idlocal`, `fbid`, `name`, `email`, `link`, `username` FROM `facebook`');
             $out = array();
             while ($aux = $result->fetch_assoc()) {
                 array_shift($aux);

@@ -559,25 +559,27 @@ function external_guardar_gasto(){
     }
 }
 function external_informepdf(){
-    if (isset($_GET['id']) && isset($_GET['fecha'])) {
+    if (isset($_GET['id'])) {
         global $database;
-        $result = $database->query("SELECT * FROM `historial` WHERE `id`='".$_GET['id']."' AND `fecha`='".$_GET['fecha']."'");
-        $aux = $result->fetch_assoc();
-        $in=array();
-        for ($index = 1; $index < 16; $index++) {
-            if (empty($aux['id_perfil'.$index])) {
-                break;
-            } else {
-                $result = $database->query('SELECT Precio FROM lotes WHERE Id='.$aux['id_perfil'.$index]);
-                $precio = $result->fetch_assoc();
-                $in[$aux['id_perfil'.$index]]=array('cantidad'=>$aux['contador_perfil'.$index], 'usuarios' => explode(',', $aux['users_'.$index]), 'precio'=> $precio['Precio']);
+        $result = $database->query("SELECT * FROM `historial` WHERE `id`='".$_GET['id']."'");
+        if ($result->num_rows > 0) {
+            $aux = $result->fetch_assoc();
+            $in=array();
+            for ($index = 1; $index < 16; $index++) {
+                if (empty($aux['id_perfil'.$index])) {
+                    break;
+                } else {
+                    $result = $database->query('SELECT Precio FROM lotes WHERE Id='.$aux['id_perfil'.$index]);
+                    $precio = $result->fetch_assoc();
+                    $in[$aux['id_perfil'.$index]]=array('cantidad'=>$aux['contador_perfil'.$index], 'usuarios' => explode(',', $aux['users_'.$index]), 'precio'=> $precio['Precio']);
+                }
             }
-        }
-        if (count($in)>0) {
-            $result = $database->query("SELECT * FROM `hotspots` WHERE id = ".$aux['id_hotspot']);
-            $hotspot = $result->fetch_assoc();
-            pdf($in, $hotspot, TRUE, spanish(date('F', strtotime('- 1 month',strtotime($_GET['fecha'])))));
-        }
+            if (count($in)>0) {
+                $result = $database->query("SELECT * FROM `hotspots` WHERE id = ".$aux['id_hotspot']);
+                $hotspot = $result->fetch_assoc();
+                pdf($in, $hotspot, TRUE, spanish(date('F', strtotime('- 1 month',strtotime($aux['fecha'])))),$_GET['modo']);
+            }
+        }  
         die();
     }
 }
@@ -598,7 +600,6 @@ function external_guardar_bloc(){
                 if ($database->query('UPDATE `blocs` SET `nombre`="'.$_POST['nombre'].'",`descripcion`="'.$_POST['descripcion'].'" WHERE `id`='.$_POST['id'])) die();
             }
         }
-
     }
 }
 
@@ -953,34 +954,56 @@ function subtotal($pdf, $concepto) {
 }
 
 function cierreinforme($pdf, $total, $comision) {
+    $subtotal1 = (((isset($total['PayPal']))?$total['Tickets'] + $total['PayPal']:$total['Tickets']) - $total['Gastos'])*($comision/100);
+    $subtotal = $subtotal1 + $total['Gastos'];
+    $sinigic = (($subtotal*100)/107);
     $x = $pdf->GetY();
     $x+=12;
     $pdf->SetY($x);
     $pdf->Cell(35, 5, 'IGIC %', 1,0, 'C');
     $pdf->Cell(35, 5, '7%', 1,0, 'C');
+    
     $pdf->SetX(100);
-    $pdf->Cell(35, 5, '% Comision', 0,0, 'R');
-    $pdf->Cell(35, 5, "$comision%", 1,0, 'C');
-    $subtotal  = ($total['Tickets'] - $total['Gastos'])*($comision/100);
-    $pdf->Cell(35, 5, number_format($subtotal, 2,',','.').  chr(128), 1,1, 'C');
-    $subtotal+=$total['Gastos'];
-    $sinigic = (($subtotal*100)/107);
+    $pdf->Cell(35, 5, 'Subtotal', 0,0, 'R');
+    $pdf->Cell(35, 5, ' ', 1,0, 'C');
+    $pdf->Cell(35, 5, number_format(((isset($total['PayPal']))?$total['Tickets'] + $total['PayPal']:$total['Tickets']), 2,',','.').chr(128), 1,1, 'C');
+    
+    
     $pdf->Cell(35, 5, 'Total sin IGIC', 1,0, 'C');
     $pdf->Cell(35, 5, number_format($sinigic, 2,',','.').chr(128), 1,0, 'C');
+    
     $pdf->SetX(100);
     $pdf->Cell(35, 5, 'Gastos', 0,0, 'R');
     $pdf->Cell(35, 5, ' ', 1,0, 'C');
     $pdf->Cell(35, 5, number_format($total['Gastos'], 2,',','.').chr(128), 1,1, 'C');
+    
+    
+    
     $pdf->Cell(35, 5, 'IGIC', 1,0, 'C');
     $pdf->Cell(35, 5, number_format($sinigic*0.07, 2,',','.').chr(128), 1,0, 'C');
-    $pdf->SetX(135);
-    $pdf->Cell(35, 5, 'TOTAL A PAGAR', 0,0, 'R');
-    $pdf->Cell(35, 5, number_format($subtotal, 2,',','.').chr(128), 1,1, 'C');
+    
+    $pdf->SetX(100);
+    $pdf->Cell(35, 5, '% Comision', 0,0, 'R');
+    $pdf->Cell(35, 5, "$comision%", 1,0, 'C');
+    $pdf->Cell(35, 5, number_format($subtotal1, 2,',','.').  chr(128), 1,1, 'C');
+    
+    
     $pdf->Cell(35, 5, 'TOTAL', 1,0, 'C');
+    $pdf->Cell(35, 5, number_format($subtotal, 2,',','.').chr(128), 1,0, 'C');
+    
+    $pdf->SetX(135);
+    $pdf->Cell(35, 5, 'TOTAL A FACTURAR', 0,0, 'R');
     $pdf->Cell(35, 5, number_format($subtotal, 2,',','.').chr(128), 1,1, 'C');
+    
+    if (isset($total['PayPal'])) {
+        $pdf->SetX(135);
+        $pdf->Cell(35, 5, 'LIQUIDACION', 0,0, 'R');
+        $pdf->Cell(35, 5, number_format(($subtotal - $total['PayPal']), 2,',','.').chr(128), 1,1, 'C');
+    }
+        
     return $subtotal;
 }
-function pdf($in, $local, $print = false, $mes = FALSE) {
+function pdf($in, $local, $print = false, $mes = FALSE, $users = FALSE) {
     global $fulldomain;
     require getcwd().'/scripts/fpdf/fpdf.php';
     global $suma;
@@ -1022,9 +1045,21 @@ function pdf($in, $local, $print = false, $mes = FALSE) {
         $duracion = $lote->fetch_assoc();
         //checkear el indice del array para ver si usar el id del ticket para sacar la duracion.
         //cabecera($pdf, $x, $value['cantidad'], "Ticket ".(($value['precio']==5)?'1 Dia':(($value['precio']==10)?'3 Dias':'1 Semana')), $value['precio']);
-        cabecera($pdf, $x, $value['cantidad'], $duracion['Descripcion'], $value['precio']);
+        if (!strstr($duracion['Descripcion'], "PAYPAL")) cabecera($pdf, $x, $value['cantidad'], $duracion['Descripcion'], $value['precio']);
     }
     $totalfin['Tickets'] = subtotal($pdf, 'Tickets');
+    $paypal = false;
+    foreach ($in as $key => $value) {
+        $lote = $database->query("SELECT perfiles.Descripcion FROM lotes INNER JOIN perfiles ON perfiles.id = lotes.Id_perfil WHERE lotes.id = $key");
+        $duracion = $lote->fetch_assoc();
+        //checkear el indice del array para ver si usar el id del ticket para sacar la duracion.
+        //cabecera($pdf, $x, $value['cantidad'], "Ticket ".(($value['precio']==5)?'1 Dia':(($value['precio']==10)?'3 Dias':'1 Semana')), $value['precio']);
+        if (strstr($duracion['Descripcion'], "PAYPAL")) {
+            cabecera($pdf, $x, $value['cantidad'], $duracion['Descripcion'], $value['precio']);
+            $paypal = true;
+        }
+    }
+    if ($paypal) $totalfin['PayPal'] = subtotal($pdf, 'PayPal');
     $factura = cierreinforme($pdf, $totalfin, 50);
     $out = array();
     foreach ($in as $key => $value) {
@@ -1038,13 +1073,40 @@ function pdf($in, $local, $print = false, $mes = FALSE) {
             }
         }
     }
-    if (count($out) > 0) {
-        $pdf->Cell(30,5,utf8_decode('Relación de Tickets Anulados:'),0,1,'L');
-        foreach ($out as $value) {
+    // Si hay q poner los usuarios cancelados $users a 1, si tambíen hay q poner los creados hay q poner users a 2
+    if ($users) {
+        $pdf->Cell(30,5," ",0,1,'L');
+        if (count($out) > 0) {
+            $pdf->Cell(30,5,utf8_decode('Relación de Tickets Anulados:'),0,1,'L');
             $pdf->SetX(30);
-            $pdf->Cell(30,5,$value,0,1,'L');
+            $counter = 0;
+            foreach ($out as $value) {
+                //$pdf->Cell(30,5,$value,0,1,'L');
+                $pdf->Cell(30,5,$value,0,((($counter%3) == 0)?1:0),'L');
+                if (($counter%5) == 0) $pdf->SetX(30);
+            }
+        }
+        if ($users == 2) {
+            $pdf->Cell(30,5," ",0,1,'L');
+            $pdf->Cell(30,5,utf8_decode('Relación Usuarios:'),0,1,'L');
+            foreach ($in as $key => $value) {
+                $lote = $database->query("SELECT perfiles.Descripcion FROM lotes INNER JOIN perfiles ON perfiles.id = lotes.Id_perfil WHERE lotes.id = $key");
+                $duracion = $lote->fetch_assoc();
+                $pdf->Cell(30,5,utf8_decode($duracion['Descripcion']),0,1,'L');
+                $counter = 0;
+                $pdf->SetX(30);
+                foreach ($value['usuarios'] as $aux) {
+                    if (!strstr($aux, "ANULADO")) {
+                        $counter++;
+                        $pdf->Cell(30,5,$aux,0,((($counter%5) == 0)?1:0),'L');
+                        if (($counter%5) == 0) $pdf->SetX(30);
+                    } 
+                }
+                $pdf->Cell(30,5," ",0,1,'L');
+            }
         }
     }
+        
     if ($print) {
         $pdf->Output();
     } else {

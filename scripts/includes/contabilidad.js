@@ -34,8 +34,9 @@ $(document).ready(function(){
     // Resetea los campos del formulario
     $('.modal').on('hidden.bs.modal', function(){
         data = null;
-        $('.modal input').val('');
+        $('.modal input:not([type="radio"])').val('');
         $('.modal select').val('');
+        $('#historico input[type="radio"]:checked').removeAttr('checked')
     });
     // Acciones de los botones
     $('.modal button.action').click(function(){
@@ -54,15 +55,16 @@ $(document).ready(function(){
                 //Si estamos creando no hay id asignado y no se llama a la función
                 guardar_gasto(1);
             }
+        } else if ($(this).text() == 'Abrir') {
+            window.open('/informepdf?id='+data[0]+'&modo='+$('#historico input[type="radio"]:checked').val(), '_blank','menubar=no,status=no,titlebar=no,toolbar=no,scrollbars=yes,location=no');
         }
     });
-    $('.hisorialtable tbody td').on('click', function(){
+    /*$('.hisorialtable tbody td').on('click', function(){
         var data = table.row($(this).parent()).data();
         if (!$(this).hasClass('sorting_1')) {
-            window.open('http://servibyte.net/informepdf?id='+data[0]+'&fecha='+data[1], '_blank','menubar=no,status=no,titlebar=no,toolbar=no,scrollbars=yes,location=no');
+            window.open('/informepdf?id='+data[0]+'&fecha='+data[1], '_blank','menubar=no,status=no,titlebar=no,toolbar=no,scrollbars=yes,location=no');
         }
-
-    })
+    })*/
 });
 var table;
 var data;
