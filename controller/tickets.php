@@ -411,6 +411,7 @@ if (isLoggedIn()) {
                         }
                     }  
                 }
+                //dump($out, true);
                 $smarty->assign('estado', (($cancelado)?"CANCELADO":$estado));
                 $smarty->assign('out', $out);
             } else {
@@ -418,7 +419,7 @@ if (isLoggedIn()) {
                     $result = $database->query("SELECT distinct(perfiles.ServerName) FROM `ventashotspot` INNER JOIN lotes ON ventashotspot.Id_lote = lotes.id INNER JOIN perfiles ON lotes.Id_perfil = perfiles.id");
                     while($aux = $result->fetch_assoc()) $out[] = $aux['ServerName'];
                     $smarty->assign('servers', $out);
-		}
+		        }
                 $smarty->assign('busqueda', true);
             } 
             break;

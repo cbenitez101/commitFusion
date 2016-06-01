@@ -11,6 +11,7 @@ if (isset($_SERVER['SHELL']) || isset($_GET['check'])) {
     $elements = $database->query("SELECT * FROM hotspots WHERE Informe = 3");
     while ($lugar = $elements->fetch_assoc()) {
         $result = $radius->query("SELECT username from radacct where username like '".$lugar['ServerName']."_%' and acctstarttime > '".  ((isset($_GET['check']))?date('Y-m'):date('Y-m', strtotime('-1 month')))."-01 00:00:00' group by username");
+        $users = array();
         while ($test = $result->fetch_assoc()) {
             $users[] = $test['username'];
         }
