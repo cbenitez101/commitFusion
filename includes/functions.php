@@ -707,12 +707,12 @@ function external_aleatorio() {
 }
 
 function external_bono_allow() {
-    if (isset($_GET['id_hotspot'])) {
+    if (isset($_POST['id_hotspot'])) {
         global $database;
-        $result = $database->query("SELECT `cantidad` FROM `bono_accounting` WHERE `mes` >= '".date("Y-m")."-01' AND `id_hotspot`=".$_GET['id_hotspot']);
+        $result = $database->query("SELECT `cantidad` FROM `bono_accounting` WHERE `mes` >= '".date("Y-m")."-01' AND `id_hotspot`=".$_POST['id_hotspot']);
         if ($result->num_rows > 0) {
             $aux = $result->fetch_assoc();
-            $result = $database->query("SELECT * FROM bonos WHERE id_hotspot=".$_GET['id_hotspot']);
+            $result = $database->query("SELECT * FROM bonos WHERE id_hotspot=".$_POST['id_hotspot']);
             $numero = $result->num_rows;
             if ($numero == 0) {
                 // No hay entrada en bono, no es de este tipo.
@@ -723,7 +723,7 @@ function external_bono_allow() {
                 $value = 0;
                 while ($counter = $result->fetch_assoc()) $value += $counter['cantidad'];
                 if ($aux['cantidad'] + 1 <= $value) {
-                    $database->query("UPDATE bono_accounting SET cantidad = cantidad + 1 WHERE `mes` >= '".date("Y-m")."-01' AND `id_hotspot`=".$_GET['id_hotspot']);
+                    $database->query("UPDATE bono_accounting SET cantidad = cantidad + 1 WHERE `mes` >= '".date("Y-m")."-01' AND `id_hotspot`=".$_POST['id_hotspot']);
                     echo "OK";
                     die();
                 } else {
@@ -732,7 +732,7 @@ function external_bono_allow() {
                 }
             }
         } else {
-            $database->query("INSERT INTO `bono_accounting`(`id_hotspot`, `cantidad`, `mes`) VALUES ('".$_GET['id_hotspot']."',1,'".date("Y-m")."-01')");
+            $database->query("INSERT INTO `bono_accounting`(`id_hotspot`, `cantidad`, `mes`) VALUES ('".$_POST['id_hotspot']."',1,'".date("Y-m")."-01')");
             echo "OK";
             die();
         }
