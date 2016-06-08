@@ -62,23 +62,42 @@ $(document).ready(function(){
     // Acciones de los botones
     $('.modal button.action').click(function(){
         if ($(this).text() == 'Guardar') {
-            console.log('guardar');
-            // Guardo los valores en dataok para actualizar la tabla
-            if ($('#modal_gastoid').val() !== "") {
-                $('.modal-body [id^="modal_bloc"]').each(function(elem) {
-                    dataok.push($(this).val());
-                });
-                //dataok[5] = data[5];
+            if ($('#modal_bloc').length !== 0) {
+                // Guardo los valores en dataok para actualizar la tabla
+                if ($('#modal_blocid').val() !== "") {
+                    $('.modal-body [id^="modal_bloc"]').each(function(elem) {
+                        dataok.push($(this).val());
+                    });
+                    //dataok[5] = data[5];
+                }
+                //console.log(dataok);
+                guardar_bloc(0);
+            } else if ($('#modal_bono').length !== 0) {
+                if ($('#modal_bonoid').val() !== "") {
+                    $('.modal-body [id^="modal_bono"]').each(function(elem) {
+                        dataok.push($(this).val());
+                    });
+                    //dataok[5] = data[5];
+                }
+                guardar_bono(0);
             }
-            //console.log(dataok);
-            guardar_bloc(0);
         } else if ($(this).text() == 'Eliminar') {
-            if (($('#modal_gastoid').val()!== "")) {
-                //Si estamos creando no hay id asignado y no se llama a la función
-                $('.modal-body [id^="modal_bloc"]').each(function(elem) {
-                    dataok.push($(this).val());
-                });
-                guardar_bloc(1);
+            if ($('#modal_bloc').length !== 0) {
+                if (($('#modal_gastoid').val()!== "")) {
+                    //Si estamos creando no hay id asignado y no se llama a la función
+                    $('.modal-body [id^="modal_bloc"]').each(function(elem) {
+                        dataok.push($(this).val());
+                    });
+                    guardar_bloc(1);
+                }
+            } else if ($('#modal_bono').length !== 0) {
+                if (($('#modal_bono_id').val()!== "")) {
+                    //Si estamos creando no hay id asignado y no se llama a la función
+                    $('.modal-body [id^="modal_bono"]').each(function(elem) {
+                        dataok.push($(this).val());
+                    });
+                    guardar_bono(1);
+                }
             }
         } else if ($(this).text() == 'Importar') {
             $('#modal_importid').val($('#modal_blocid').val());
@@ -282,4 +301,38 @@ function importar_bloc(){
 function crear_server_ticket(name) {
     $('[id^="Server_"]').addClass('serverhidden');
     $('#Server_'+name).removeClass('serverhidden');
+}
+
+function guardar_bono(action) {
+    var guardar = [];
+    $('input[id^="modal_bono"]').each(function(){
+        guardar.push($(this).val());
+    });
+    $('select[id^="modal_bono"]').each(function(){
+        guardar.push($(this).val());
+    });
+    console.log(guardar);
+    if (guardar.length > 0) {
+        $.ajax({
+            url: '/guardar_bono',
+            type: 'POST',
+            data: {id: guardar[0], id_hotspot: guardar[3], cantidad: guardar[1], tipo: guardar[4], action: action}
+        }).done(function(){
+            if (action === 0) {
+                if (guardar[0] === '') {
+                    window.location = document.URL;
+                } else {
+                    dataok[5] = $('#modal_bonohotspot option[value=' + guardar[3] + ']').text();
+                    row.data(dataok);
+                    dataok = [];
+                }
+                mensajealert('ok');
+            } else {
+                dataok = [];
+                row.remove().draw();
+                mensajealert('delete');
+            }
+            //window.location = document.URL;
+        });
+    }
 }

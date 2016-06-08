@@ -8,6 +8,8 @@ date_default_timezone_set("Europe/London");
 if (isset($_SERVER['SHELL']) || isset($_GET['check'])) {
     $database= new mysqli('localhost', 'platformuser', 'rfC79w?3', 'plataforma');
     $radius= new mysqli('localhost', 'radiususer', 'Pwp+*f2b', 'radius');
+    
+    //Proceso de generar los informes de hotspot
     $elements = $database->query("SELECT * FROM hotspots WHERE Informe = 3");
     while ($lugar = $elements->fetch_assoc()) {
         $result = $radius->query("SELECT username from radacct where username like '".$lugar['ServerName']."_%' and acctstarttime > '".  ((isset($_GET['check']))?date('Y-m'):date('Y-m', strtotime('-1 month')))."-01 00:00:00' group by username");
@@ -52,8 +54,17 @@ if (isset($_SERVER['SHELL']) || isset($_GET['check'])) {
 //        die();
     //    
     }
-
-
+    if (isset($_SERVER['SHELL'])) {
+        //Proceso de actualización de bonos
+        $result = $database->query("SELECT bonos.id, bonos.cantidad, bonos.id_hotspot as mkt, bono_accounting.cantidad as consumidos, (SELECT cantidad FROM bonos WHERE tipo='Mensual' AND id_hotspot=mkt) as Mensual FROM `bonos` INNER JOIN bono_accounting ON bonos.id_hotspot = bono_accounting.id_hotspot WHERE bono_accounting.mes >= '".date('Y-m', strtotime('-1 month'))."-01' AND `tipo`='Extra'");
+        while ($aux = $result->fetch_assoc()) {
+            if ($aux['consumidos'] > $aux['Mensual']) {
+                // Se han consumido mas que los del bono, hay que restar del bono extra.
+                if (($aux['consumidos'] - $aux['Mensual']) >= $aux['cantidad']) $database->query("DELETE FROM `bonos` WHERE `id`=".$aux['id']);
+                else $database->query("UPDATE `bonos` SET `cantidad`='".($aux['cantidad'] - ($aux['consumidos'] - $aux['Mensual']))."' WHERE `id`=".$aux['id']);
+            }
+        }
+    } 
 }
 
 

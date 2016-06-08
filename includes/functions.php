@@ -705,6 +705,54 @@ function external_aleatorio() {
         die();
     }
 }
+
+function external_bono_allow() {
+    if (isset($_GET['id_hotspot'])) {
+        global $database;
+        $result = $database->query("SELECT `cantidad` FROM `bono_accounting` WHERE `mes` >= '".date("Y-m")."-01' AND `id_hotspot`=".$_GET['id_hotspot']);
+        if ($result->num_rows > 0) {
+            $aux = $result->fetch_assoc();
+            $result = $database->query("SELECT * FROM bonos WHERE id_hotspot=".$_GET['id_hotspot']);
+            $numero = $result->num_rows;
+            if ($numero == 0) {
+                // No hay entrada en bono, no es de este tipo.
+                echo "NO";
+                die();
+            } elseif ($numero > 0) {
+                // Hay que sacar el total de las conexiones con todos los bonos que tiene.
+                $value = 0;
+                while ($counter = $result->fetch_assoc()) $value += $counter['cantidad'];
+                if ($aux['cantidad'] + 1 <= $value) {
+                    $database->query("UPDATE bono_accounting SET cantidad = cantidad + 1 WHERE `mes` >= '".date("Y-m")."-01' AND `id_hotspot`=".$_GET['id_hotspot']);
+                    echo "OK";
+                    die();
+                } else {
+                    echo "NO";
+                    die();
+                }
+            }
+        } else {
+            $database->query("INSERT INTO `bono_accounting`(`id_hotspot`, `cantidad`, `mes`) VALUES ('".$_GET['id_hotspot']."',1,'".date("Y-m")."-01')");
+            echo "OK";
+            die();
+        }
+    }
+}
+
+function external_guardar_bono(){
+    if ((isset($_POST['id_hotspot'])) && (isset($_POST['cantidad'])) && (isset($_POST['tipo']))) {
+        global $database;
+        if ($_POST['action'] == 1) {
+            if ($database->query("DELETE FROM `bonos` WHERE `id`=".$_POST['id'])) die();
+        } else {
+            if (empty($_POST['id'])) {
+                if ($database->query('INSERT INTO `bonos`(`id_hotspot`, `cantidad`, `tipo`, `fecha`) VALUES ("'.$_POST['id_hotspot'].'","'.$_POST['cantidad'].'","'.$_POST['tipo'].'",NOW())')) die();
+            } else {
+                if ($database->query('UPDATE `bonos` SET `id_hotspot`="'.$_POST['id_hotspot'].'",`cantidad`="'.$_POST['cantidad'].'",`tipo`="'.$_POST['tipo'].'" WHERE `id`='.$_POST['id'])) die();
+            }
+        }
+    }
+}
 /*--------------------------------------------------------------------------*
  *                                 END                                      *
  *--------------------------------------------------------------------------*/

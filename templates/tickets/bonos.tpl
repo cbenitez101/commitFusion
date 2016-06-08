@@ -46,6 +46,14 @@
 										<input class="form-control" name="bono_cantidad" id="modal_bonocantidad">
 									</div>
 									<div class="form-group">
+										<label>Tipo</label>
+										<select class="form-control" name="bono_tipo" id="modal_bonotipo">
+											<option value="">Elige un tipo</option>
+											<option value="Mensual">Mensual</option>
+											<option value="Extra">Extra</option>
+										</select>
+									</div>
+									<div class="form-group">
 										<label>Fecha</label>
 										<input class="form-control" name="bono_fecha" id="modal_bonofecha" disabled>
 									</div>
