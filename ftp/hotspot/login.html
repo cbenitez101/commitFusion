@@ -1,0 +1,51 @@
+<html>
+<head>
+	<title>...</title>
+
+	<script type="text/javascript">
+		function SubmitForm() {
+			var client = new XMLHttpRequest();
+			client.open('GET', '/testinternet.txt',false);
+			client.onreadystatechange = function() {
+				document.redirect.action = client.responseText;
+				document.redirect.submit();
+			}
+			client.send();
+		}
+	</script>
+</head>
+<body onLoad="SubmitForm();">
+
+$(if chap-id)
+<noscript>
+<center>
+<b>JavaScript required. Enable JavaScript to continue.</b><br>
+<b>Se necesita JavaScript. Activa JavaScript para continuar.</b>
+</center>
+</noscript>
+$(endif)
+
+<center>
+
+If you are not redirected in a few seconds, click 'continue' below<br>
+Si no eres redirigido en unos segundos, haz clic en el bot&oacute;n 'continue' de abajo<br>
+
+<form name="redirect" method="post">
+<input type="hidden" name="mac" value="$(mac)">
+<input type="hidden" name="ip" value="$(ip)">
+<input type="hidden" name="username" value="$(username)">
+<input type="hidden" name="link-login" value="$(link-login)">
+<input type="hidden" name="link-orig" value="$(link-orig)">
+<input type="hidden" name="error" value="$(error)">
+<input type="hidden" name="chap-id" value="$(chap-id)">
+<input type="hidden" name="chap-challenge" value="$(chap-challenge)">
+<input type="hidden" name="link-login-only" value="$(link-login-only)">
+<input type="hidden" name="link-orig-esc" value="$(link-orig-esc)">
+<input type="hidden" name="mac-esc" value="$(mac-esc)">
+<input type="hidden" name="SerialNum" value="6088052BE9B2">
+<input type="submit" value="continue">
+</form>
+
+</center>
+</body>
+</html>
