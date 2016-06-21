@@ -161,6 +161,7 @@ $(document).ready(function(){
                 if (i == 3) {
                     $(this).val(data[i].toLowerCase());
                 } else if (i == 0) {
+                    $(this).val(data[i]);
                     if ((data[i] !== "") && (data[2] === "")) {
                         $('#button-copy').attr('data-clipboard-text','/ip dns set servers=8.8.8.8,8.8.4.4 allow-remote-requests=yes\r\n\
 /ip dhcp-client add interface=ether2 disabled=no\r\n\
