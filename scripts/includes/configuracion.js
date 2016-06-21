@@ -165,8 +165,8 @@ $(document).ready(function(){
                     if ((data[i] !== "") && (data[2] === "")) {
                         $('#button-copy').attr('data-clipboard-text','/ip dns set servers=8.8.8.8,8.8.4.4 allow-remote-requests=yes\r\n\
 /ip dhcp-client add interface=ether2 disabled=no\r\n\
-:delay 1s;\r\n\
-tool fetch url="http://servibyte.net/script_hotspot\\?id_hotspot=' + data[i] + '&hotspot_serial=$[:put [/system routerboard get serial-number]]" dst-path=hotspot.rsc\r\n\
+:delay 3s;\r\n\
+/tool fetch url="http://servibyte.net/script_hotspot\\?id_hotspot=' + data[i] + '&hotspot_serial=$[:put [/system routerboard get serial-number]]" dst-path=hotspot.rsc\r\n\
 /system package update\r\n\
 check-for-updates once\r\n\
 :delay 1s;\r\n\
