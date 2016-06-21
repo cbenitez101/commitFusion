@@ -174,6 +174,7 @@ if (isLoggedIn()) {
             }
         case 'hotspots':
             if ($_SESSION['cliente'] == 'admin') {
+                load_modul('clipboard');
                 $si = new mysqli('217.125.25.165', 'servibyte', 'sbyte_15_Mxz', 'simpleinvoices', 8092);
                 $result = $si->query("SELECT id, name FROM `si_customers`");
                 $siout = array();

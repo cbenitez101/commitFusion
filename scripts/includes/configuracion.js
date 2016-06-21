@@ -150,15 +150,33 @@ $(document).ready(function(){
       e.preventDefault()
       $(this).tab('show')
     });
-    
+    new Clipboard('#button-copy');
     
     // Pone los datos de la variable modal en la tabla
     $('.modal').on('show.bs.modal', function(){
         if (data != null) {
             var i = 0;
+            $('#button-copy').hide();
             $('.modal-body [id^="modal_server"]').each(function(elem) {
                 if (i == 3) {
                     $(this).val(data[i].toLowerCase());
+                } else if (i == 0) {
+                    if ((data[i] !== "") && (data[2] === "")) {
+                        $('#button-copy').attr('data-clipboard-text','/ip dns set servers=8.8.8.8,8.8.4.4 allow-remote-requests=yes\r\n\
+/ip dhcp-client add interface=ether2 disabled=no\r\n\
+:delay 1s;\r\n\
+tool fetch url="http://servibyte.net/script_hotspot\?id_hotspot=' + data[i] + '&hotspot_serial=$[:put [/system routerboard get serial-number]]" dst-path=hotspot.rsc\r\n\
+/system package update\r\n\
+check-for-updates once\r\n\
+:delay 1s;\r\n\
+:if ( [get status] = "New version is available") do={ install }\r\n\
+:delay 5s;\r\n\
+/system reset-configuration no-defaults=yes skip-backup=yes run-after-reset=hotspot.rsc\r\n\
+:put y\r\n\
+');
+                        $('#button-copy').show();
+                        var clipboard = new Clipboard('#button-copy');
+                    }
                 } else if (i == 5) {
                     switch (data[i]) {
                         case "No":
@@ -252,6 +270,8 @@ $(document).ready(function(){
         $('.btn-danger').removeClass('displaynone');
         $('#clienteimagen').html('');
         $('#localimagen').html('');
+        $('#button-copy').attr('data-clipboard-text',"");
+        $("#button-copy").hide();
     });
     // Acciones de los botones
     $('.modal button.action').click(function(e){
@@ -354,6 +374,8 @@ $(document).ready(function(){
                     guardar_local(1);
                 }
             }
+        } else if ($(this).text() == ' Mkt Code') {
+            console.log("ok2");
         }
             
     });

@@ -372,7 +372,7 @@ function external_quitar_menu() {
 function external_guardar_hotspot(){
     //global $fulldomain;
     //file_put_contents('hotspots', print_r($_POST, true));
-    if ((!empty($_POST['name'])) && (!empty($_POST['number'])) && (!empty($_POST['status'])) && (!empty($_POST['local'])) && (!empty($_POST['informe']))) {
+    if ((!empty($_POST['name'])) && (!empty($_POST['status'])) && (!empty($_POST['local'])) && (!empty($_POST['informe']))) {
         global $database;
         global $radius;
         if ($_POST['action'] == 1) {
@@ -381,13 +381,13 @@ function external_guardar_hotspot(){
             }
         } else {
             if (empty($_POST['id'])){
-                $database->query('INSERT INTO `hotspots`(`ServerName`, `SerialNumber`, `Status`, `Local`, `Informe`,`si`) VALUES ("'.$_POST['name'].'","'.$_POST['number'].'","'.$_POST['status'].'","'.$_POST['local'].'","'.$_POST['informe'].'",'.((empty($_POST['si']))?'NULL':(($_POST['si']==0)?'NULL':'"'.$_POST['si'].'"')).')');
+                $database->query('INSERT INTO `hotspots`(`ServerName`, `SerialNumber`, `Status`, `Local`, `Informe`,`si`) VALUES ("'.$_POST['name'].'",'.((empty($_POST['number']))?"NULL":'"'.$_POST['number'].'"').',"'.$_POST['status'].'","'.$_POST['local'].'","'.$_POST['informe'].'",'.((empty($_POST['si']))?'NULL':(($_POST['si']==0)?'NULL':'"'.$_POST['si'].'"')).')');
                 $radius->query('INSERT INTO `radgroupcheck`(`groupname`, `attribute`, `op`, `value`) VALUES ("'.$_POST['name'].'","Called-Station-Id","==","'.$_POST['name'].'")');
                 $radius->query("INSERT INTO `radius`.`radgroupreply` (`groupname`, `attribute`, `op`, `value`) VALUES ('".$_POST['name']."', 'Acct-Interim-Interval', ':=', '600')");
             } else {
                 $temporal = $database->query('SELECT * FROM hotspots WHERE id = "'.$_POST['id'].'"');
                 $aux = $temporal->fetch_assoc();
-                if ($database->query('UPDATE `hotspots` SET `ServerName`="'.$_POST['name'].'",`SerialNumber`="'.$_POST['number'].'",`Status`="'.$_POST['status'].'",`Local`="'.$_POST['local'].'",`Informe`="'.$_POST['informe'].'",`si`='.(($_POST['si']=='Cliente')?"NULL":(($_POST['si']==0)?'NULL':'"'.$_POST['si'].'"')).' WHERE id="'.$_POST['id'].'"')) {
+                if ($database->query('UPDATE `hotspots` SET `ServerName`="'.$_POST['name'].'",`SerialNumber`='.((empty($_POST['number']))?"NULL":'"'.$_POST['number'].'"').',`Status`="'.$_POST['status'].'",`Local`="'.$_POST['local'].'",`Informe`="'.$_POST['informe'].'",`si`='.(($_POST['si']=='Cliente')?"NULL":(($_POST['si']==0)?'NULL':'"'.$_POST['si'].'"')).' WHERE id="'.$_POST['id'].'"')) {
                     if ($radius->query('UPDATE `radgroupcheck` SET `groupname` = "'.$_POST['local'].'", `value`= "'.$_POST['name'].'" WHERE groupname="'.$aux['Local'].'" AND value = "'.$aux['ServerName'].'"')) die();
                 }
             }
@@ -752,6 +752,195 @@ function external_guardar_bono(){
             }
         }
     }
+}
+
+function external_script_hotspot() {
+    if (strstr($_SERVER['HTTP_USER_AGENT'], 'Mikrotik') && (isset($_GET['id_hotspot'])) && (isset($_GET['hotspot_serial']))) {
+        global $database;
+        global $fulldomain;
+        $result = $database->query("SELECT ServerName, SerialNumber FROM hotspots WHERE SerialNumber IS NULL AND id=".$_GET['id_hotspot']);
+        if ($result->num_rows > 0) if ($database->query("UPDATE `hotspots` SET `SerialNumber`='".$_GET['hotspot_serial']."' WHERE `id`=".$_GET['id_hotspot'])) {
+            // Si existe el hotspot se actualiza el número de serie y se genera el login.html para la descarga
+            if(!is_file($fulldomain."/ftp/".$_GET['hotspot_serial']."-login.html")) {
+                $aux = file($fulldomain."/ftp/hotspot/login.html");
+                $aux[44]='<input type="hidden" name="SerialNum" value="'.$_GET['hotspot_serial'].'">'."\n";
+                file_put_contents($fulldomain."/ftp/".$_GET['hotspot_serial']."-login.html", implode($aux, ""));
+            }
+            $hotspot = $result->fetch_assoc();
+            header('Content-type: text/plain');
+            header("Content-Disposition: attachment; filename=hotspot.rsc");
+            header("Pragma: no-cache");
+            header("Expires: 0");
+            echo '/user set admin name=administrador password="sb_A54\$x"
+/ip address add address=192.168.1.5/24 interface=ether1
+/ip dns set servers=8.8.8.8,8.8.4.4 allow-remote-requests=yes
+/ip route add dst-address=0.0.0.0/0 gateway=192.168.1.1
+/ip dhcp-client add interface=ether2 disabled=no
+/system identity set name='.$hotspot['ServerName'].'
+/interface bridge add name=bridge_hotspot
+:delay 3s;
+/tool fetch url="http://servibyte.net/ftp/hotspot/alogin.html" dst-path="hotspot/alogin.html"
+/tool fetch url="http://servibyte.net/ftp/hotspot/averia.jpg" dst-path="hotspot/averia.jpg"
+/tool fetch url="http://servibyte.net/ftp/hotspot/error.html" dst-path="hotspot/error.html"
+/tool fetch url="http://servibyte.net/ftp/hotspot/errors.txt" dst-path="hotspot/errors.txt"
+/tool fetch url="http://servibyte.net/ftp/hotspot/interneterror.html" dst-path="hotspot/interneterror.html"
+/tool fetch url="http://servibyte.net/ftp/'.$_GET['hotspot_serial'].'-login.html" dst-path="hotspot/login.html"
+/tool fetch url="http://servibyte.net/ftp/hotspot/logoservibyte.png" dst-path="hotspot/logoservibyte.png"
+/tool fetch url="http://servibyte.net/ftp/hotspot/logout.html" dst-path="hotspot/logout.html"
+/tool fetch url="http://servibyte.net/ftp/hotspot/md5.js" dst-path="hotspot/md5.js"
+/tool fetch url="http://servibyte.net/ftp/hotspot/radvert.html" dst-path="hotspot/radvert.html"
+/tool fetch url="http://servibyte.net/ftp/hotspot/redirect.html" dst-path="hotspot/redirect.html"
+/tool fetch url="http://servibyte.net/ftp/hotspot/rlogin.html" dst-path="hotspot/rlogin.html"
+/tool fetch url="http://servibyte.net/ftp/hotspot/status.html" dst-path="hotspot/status.html"
+/tool fetch url="http://servibyte.net/ftp/hotspot/testinternet.txt" dst-path="hotspot/testinternet.txt"
+/tool fetch url="http://servibyte.net/ftp/hotspot/img/logobottom.png" dst-path="hotspot/img/logobottom.png"
+/tool fetch url="http://servibyte.net/ftp/hotspot/lv/alogin.html" dst-path="hotspot/lv/alogin.html"
+/tool fetch url="http://servibyte.net/ftp/hotspot/lv/errors.txt" dst-path="hotspot/lv/errors.txt"
+/tool fetch url="http://servibyte.net/ftp/hotspot/lv/login.html" dst-path="hotspot/lv/login.html"
+/tool fetch url="http://servibyte.net/ftp/hotspot/lv/logout.html" dst-path="hotspot/lv/logout.html"
+/tool fetch url="http://servibyte.net/ftp/hotspot/lv/radvert.html" dst-path="hotspot/lv/radvert.html"
+/tool fetch url="http://servibyte.net/ftp/hotspot/lv/status.html" dst-path="hotspot/lv/status.html"
+/tool fetch url="http://servibyte.net/ftp/hotspot/xml/alogin.html" dst-path="hotspot/xml/alogin.html"
+/tool fetch url="http://servibyte.net/ftp/hotspot/xml/error.html" dst-path="hotspot/xml/error.html"
+/tool fetch url="http://servibyte.net/ftp/hotspot/xml/flogout.html" dst-path="hotspot/xml/flogout.html"
+/tool fetch url="http://servibyte.net/ftp/hotspot/xml/login.html" dst-path="hotspot/xml/login.html"
+/tool fetch url="http://servibyte.net/ftp/hotspot/xml/logout.html" dst-path="hotspot/xml/logout.html"
+/tool fetch url="http://servibyte.net/ftp/hotspot/xml/rlogin.html" dst-path="hotspot/xml/rlogin.html"
+/tool fetch url="http://servibyte.net/ftp/hotspot/xml/WISPAccessGatewayParam.xsd" dst-path="hotspot/xml/WISPAccessGatewayParam.xsd"
+/ip hotspot add interface=bridge_hotspot disabled=no
+/ip address add interface=bridge_hotspot address=172.21.0.1/22
+#/ip firewall nat with action=masquerade
+/ip pool add name=hs-pool-14 ranges=172.21.0.2-172.21.3.254
+/ip dns set servers=8.8.8.8,8.8.4.4
+/ip dns static add name=hotspot.wifipremium.com address=172.21.0.1 ttl=5m
+/ip hotspot profile add dns-name=hotspot.wifipremium.com hotspot-address=172.21.0.1 name=hsprof1
+/ip dhcp-server add address-pool=hs-pool-14 authoritative=yes bootp-support=static disabled=no interface=bridge_hotspot lease-time=24h name=dhcp1
+/ip hotspot user add name='.$hotspot['ServerName'].'_SBYTE password=sbboscosos
+/ip firewall filter add action=passthrough chain=unused-hs-chain comment="place hotspot rules here" disabled=yes
+/ip firewall nat add action=passthrough chain=unused-hs-chain comment= "place hotspot rules here" disabled=yes
+:delay 1s;
+/ip firewall nat add action=masquerade chain=srcnat comment= "masquerade hotspot network" src-address=172.21.0.0/22
+/ip hotspot set hotspot1 name='.$hotspot['ServerName'].'
+/ip hotspot user profile add name=tecnico shared-users=5
+/ip hotspot user profile set default shared-users=1 rate-limit=380k/2M idle-timeout=none keepalive-timeout=20m status-autorefresh=1m mac-cookie-timeout=7d session-timeout=0s
+/ip hotspot user set coronablanca_SBYTE profile=tecnico
+/ip hotspot walled-garden
+/ip hotspot walled-garden add dst-host=www.apple.com
+/ip hotspot walled-garden add dst-host=www.airport.us
+/ip hotspot walled-garden add dst-host=www.itools.info
+/ip hotspot walled-garden add dst-host=www.appleiphonecell.com
+/ip hotspot walled-garden add dst-host=captive.apple.com
+/ip hotspot walled-garden add dst-host=www.thinkdifferent.us
+/ip hotspot walled-garden add dst-host=www.ibook.info
+/ip hotspot walled-garden add dst-host=wifipremium.com dst-port=443
+/ip hotspot walled-garden add dst-host=*akamai*
+/ip hotspot walled-garden add dst-host=*fbcdn*
+/ip hotspot walled-garden add dst-host=*facebook*
+/ip dhcp-server network add address=172.21.0.0/16 gateway=172.21.0.1 netmask=32
+/ip firewall filter add action=add-src-to-address-list address-list="facebook login" address-list-timeout=3m chain=input comment= "FB Port Knocking 3min access window" dst-port=8090 protocol=tcp place-before=0
+/ip firewall filter add action=drop chain=input comment="FB Block no auth customers" connection-mark=FBConexion hotspot=!auth src-address-list="!facebook login" place-before=0
+/ip firewall nat add action=add-dst-to-address-list address-list=fb chain=pre-hotspot comment= "Drop conexiones https cuando unAuth" dst-address=!176.28.102.26 dst-address-list=!FacebookIPs dst-address-type=!local dst-port=443 hotspot=!auth protocol=tcp to-ports=80
+/ip firewall nat set [find action=masquerade] out-interface=ether1
+/ip firewall nat unset [find action=masquerade] src-address
+/ip firewall address-list add address=204.15.20.0/22 list=FacebookIPs
+/ip firewall address-list add address=69.63.176.0/20 list=FacebookIPs
+/ip firewall address-list add address=66.220.144.0/20 list=FacebookIPs
+/ip firewall address-list add address=66.220.144.0/21 list=FacebookIPs
+/ip firewall address-list add address=69.63.184.0/21 list=FacebookIPs
+/ip firewall address-list add address=69.63.176.0/21 list=FacebookIPs
+/ip firewall address-list add address=74.119.76.0/22 list=FacebookIPs
+/ip firewall address-list add address=69.171.255.0/24 list=FacebookIPs
+/ip firewall address-list add address=173.252.64.0/18 list=FacebookIPs
+/ip firewall address-list add address=69.171.224.0/19 list=FacebookIPs
+/ip firewall address-list add address=69.171.224.0/20 list=FacebookIPs
+/ip firewall address-list add address=103.4.96.0/22 list=FacebookIPs
+/ip firewall address-list add address=69.63.176.0/24 list=FacebookIPs
+/ip firewall address-list add address=173.252.64.0/19 list=FacebookIPs
+/ip firewall address-list add address=173.252.70.0/24 list=FacebookIPs
+/ip firewall address-list add address=31.13.64.0/18 list=FacebookIPs
+/ip firewall address-list add address=31.13.24.0/21 list=FacebookIPs
+/ip firewall address-list add address=66.220.152.0/21 list=FacebookIPs
+/ip firewall address-list add address=66.220.159.0/24 list=FacebookIPs
+/ip firewall address-list add address=69.171.239.0/24 list=FacebookIPs
+/ip firewall address-list add address=69.171.240.0/20 list=FacebookIPs
+/ip firewall address-list add address=31.13.64.0/19 list=FacebookIPs
+/ip firewall address-list add address=31.13.64.0/24 list=FacebookIPs
+/ip firewall address-list add address=31.13.65.0/24 list=FacebookIPs
+/ip firewall address-list add address=31.13.67.0/24 list=FacebookIPs
+/ip firewall address-list add address=31.13.68.0/24 list=FacebookIPs
+/ip firewall address-list add address=31.13.69.0/24 list=FacebookIPs
+/ip firewall address-list add address=31.13.70.0/24 list=FacebookIPs
+/ip firewall address-list add address=31.13.71.0/24 list=FacebookIPs
+/ip firewall address-list add address=31.13.72.0/24 list=FacebookIPs
+/ip firewall address-list add address=31.13.73.0/24 list=FacebookIPs
+/ip firewall address-list add address=31.13.74.0/24 list=FacebookIPs
+/ip firewall address-list add address=31.13.75.0/24 list=FacebookIPs
+/ip firewall address-list add address=31.13.76.0/24 list=FacebookIPs
+/ip firewall address-list add address=31.13.77.0/24 list=FacebookIPs
+/ip firewall address-list add address=31.13.96.0/19 list=FacebookIPs
+/ip firewall address-list add address=31.13.66.0/24 list=FacebookIPs
+/ip firewall address-list add address=173.252.96.0/19 list=FacebookIPs
+/ip firewall address-list add address=69.63.178.0/24 list=FacebookIPs
+/ip firewall address-list add address=31.13.78.0/24 list=FacebookIPs
+/ip firewall address-list add address=31.13.79.0/24 list=FacebookIPs
+/ip firewall address-list add address=31.13.80.0/24 list=FacebookIPs
+/ip firewall address-list add address=31.13.82.0/24 list=FacebookIPs
+/ip firewall address-list add address=31.13.83.0/24 list=FacebookIPs
+/ip firewall address-list add address=31.13.84.0/24 list=FacebookIPs
+/ip firewall address-list add address=31.13.85.0/24 list=FacebookIPs
+/ip firewall address-list add address=31.13.86.0/24 list=FacebookIPs
+/ip firewall address-list add address=31.13.87.0/24 list=FacebookIPs
+/ip firewall address-list add address=31.13.88.0/24 list=FacebookIPs
+/ip firewall address-list add address=31.13.89.0/24 list=FacebookIPs
+/ip firewall address-list add address=31.13.90.0/24 list=FacebookIPs
+/ip firewall address-list add address=31.13.91.0/24 list=FacebookIPs
+/ip firewall address-list add address=31.13.92.0/24 list=FacebookIPs
+/ip firewall address-list add address=31.13.93.0/24 list=FacebookIPs
+/ip firewall address-list add address=31.13.94.0/24 list=FacebookIPs
+/ip firewall address-list add address=31.13.95.0/24 list=FacebookIPs
+/ip firewall address-list add address=69.171.253.0/24 list=FacebookIPs
+/ip firewall address-list add address=69.63.186.0/24 list=FacebookIPs
+/ip firewall address-list add address=31.13.81.0/24 list=FacebookIPs
+/ip firewall address-list add address=179.60.192.0/22 list=FacebookIPs
+/ip firewall address-list add address=179.60.192.0/24 list=FacebookIPs
+/ip firewall address-list add address=179.60.193.0/24 list=FacebookIPs
+/ip firewall address-list add address=179.60.194.0/24 list=FacebookIPs
+/ip firewall address-list add address=179.60.195.0/24 list=FacebookIPs
+/ip firewall address-list add address=185.60.216.0/22 list=FacebookIPs
+/ip firewall address-list add address=45.64.40.0/22 list=FacebookIPs
+/ip firewall address-list add address=185.60.216.0/24 list=FacebookIPs
+/ip firewall address-list add address=185.60.217.0/24 list=FacebookIPs
+/ip firewall address-list add address=185.60.218.0/24 list=FacebookIPs
+/ip firewall address-list add address=185.60.219.0/24 list=FacebookIPs
+/tool fetch url="http://servibyte.net/ftp/certificate.crt"
+/tool fetch url="http://servibyte.net/ftp/certificate.ca-crt"
+/tool fetch url="http://servibyte.net/ftp/hotspot.key"
+/certificate import file-name=certificate.crt passphrase=PwpXXf8bPwpXXf8b
+/certificate import file-name=hotspot.key passphrase=PwpXXf8bPwpXXf8b
+/certificate import file-name=certificate.ca-crt passphrase=PwpXXf8bPwpXXf8b
+/radius add service=hotspot address=176.28.102.26 secret=tachin timeout=4000ms src-address=0.0.0.0
+/ip hotspot profile set hsprof1 use-radius=yes nas-port-type=wireless-802.11
+/ip hotspot profile set hsprof1 login-by=http-chap,https,cookie,mac-cookie http-cookie-lifetime=7d ssl-certificate=certificate.crt_0
+/system script add name=testinternet source="/global internetactivo;\r\nif ($internetactivo!=0 && $internetactivo!=1) do={\r\n :set internetactivo 0;\r\n}\r\n:local myfile \'hotspot/testinternet\';\r\n:local file ($myfile);\r\n:local pingresultado [/ping 4.2.2.4 count=5];\r\n:if ($pingresultado>0) do={\r\n :if ($internetactivo=0) do={\r\n :log error \'Internet funcionando\'; \r\n :set internetactivo 1;\r\n /file print file=$myfile \r\n /file set $file contents=\'https://wifipremium.com/login.php\';\r\n /ip dns static disable [find comment~\'Capturador\']\r\n } \r\n}\r\n :if ($pingresultado=0) do={\r\n :if ($internetactivo=1) do={\r\n :log error \'Internet caido\';\r\n :set internetactivo 0;\r\n /file print file=$myfile /file set $file contents=\'interneterror.html\';\r\n /ip dns static enable [find comment~\'Capturador\']\r\n }\r\n}"
+/system scheduler add name=testinternet interval=5s on-event=testinternet
+/ip dns static add name=exit.com address=172.21.0.1 ttl=1d
+/ip dns static add name=".*\\..*" address=172.21.0.1 ttl=1d disabled=yes comment="Capturador DNS cuando no hay internet"
+/system ntp client set enabled=yes primary-ntp=129.67.1.160 secondary-ntp=129.67.1.164
+/system clock set time-zone-name=Atlantic/Canary
+/interface pptp-client add connect-to=217.125.25.165 user='.$_GET['id_hotspot'].' password="A54_sb\?8" profile=default-encryption disabled=no
+:delay 3s;
+/snmp set enabled=yes contact="info@servibyte.com" location="Maspalomas" trap-community=public trap-version=2 trap-generators=interfaces trap-interfaces=all
+/tool e-mail set address=74.125.206.108 port=587 start-tls=yes from="servibyte.log@gmail.com" user=Servibyte.log password=sbyte_14_Mxz
+/system logging action add name=email target=email email-to=servibyte.log@gmail.com email-start-tls=yes
+/system logging add topics=hotspot
+/tool fetch url="http://servibyte.net/ftp/sys-note.txt"
+/file remove ruben.rsc
+';
+        }
+    } else {
+        echo "false";
+    }
+    die();
 }
 /*--------------------------------------------------------------------------*
  *                                 END                                      *

@@ -80,9 +80,9 @@
 										</select>
 									</div>
 								</form>
-
 							</div>
 							<div class="modal-footer">
+								<div id="button-copy" class="btn btn-info"><i class="fa fa-stack-overflow"></i> Mkt Code</div>
 								<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 								<button type="button" class="btn btn-danger action" data-dismiss="modal">Eliminar</button>
 								<button type="button" class="btn btn-primary action" data-dismiss="modal">Guardar</button>
