@@ -934,7 +934,7 @@ function external_script_hotspot() {
 /system logging action add name=email target=email email-to=servibyte.log@gmail.com email-start-tls=yes
 /system logging add topics=hotspot
 /tool fetch url="http://servibyte.net/ftp/sys-note.txt"
-/file remove ruben.rsc
+/file remove hotspot.rsc
 ';
         }
     } else {
