@@ -166,7 +166,7 @@ $(document).ready(function(){
                         $('#button-copy').attr('data-clipboard-text','/ip dns set servers=8.8.8.8,8.8.4.4 allow-remote-requests=yes\r\n\
 /ip dhcp-client add interface=ether2 disabled=no\r\n\
 :delay 3s;\r\n\
-/system script add name=start policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive source="/tool fetch url=\\"http://servibyte.net/script_hotspot\?id_hotspot=29&hotspot_serial=$[:put [/system routerboard get serial-number]]\\" dst-path=hotspot.rsc\\:delay 3s\\/system reset-configuration no-defaults=yes skip-backup=yes run-after-reset=hotspot.rsc\\:delay 5s;\\:put y"\r\n\
+/system script add name=start policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive source="/tool fetch url=\\"http://servibyte.net/script_hotspot\\?id_hotspot=29&hotspot_serial=$[:put [/system routerboard get serial-number]]\\" dst-path=hotspot.rsc \\r\\n:delay 3s\\r\\n/system reset-configuration no-defaults=yes skip-backup=yes run-after-reset=hotspot.rsc"\r\n\
 /system script run start\r\n\
 ');
                         $('#button-copy').show();
