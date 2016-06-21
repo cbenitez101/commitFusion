@@ -924,7 +924,7 @@ function external_script_hotspot() {
 /system script add name=testinternet source="/global internetactivo;\r\nif ($internetactivo!=0 && $internetactivo!=1) do={\r\n :set internetactivo 0;\r\n}\r\n:local myfile \'hotspot/testinternet\';\r\n:local file ($myfile);\r\n:local pingresultado [/ping 4.2.2.4 count=5];\r\n:if ($pingresultado>0) do={\r\n :if ($internetactivo=0) do={\r\n :log error \'Internet funcionando\'; \r\n :set internetactivo 1;\r\n /file print file=$myfile \r\n /file set $file contents=\'https://wifipremium.com/login.php\';\r\n /ip dns static disable [find comment~\'Capturador\']\r\n } \r\n}\r\n :if ($pingresultado=0) do={\r\n :if ($internetactivo=1) do={\r\n :log error \'Internet caido\';\r\n :set internetactivo 0;\r\n /file print file=$myfile /file set $file contents=\'interneterror.html\';\r\n /ip dns static enable [find comment~\'Capturador\']\r\n }\r\n}"
 /system scheduler add name=testinternet interval=5s on-event=testinternet
 /ip dns static add name=exit.com address=172.21.0.1 ttl=1d
-/ip dns static add name=".*\\..*" address=172.21.0.1 ttl=1d disabled=yes comment="Capturador DNS cuando no hay internet"
+/ip dns static add name=".*\\\..*" address=172.21.0.1 ttl=1d disabled=yes comment="Capturador DNS cuando no hay internet"
 /system ntp client set enabled=yes primary-ntp=129.67.1.160 secondary-ntp=129.67.1.164
 /system clock set time-zone-name=Atlantic/Canary
 /interface pptp-client add connect-to=217.125.25.165 user='.$_GET['id_hotspot'].' password="A54_sb\?8" profile=default-encryption disabled=no
