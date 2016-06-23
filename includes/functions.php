@@ -406,7 +406,7 @@ function external_guardar_perfil() {
                 for ($index = 1; $index < 16; $index++) $sql.='"'.((!empty($_POST['per_'.$index]))?$_POST['per_'.$index]:'').'",';
                 $sql = substr($sql, 0, -1).')';
                 //file_put_contents('perfiles', $sql, 8);
-                $database->query($sql);
+                if ($database->query($sql)) die();
             } else {
                 if ($database->query('UPDATE `perfiles` SET `Id_hotspot`="'.$_POST['per_1'].'",`ServerName`="'.$_POST['per_2'].'",`Descripcion`="'.$_POST['per_3'].'",`Duracion`="'.$_POST['per_4'].'",`Movilidad`="'.$_POST['per_5'].'",`ModoConsumo`="'.$_POST['per_6'].'",`Acct-Interim-Interval`="'.$_POST['per_7'].'",`Idle-Timeout`="'.$_POST['per_8'].'",`Simultaneous-Use`="'.$_POST['per_9'].'",`Login-Time`="'.$_POST['per_10'].'",`Expiration`="'.$_POST['per_11'].'",`WISPr-Bandwidth-Max-Down`="'.$_POST['per_12'].'",`WISPr-Bandwidth-Max-Up`="'.$_POST['per_13'].'",`TraficoDescarga`="'.$_POST['per_14'].'",`Password`="'.$_POST['per_15'].'" WHERE id = '.$_POST['per_0'])) die ();
             }
@@ -420,7 +420,7 @@ function external_guardar_lote() {
             if ($database->query('DELETE FROM lotes WHERE Id = '.$_POST['id'])) die();
         } elseif ($_POST['action']== 0) {
             if (empty($_POST['id'])) {
-                $database->query('INSERT INTO `lotes`(`Id_perfil`, `Duracion`, `Costo`, `Precio`) VALUES ("'.$_POST['id_perfil'].'", "'.$_POST['duracion'].'", "'.$_POST['costo'].'", "'.$_POST['precio'].'")');
+                if ($database->query('INSERT INTO `lotes`(`Id_perfil`, `Duracion`, `Costo`, `Precio`) VALUES ("'.$_POST['id_perfil'].'", "'.$_POST['duracion'].'", "'.$_POST['costo'].'", "'.$_POST['precio'].'")')) die();
             } else {
                 if ($database->query('UPDATE `lotes` SET `Id_perfil`="'.$_POST['id_perfil'].'",`Duracion`="'.$_POST['duracion'].'",`Costo`="'.$_POST['costo'].'",`Precio`="'.$_POST['precio'].'" WHERE `Id`='.$_POST['id'])) die ();
             }
@@ -932,7 +932,7 @@ function external_script_hotspot() {
 /ip dns static add name=".*\\\..*" address=172.21.0.1 ttl=1d disabled=yes comment="Capturador DNS cuando no hay internet"
 /system ntp client set enabled=yes primary-ntp=129.67.1.160 secondary-ntp=129.67.1.164
 /system clock set time-zone-name=Atlantic/Canary
-/interface pptp-client add connect-to=217.125.25.165 user='.$_GET['id_hotspot'].' password="A54_sb\?8" profile=default-encryption disabled=no
+/interface pptp-client add connect-to=217.125.25.165 user='.$hotspot['ServerName'].' password="A54_sb\?8" profile=default-encryption disabled=no
 :delay 3s;
 /snmp set enabled=yes contact="info@servibyte.com" location="Maspalomas" trap-community=public trap-version=2 trap-generators=interfaces trap-interfaces=all
 /tool e-mail set address=74.125.206.108 port=587 start-tls=yes from="servibyte.log@gmail.com" user=Servibyte.log password=sbyte_14_Mxz
