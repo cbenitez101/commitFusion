@@ -150,7 +150,6 @@ $(document).ready(function(){
       e.preventDefault()
       $(this).tab('show')
     });
-    new Clipboard('#button-copy');
     
     // Pone los datos de la variable modal en la tabla
     $('.modal').on('show.bs.modal', function(){
