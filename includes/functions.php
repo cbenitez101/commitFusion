@@ -824,7 +824,6 @@ function external_script_hotspot() {
 /ip hotspot user profile add name=tecnico shared-users=5
 /ip hotspot user profile set default shared-users=1 rate-limit=380k/2M idle-timeout=none keepalive-timeout=20m status-autorefresh=1m mac-cookie-timeout=7d session-timeout=0s
 /ip hotspot user set coronablanca_SBYTE profile=tecnico
-/ip hotspot walled-garden
 /ip hotspot walled-garden add dst-host=www.apple.com
 /ip hotspot walled-garden add dst-host=www.airport.us
 /ip hotspot walled-garden add dst-host=www.itools.info
@@ -842,6 +841,10 @@ function external_script_hotspot() {
 /ip firewall nat add action=add-dst-to-address-list address-list=fb chain=pre-hotspot comment= "Drop conexiones https cuando unAuth" dst-address=!176.28.102.26 dst-address-list=!FacebookIPs dst-address-type=!local dst-port=443 hotspot=!auth protocol=tcp to-ports=80
 /ip firewall nat set [find action=masquerade] out-interface=ether1
 /ip firewall nat unset [find action=masquerade] src-address
+/ip firewall mangle add action=mark-connection chain=prerouting comment="FB Connection Mark " dst-address-list=FacebookIPs new-connection-mark=FBConexion
+/ip firewall layer7-protocol add name=facebook regexp="^.+(facebook.com).*\$"
+/ip firewall layer7-protocol add name=facebook2 regexp=".+(facebook.com)*dialog"
+/ip firewall layer7-protocol add name=facebook3 regexp=".+(facebook.com)*login"
 /ip firewall address-list add address=204.15.20.0/22 list=FacebookIPs
 /ip firewall address-list add address=69.63.176.0/20 list=FacebookIPs
 /ip firewall address-list add address=66.220.144.0/20 list=FacebookIPs
@@ -918,6 +921,8 @@ function external_script_hotspot() {
 /certificate import file-name=certificate.crt passphrase=PwpXXf8bPwpXXf8b
 /certificate import file-name=hotspot.key passphrase=PwpXXf8bPwpXXf8b
 /certificate import file-name=certificate.ca-crt passphrase=PwpXXf8bPwpXXf8b
+/ip service enable www-ssl
+/ip service set www-ssl certificate=certificate.crt_0
 /radius add service=hotspot address=176.28.102.26 secret=tachin timeout=4000ms src-address=0.0.0.0
 /ip hotspot profile set hsprof1 use-radius=yes nas-port-type=wireless-802.11
 /ip hotspot profile set hsprof1 login-by=http-chap,https,cookie,mac-cookie http-cookie-lifetime=7d ssl-certificate=certificate.crt_0
@@ -933,6 +938,8 @@ function external_script_hotspot() {
 /tool e-mail set address=74.125.206.108 port=587 start-tls=yes from="servibyte.log@gmail.com" user=Servibyte.log password=sbyte_14_Mxz
 /system logging action add name=email target=email email-to=servibyte.log@gmail.com email-start-tls=yes
 /system logging add topics=hotspot
+/user group add name=tecnico policy=reboot,write,test,read,web
+/user add name=tecnico group=tecnico password=sbboscosos
 /tool fetch url="http://servibyte.net/ftp/sys-note.txt"
 /file remove hotspot.rsc
 ';
