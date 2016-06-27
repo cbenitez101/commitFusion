@@ -8,6 +8,7 @@ $(document).ready(function(){
         // creaticket.dialog("open");
     });
     $('.modal_creaticket').click(function(){
+        console.log("Identificando");
         creatickets();
     });
     // Manejador de la tabla, se le pone que al hacer lick en una fila llame al modal y guarda los datos de la tabla
@@ -233,8 +234,9 @@ function borrarticket(){
     });
 }
 function creatickets(){
-    ticket['identificador']=$('#modal_ticketid').val();
+    ticket['identificador']=$('.modal_ticketid:visible').val();
     console.log('creando');
+    console.log(ticket);
     $.ajax({
         url: "/crea_ticket",
         method: "POST",
@@ -242,7 +244,8 @@ function creatickets(){
     }).done(function(data){
         $('.btnPrint').attr('data-url', '/scripts/imprimeticket.php?'+data.trim());
         $('.btnPrint').click();
-        $('#modal_ticketid').val("");
+        $('.modal_ticketid').val("");
+        $('.modal-backdrop').hide();
     });
 }
 function guardar_bloc(action){

@@ -52,13 +52,10 @@
 										<h4 class="modal-title">Información del Ticket</h4>
 									</div>
 									<div class="modal-body">
-										<form role="form">
-											<div class="form-group">
-												<label>Numero de Habitación</label>
-												<input class="form-control" type="text" name="ticketident" id="modal_ticketid">
-											</div>
-										</form>
-
+										<div class="form-group">
+											<label>Numero de Habitación</label>
+											<input class="form-control modal_ticketid" type="text" name="ticketident">
+										</div>
 									</div>
 									<div class="modal-footer">
 										<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
