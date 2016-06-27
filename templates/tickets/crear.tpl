@@ -62,7 +62,7 @@
 									</div>
 									<div class="modal-footer">
 										<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-										<button type="button" class="btn btn-success action" data-dismiss="modal" id="modal_creaticket">Crear</button>
+										<button type="button" class="btn btn-success action modal_creaticket" data-dismiss="modal" id="modal_creaticket">Crear</button>
 									</div>
 								</div><!-- /.modal-content -->
 							</div><!-- /.modal-dialog -->

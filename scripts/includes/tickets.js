@@ -7,7 +7,7 @@ $(document).ready(function(){
         ticket = $(this).data();
         // creaticket.dialog("open");
     });
-    $('#modal_creaticket').click(function(){
+    $('.modal_creaticket').click(function(){
         creatickets();
     });
     // Manejador de la tabla, se le pone que al hacer lick en una fila llame al modal y guarda los datos de la tabla
