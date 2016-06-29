@@ -35,7 +35,9 @@ and open the template in the editor.
         <div class='data'>
             <div class='border'>
                 <p>User: <?php echo $_GET['user']; ?></p>
-                <p>Pass: <?php echo $_GET['pass']; ?></p>
+                <?php if (!empty($_GET['pass'])): ?>
+                    <p>Pass: <?php echo $_GET['pass']; ?></p>
+                <?php endif; ?>
             </div>
         </div>
     </body>

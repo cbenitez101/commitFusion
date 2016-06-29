@@ -440,7 +440,7 @@ function external_crea_ticket() {
             $aux = $radius->query('SELECT * FROM radusergroup where username = '.$_POST['servername'].'_'.$usuario);
             if ($aux->num_rows == 0) $exists = true;
         }
-        $contrasena = (empty($_POST['password'])?usuario_aleatorio('CVCVCVNN', 8):$_POST['password']);
+        $contrasena = (empty($_POST['password'])?usuario_aleatorio('CVCVCVNN', 8):(($_POST['password'] == 'usuario')?$usuario:$_POST['password']));
         if ($radius->query("INSERT INTO `radusergroup`(`username`, `groupname`, `priority`) VALUES ('".$_POST['servername'].'_'.$usuario."','".$_POST['servername']."',1)")) {
             if ($radius->query("INSERT INTO `radcheck`( `username`, `attribute`, `op`, `value`) VALUES ('".$_POST['servername'].'_'.$usuario."','Cleartext-Password',':=','$contrasena')")) {
                 if ($radius->query("INSERT INTO `radcheck`( `username`, `attribute`, `op`, `value`) VALUES ('".$_POST['servername'].'_'.$usuario."','Called-Station-Id','==','".$_POST['servername']."')")) {
@@ -472,11 +472,9 @@ function external_crea_ticket() {
                     $database->query("INSERT INTO `ventashotspot`(`Id_Lote`, `FechaVenta`, `Usuario`, `Precio`, `identificador`) VALUES ('".$_POST['lotesid']."',NOW(),'".$_POST['servername'].'_'.$usuario."','".$_POST['precio']."','".$_POST['identificador']."')");
                 }   
             }  
-        }
-        //MOISESSSSSSSSSS linea para que pongas lo que quieras donde el print_r y que se guarde en un fichero
-        //file_put_contents($fulldomain.'/ticketrad', print_r($_POST, true));    
+        }    
         
-        echo "user=$usuario&pass=$contrasena";
+        echo (($_POST['password'] == 'usuario')?"user=$usuario":"user=$usuario&pass=$contrasena");
         die();
     }
 }
@@ -958,29 +956,44 @@ function external_script_hotspot() {
 /**
  * Generador aleatorio de ristras. 
  * Tipofab:
- * 0= Carac May, min y num
- * 1= carac may, min
- * 2= Carac May
- * 3= Carac min
- * 4= num
- * 5= Carac min y num
- * 6= Carac May y num
+ * T= Carac May, min y num
+ * A= carac may, min
+ * M= Carac May
+ * m= Carac min
+ * N= num
+ * b= Carac min y num
+ * B= Carac May y num
+ * V= Vocales Mayúsculas
+ * v= Vocales Minúsculas
+ * C= Consonantes Mayúsculas
+ * c= Consonantes Minúsculas
  * @param type $tipoafab
  * @param type $lon
  * @return array
  */
 function usuario_aleatorio($tipoafab, $lon= NULL) {
     $alfabetos= array(
+        // Todos
         "T" => array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","0","1","2","3","4","5","6","7","8","9"), 
+        // Alfabeto
         "A"=>array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"),
+        // Mayúsculas
         "M"=>array("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"),
+        // Minúsculas
         "m"=>array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"),
+        // Números
         "N"=>array("0","1","2","3","4","5","6","7","8","9"),
+        // minúsculas y números
         "b"=>array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","0","1","2","3","4","5","6","7","8","9"),
+        // Mayúsculas y números
         "B"=>array("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","0","1","2","3","4","5","6","7","8","9"),
+        // Vocales mayúsculas
         "V"=>array("A", "E", "I", "O", "U"),
+        // Vocales minúsculas
         "v"=>array("a", "e", "i", "o", "u"),
+        // Consonantes mayúsculas
         "C"=>array("B","C","D","F","G","H","J","K","L","M","N","P","Q","R","S","T","V","W","X","Y","Z"),
+        // Consonantes minúsculas
         "c"=>array("b","c","d","f","g","h","j","k","l","m","n","p","q","r","s","t","v","w","x","y","z")
         );
     $out = "";
