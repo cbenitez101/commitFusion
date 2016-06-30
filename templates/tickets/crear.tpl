@@ -103,14 +103,14 @@
 									<form role="form">
 										<div class="form-group">
 											<label>Numero de Habitación</label>
-											<input class="form-control" type="text" name="ticketident" id="modal_ticketid">
+											<input class="form-control modal_ticketid" type="text" name="ticketident">
 										</div>
 									</form>
 
 								</div>
 								<div class="modal-footer">
 									<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-									<button type="button" class="btn btn-success action" data-dismiss="modal" id="modal_creaticket">Crear</button>
+									<button type="button" class="btn btn-success action modal_creaticket" data-dismiss="modal" id="modal_creaticket">Crear</button>
 								</div>
 							</div><!-- /.modal-content -->
 						</div><!-- /.modal-dialog -->
