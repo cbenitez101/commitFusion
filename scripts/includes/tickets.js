@@ -196,7 +196,7 @@ $(document).ready(function(){
     var bloc;
     $('.bloctable tbody tr td:not(:last-child)').on('click', function() {
         bloc = $(this).parent();
-        modalbloc.dialog("open");
+        $('#modalbloc').modal();
     });
 });
 var table;
