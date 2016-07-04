@@ -235,8 +235,8 @@ function borrarticket(){
 }
 function creatickets(){
     ticket['identificador']=$('.modal_ticketid:visible').val();
-    console.log('creando');
-    console.log(ticket);
+    //console.log('creando');
+    //console.log(ticket);
     $.ajax({
         url: "/crea_ticket",
         method: "POST",

@@ -474,7 +474,7 @@ function external_crea_ticket() {
             }  
         }    
         
-        echo (($_POST['password'] == 'usuario')?"user=$usuario":"user=$usuario&pass=$contrasena");
+        echo (($_POST['password'] == 'usuario')?(($_POST['servername'] == "coronablanca")?"user=$usuario&full=corona.png":"user=$usuario"):"user=$usuario&pass=$contrasena");
         die();
     }
 }
@@ -924,7 +924,7 @@ function external_script_hotspot() {
 /radius add service=hotspot address=176.28.102.26 secret=tachin timeout=4000ms src-address=0.0.0.0
 /ip hotspot profile set hsprof1 use-radius=yes nas-port-type=wireless-802.11
 /ip hotspot profile set hsprof1 login-by=http-chap,https,cookie,mac-cookie http-cookie-lifetime=7d ssl-certificate=certificate.crt_0
-/system script add name=testinternet source="/global internetactivo;\r\nif ($internetactivo!=0 && $internetactivo!=1) do={\r\n :set internetactivo 0;\r\n}\r\n:local myfile \'hotspot/testinternet\';\r\n:local file ($myfile);\r\n:local pingresultado [/ping 4.2.2.4 count=5];\r\n:if ($pingresultado>0) do={\r\n :if ($internetactivo=0) do={\r\n :log error \'Internet funcionando\'; \r\n :set internetactivo 1;\r\n /file print file=$myfile \r\n /file set $file contents=\'https://wifipremium.com/login.php\';\r\n /ip dns static disable [find comment~\'Capturador\']\r\n } \r\n}\r\n :if ($pingresultado=0) do={\r\n :if ($internetactivo=1) do={\r\n :log error \'Internet caido\';\r\n :set internetactivo 0;\r\n /file print file=$myfile /file set $file contents=\'interneterror.html\';\r\n /ip dns static enable [find comment~\'Capturador\']\r\n }\r\n}"
+/system script add name=testinternet owner=administrador policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive source=":global internetactivo;\r\    \n\r\    \nif (\$internetactivo!=0 && \$internetactivo!=1) do={\r\    \n    :set internetactivo 0;\r\    \n        :log error \"Comienza Test Internet\";\r\    \n        /file print file=\$myfile\r\    \n        /file set \$file contents=\"interneterror.html\";\r\    \n        /ip dns static enable [find comment~\"Capturador\"] \r\    \n\r\    \n}\r\    \n\r\    \n:local myfile \"hotspot/testinternet\";\r\    \n:local file (\$myfile);\r\    \n\r\    \n:local pingresultado [/ping 4.2.2.4 count=5];\r\    \n\r\    \n:if (\$pingresultado>0) do={\r\    \n    :if (\$internetactivo=0) do={\r\    \n        :log error \"Internet funcionando\";\r\    \n        :set internetactivo 1;\r\    \n        /file print file=\$myfile\r\    \n        /file set \$file contents=\"https://wifipremium.com/login.php\";\r\    \n        /ip dns static disable [find comment~\"Capturador\"] \r\    \n    }\r\    \n}\r\    \n\r\    \n:if (\$pingresultado=0) do={\r\    \n    :if (\$internetactivo=1) do={\r\    \n        :log error \"Internet caido\";\r\    \n        :set internetactivo 0;\r\    \n        /file print file=\$myfile\r\    \n        /file set \$file contents=\"interneterror.html\";\r\    \n        /ip dns static enable [find comment~\"Capturador\"] \r\    \n    }\r\    \n}"
 /system scheduler add name=testinternet interval=5s on-event=testinternet
 /ip dns static add name=exit.com address=172.21.0.1 ttl=1d
 /ip dns static add name=".*\\\..*" address=172.21.0.1 ttl=1d disabled=yes comment="Capturador DNS cuando no hay internet"

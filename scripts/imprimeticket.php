@@ -11,7 +11,7 @@ and open the template in the editor.
         <style type="text/css">
             <?php
                 if (isset($_GET['full'])) {
-                    echo '@page {size: A4;margin: 0;} @media print {html, body {width: 210mm;height: 297mm;}} .logo{display:none;} .data{ padding-top: 175px;} .border {border: 1px solid black;display: inline-block}'.((file_exists('/var/www/vhosts/servibyte.com/servibyte.net/images/'.$_GET['full']))?' body{background-image: url("/images/'.$_GET['full'].'"); height: 29cm; width: 21cm; background-repeat: no-repeat; background-size: 21cm 29cm;}':'');
+                    echo '@page {size: A4;margin: 0;} @media print {html, body {width: 210mm;height: 297mm;}} .logo{display:none;} .data{ padding-top: 175px;} .border {border: 1px solid black;display: inline-block}'.((file_exists(getcwd().'/../images/'.$_GET['full']))?' body{background-image: url("/images/'.$_GET['full'].'"); height: 29cm; width: 21cm; background-repeat: no-repeat; background-size: 21cm 29cm;}':'');
                 } else {
                     echo '@media print {html, body {width: 80mm;}} body {width: 8cm; text-align: center; font-size: 30px;}';
                 }
