@@ -776,6 +776,7 @@ function external_script_hotspot() {
 /ip dhcp-client add interface=ether2 disabled=no
 /system identity set name='.$hotspot['ServerName'].'
 /interface bridge add name=bridge_hotspot
+:if ([:len [/interface wireless find ]]>0) do={/interface wireless set wlan1 disabled=no mode=ap-bridge band=2ghz-b/g/n channel-width=20mhz frequency=2437 wireless-protocol=802.11 default-forwarding=no ssid='.$hotspot['ServerName'].';/interface bridge port add bridge=bridge_hotspot interface=wlan1}
 :delay 3s;
 /tool fetch url="http://servibyte.net/ftp/hotspot/alogin.html" dst-path="hotspot/alogin.html"
 /tool fetch url="http://servibyte.net/ftp/hotspot/averia.jpg" dst-path="hotspot/averia.jpg"
