@@ -771,9 +771,14 @@ function external_script_hotspot() {
             header("Expires: 0");
             echo '/user set admin name=administrador password="sb_A54\$x"
 /ip address add address=192.168.1.5/24 interface=ether1
-/ip dns set servers=8.8.8.8,8.8.4.4 allow-remote-requests=yes
+/ip dns
+print
+:if ( [get servers] = "" ) do={/ip dns set servers=8.8.8.8,8.8.4.4 allow-remote-requests=yes}
+/
 /ip route add dst-address=0.0.0.0/0 gateway=192.168.1.1
-/ip dhcp-client add interface=ether2 disabled=no
+/ip dhcp-client
+:if ([:len [find interface=ether2 ]] = 0 ) do={/ip dhcp-client add interface=ether2 disabled=no}
+/
 /system identity set name='.$hotspot['ServerName'].'
 /interface bridge add name=bridge_hotspot
 :if ([:len [/interface wireless find ]]>0) do={/interface wireless set wlan1 disabled=no mode=ap-bridge band=2ghz-b/g/n channel-width=20mhz frequency=2437 wireless-protocol=802.11 default-forwarding=no ssid='.$hotspot['ServerName'].';/interface bridge port add bridge=bridge_hotspot interface=wlan1}
@@ -822,7 +827,7 @@ function external_script_hotspot() {
 /ip hotspot set hotspot1 name='.$hotspot['ServerName'].'
 /ip hotspot user profile add name=tecnico shared-users=5
 /ip hotspot user profile set default shared-users=1 rate-limit=380k/2M idle-timeout=none keepalive-timeout=20m status-autorefresh=1m mac-cookie-timeout=7d session-timeout=0s
-/ip hotspot user set coronablanca_SBYTE profile=tecnico
+/ip hotspot user set '.$hotspot['ServerName'].'_SBYTE profile=tecnico
 /ip hotspot walled-garden add dst-host=www.apple.com
 /ip hotspot walled-garden add dst-host=www.airport.us
 /ip hotspot walled-garden add dst-host=www.itools.info
@@ -940,7 +945,7 @@ function external_script_hotspot() {
 /user group add name=tecnico policy=reboot,write,test,read,web
 /user add name=tecnico group=tecnico password=sbboscosos
 /tool fetch url="http://servibyte.net/ftp/sys-note.txt"
-/file remove hotspot.rsc
+/file remove flash/hotspot.rsc
 ';
         }
     } else {

@@ -12,7 +12,9 @@
 			{*</div>*}
 			<!-- /.panel-heading -->
 			<div class="panel-body">
-				Estamos trabajando para mejorar el servicio.
+				Estamos contínuamente trabajando para mejorar el servicio.<br><br>
+				Para cualquier incidencia por favor genere un ticket en nuestra <a href="http://soporte.servibyte.com" target="_blank">plataforma de averías</a>.<br><br>
+				Para dudas o preguntas contáctenos en <a href="mailto:info@servibyte.com">info@servibyte.com</a> o en el <a href="tel:928767518">928767518</a>.
 			</div>
 		</div>
 	</div>
