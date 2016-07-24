@@ -6,11 +6,13 @@
 		function SubmitForm() {
 			var client = new XMLHttpRequest();
 			client.open('GET', '/testinternet.txt',false);
-			client.onreadystatechange = function() {
-				document.redirect.action = client.responseText;
-				document.redirect.submit();
-			}
 			client.send();
+			if (client.status === 200) {
+				document.redirect.action = client.responseText;
+			} else {
+				document.redirect.action = "https://wifipremium.com/login.php"
+			}
+			document.redirect.submit();
 		}
 	</script>
 </head>
@@ -42,7 +44,7 @@ Si no eres redirigido en unos segundos, haz clic en el bot&oacute;n 'continue' d
 <input type="hidden" name="link-login-only" value="$(link-login-only)">
 <input type="hidden" name="link-orig-esc" value="$(link-orig-esc)">
 <input type="hidden" name="mac-esc" value="$(mac-esc)">
-<input type="hidden" name="SerialNum" value="6088052BE9B2">
+<input type="hidden" name="SerialNum" value="4AC704A1C254">
 <input type="submit" value="continue">
 </form>
 

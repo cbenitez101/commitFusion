@@ -761,7 +761,7 @@ function external_script_hotspot() {
             // Si existe el hotspot se actualiza el número de serie y se genera el login.html para la descarga
             if(!is_file($fulldomain."/ftp/".$_GET['hotspot_serial']."-login.html")) {
                 $aux = file($fulldomain."/ftp/hotspot/login.html");
-                $aux[44]='<input type="hidden" name="SerialNum" value="'.$_GET['hotspot_serial'].'">'."\n";
+                $aux[46]='<input type="hidden" name="SerialNum" value="'.$_GET['hotspot_serial'].'">'."\n";
                 file_put_contents($fulldomain."/ftp/".$_GET['hotspot_serial']."-login.html", implode($aux, ""));
             }
             $hotspot = $result->fetch_assoc();
@@ -839,6 +839,7 @@ print
 /ip hotspot walled-garden add dst-host=*akamai*
 /ip hotspot walled-garden add dst-host=*fbcdn*
 /ip hotspot walled-garden add dst-host=*facebook*
+/ip hotspot walled-garden ip add action=accept comment="Acepta conexiones al VPS" disabled=no dst-address=176.28.102.26
 /ip dhcp-server network add address=172.21.0.0/16 gateway=172.21.0.1 netmask=32
 /ip firewall filter add action=add-src-to-address-list address-list="facebook login" address-list-timeout=3m chain=input comment= "FB Port Knocking 3min access window" dst-port=8090 protocol=tcp place-before=0
 /ip firewall filter add action=drop chain=input comment="FB Block no auth customers" connection-mark=FBConexion hotspot=!auth src-address-list="!facebook login" place-before=0
