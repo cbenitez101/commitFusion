@@ -129,6 +129,7 @@
 							<script>var anula_user = "{$smarty.session.user}"</script>
 							{if $estado == 'VALIDO'}
 								<input type="button" value="Anular" id="anularticket" class="btn btn-warning"/>
+								<input type="button" value="Imprimir" id="imprimirticket" class="btn btn-primary"/>
 							{elseif $smarty.session.cliente == 'admin'}
 								<input type="button" value="Desanular" id="desanularticket" class="btn btn-success"/>
 							{/if}
@@ -298,5 +299,8 @@
 				</div>
 			</div>
 		{/if}
+	</div>
+	<div class="ticket-crear">
+	    <button style="visibility: hidden;" class="btnPrint" data-url="/scripts/imprimeticket.php?user={$out['info']['username']}&full=corona.png"/>
 	</div>
 {/if}

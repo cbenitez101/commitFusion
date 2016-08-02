@@ -192,6 +192,10 @@ $(document).ready(function(){
         $('#modal_borra').modal();
     });
     $('#borrarbutton').click(function(){borrarticket();});
+    $('#imprimirticket').on('click', function(){
+        $('.btnPrint').click();
+        $('.modal-backdrop').hide();
+    });
 
     var bloc;
     $('.bloctable tbody tr td:not(:last-child)').on('click', function() {
