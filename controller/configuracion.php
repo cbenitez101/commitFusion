@@ -254,6 +254,8 @@ if (isLoggedIn()) {
                 die();
             }
         default:
+            header('Location: '.DOMAIN);
+            die();
             break;
     }
 } else {

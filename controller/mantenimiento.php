@@ -4,16 +4,23 @@ if (isLoggedIn()) {
 //            include_header_file('filtertable');
     load_modul('datatable');
     switch ($template_data[1]) {
-        case 'historial':
-            $result = $database->query("SELECT historial.id, historial.fecha, hotspots.ServerName, locales.nombre FROM `historial` INNER JOIN `hotspots` ON hotspots.id = historial.id_hotspot INNER JOIN `locales` ON hotspots.Local = locales.id".(($_SESSION['cliente'] != 'admin')? " INNER JOIN `clientes` ON clientes.id = locales.cliente  WHERE ".((isset($_SESSION['local']))?"locales.nombre = '".$_SESSION['local']."''":"clientes.nombre = '".$_SESSION['cliente']):""));
+        case 'dispositivos':
+            $result = $database->query("SELECT dispositivos.*, locales.nombre FROM `dispositivos` INNER JOIN `hotspots` ON hotspots.id = historial.id_hotspot INNER JOIN `locales` ON hotspots.Local = locales.id".(($_SESSION['cliente'] != 'admin')? " INNER JOIN `clientes` ON clientes.id = locales.cliente  WHERE ".((isset($_SESSION['local']))?"locales.nombre = '".$_SESSION['local']."''":"clientes.nombre = '".$_SESSION['cliente']):""));
+            //dump("SELECT dispositivos.*, locales.nombre FROM `dispositivos` INNER JOIN `hotspots` ON hotspots.id = historial.id_hotspot INNER JOIN `locales` ON hotspots.Local = locales.id".(($_SESSION['cliente'] != 'admin')? " INNER JOIN `clientes` ON clientes.id = locales.cliente  WHERE ".((isset($_SESSION['local']))?"locales.nombre = '".$_SESSION['local']."''":"clientes.nombre = '".$_SESSION['cliente']):""), true);
             $out = array();
-            while ($aux = $result->fetch_assoc()) $out[] = $aux;
-            $menu = array();
-            foreach ($out as $value) foreach ($value as $key => $item) $menu[] = $item;
-            $smarty->assign('tabla', $menu);
-            $smarty->assign('cols', 'Id,Fecha,Hotspot,Local');
+            if ($result->num_rows > 0) {
+                while ($aux = $result->fetch_assoc()) $out[] = $aux;
+                $menu = array();
+                foreach ($out as $value) foreach ($value as $key => $item) $menu[] = $item;
+                $result = $database->query('SELECT id, ServerName FROM hotspots');
+                $locales = array(); 
+                while ($aux = $result->fetch_assoc()) $locales[] = array($aux['id'],$aux['ServerName']);
+                $smarty->assign('hotspot', $locales);
+                $smarty->assign('tabla', $menu);
+                $smarty->assign('cols', implode(', ', array_keys($out[0])));
+            }
             break;
-        case 'gastos':
+        /*case 'gastos':
             if ($_SESSION['cliente'] == 'admin') {
                 if (!empty($postparams)) {
                     $database->query('INSERT INTO `gastos`(`hotspot`, `cantidad`, `Descripcion`, `precio`) VALUES ("'.$postparams['gasto_hotspot'].'","'.$postparams['gasto_cantidad'].'","'.$postparams['gasto_descripcion'].'","'.$postparams['gasto_precio'].'")');
@@ -33,7 +40,7 @@ if (isLoggedIn()) {
                 header('Location: '.DOMAIN);
                 die();
             }
-            break;
+            break;*/
         default:
             header('Location: '.DOMAIN);
             die();

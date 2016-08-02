@@ -22,7 +22,8 @@ $pages = array(
     'configuracion',
     'contrasena',
     'tickets',
-    'contabilidad'
+    'contabilidad',
+    'mantenimiento'
     );
 
 /**
