@@ -454,7 +454,7 @@ function external_crea_ticket() {
                                     $radius->query("INSERT INTO `radcheck`( `username`, `attribute`, `op`, `value`) VALUES ('".$_POST['servername'].'_'.$usuario."','WISPr-Bandwidth-Max-Down',':=','$elem')");
                                     break;
                                 case "modoconsumo":
-                                    $radius->query("INSERT INTO `radcheck`( `username`, `attribute`, `op`, `value`) VALUES ('".$_POST['servername'].'_'.$usuario."','".(($elem == 'Continuo')?'One-All-Session':'Max-All-Session')."',':=','".$_POST['duracion']."')");      //Continuo hay dos tipos?
+                                    $radius->query("INSERT INTO `radcheck`( `username`, `attribute`, `op`, `value`) VALUES ('".$_POST['servername'].'_'.$usuario."','$elem',':=','".$_POST['duracion']."')");      //Continuo hay dos tipos?
                                     break;
                                 case 'traficodescarga':
                                     $radius->query("INSERT INTO `radcheck`( `username`, `attribute`, `op`, `value`) VALUES ('".$_POST['servername'].'_'.$usuario."','Max-All-MB',':=','$elem')");
