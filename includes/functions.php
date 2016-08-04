@@ -582,6 +582,35 @@ function external_informepdf(){
     }
 }
 
+function external_informeventas(){
+    if (isset($_GET['hotspot']) && isset($_GET['fechaini']) && isset($_GET['fechafin']) && isset($_GET['modo'])) {
+        global $database;
+        $result = $database->query("SELECT * FROM ventashotspot WHERE Usuario LIKE '".$_GET['hotspot']."\_%'".((!empty($_GET['fechaini']))?" AND FechaVenta > '".$_GET['fechaini']." 00:00:00'".((!empty($_GET['fechafin']))?" AND FechaVenta < '".$_GET['fechaini']." 23:59:59'":""):""));
+        if ($result->num_rows > 0) {
+            $out = array();
+            while ($aux = $result->fetch_assoc()) {
+                $out[] = array("usuario" => substr(strstr($aux['Usuario'], '_'), 1), "precio"=>$aux['Precio'], "identificador" => $aux['identificador'], 'lote'=>$aux['Id_Lote'], "anulado"=>$aux['anulacion_fecha']);
+            }
+            $suma = array();
+            foreach ($out as $value) {
+                if (empty($suma[$value['lote']])) {
+                    $suma[$value['lote']] = array("cantidad" => ((!empty($value['anulado']))?0:1), "usuarios" => array($value['usuario'].((!empty($value['anulado']))?" ANULADO":"")), "precio" => $value['precio']);
+                } else {
+                    if (empty($value['anulado'])) $suma[$value['lote']]['cantidad'] = $suma[$value['lote']]['cantidad'] + 1;
+                    $suma[$value['lote']]['usuarios'][] = $value['usuario'].((!empty($value['anulado']))?" ANULADO":"");
+                    $suma[$value['lote']]['precio'] = $value['precio'];
+                }
+            }
+            //dump($suma, true);
+            if (count($suma)>0) {
+                $result = $database->query("SELECT * FROM `hotspots` WHERE ServerName = '".$_GET['hotspot']."'");
+                $hotspot = $result->fetch_assoc();
+                pdf($suma, $hotspot, TRUE, spanish(date('F', strtotime(((empty($_GET['fechaini']))?"now":$_GET['fechaini'])))),$_GET['modo'], TRUE);
+            }
+        }
+    }
+}
+
 function external_guardar_bloc(){
     if (isset($_POST['nombre']) && isset($_POST['descripcion']) && isset($_POST['id']) && isset($_POST['action'])) {
         global $database;
@@ -1267,7 +1296,14 @@ function cierreinforme($pdf, $total, $comision) {
         
     return $subtotal;
 }
-function pdf($in, $local, $print = false, $mes = FALSE, $users = FALSE) {
+/**
+ * $in => Se pasa los usuarios para el informe en el formato array("id_lote" => array("cantidad" => X, "usuarios" => array("usuariox"), "precio"=>X))
+ * $local => es la linea de la base de datos del hotspot
+ * $print => sacar el fichero por pantalla en vez de guardarlo como fichero
+ * $mes => se le pasa el mes a figurar en la cabecera
+ * $users => modo de informe. 0 => no salen relación de usuarios, 1 => usuarios anulados, 2 => todos los usuarios.
+ */
+function pdf($in, $local, $print = false, $mes = FALSE, $users = FALSE, $informe=FALSE) {
     global $fulldomain;
     require getcwd().'/scripts/fpdf/fpdf.php';
     global $suma;
@@ -1278,6 +1314,7 @@ function pdf($in, $local, $print = false, $mes = FALSE, $users = FALSE) {
     $pdf->AddPage('P', 'A4');
     $pdf->SetFont('Arial', 'I', 14);
     $pdf->SetTextColor(0);
+    $pdf->Image("http://servibyte.net/images/logo.png", 110, 12, 80, 32);
     $x = 12;
     $pdf->SetY($x);
     $pdf->Write(0, 'Desglose Ventas Wi-Fi');
@@ -1303,7 +1340,7 @@ function pdf($in, $local, $print = false, $mes = FALSE, $users = FALSE) {
     } else {
         $totalfin['Gastos'] = 0;
     }
-    cabecera($pdf, $x);
+    if (!$informe) cabecera($pdf, $x);
     foreach ($in as $key => $value) {
         $lote = $database->query("SELECT perfiles.Descripcion FROM lotes INNER JOIN perfiles ON perfiles.id = lotes.Id_perfil WHERE lotes.id = $key");
         $duracion = $lote->fetch_assoc();
@@ -1324,7 +1361,7 @@ function pdf($in, $local, $print = false, $mes = FALSE, $users = FALSE) {
         }
     }
     if ($paypal) $totalfin['PayPal'] = subtotal($pdf, 'PayPal');
-    $factura = cierreinforme($pdf, $totalfin, 50);
+    if (!$informe) $factura = cierreinforme($pdf, $totalfin, 50);
     $out = array();
     foreach ($in as $key => $value) {
         if ($value['cantidad'] !=  count($value['usuarios'])) {

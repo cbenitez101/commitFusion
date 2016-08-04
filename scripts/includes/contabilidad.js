@@ -65,6 +65,52 @@ $(document).ready(function(){
             window.open('/informepdf?id='+data[0]+'&fecha='+data[1], '_blank','menubar=no,status=no,titlebar=no,toolbar=no,scrollbars=yes,location=no');
         }
     })*/
+     /*-----------------------------------------------------------------------------------------------------------------
+                                                Parte para el datepicker de la búsqueda
+     ----------------------------------------------------------------------------------------------------------------*/
+    var nowTemp = new Date();
+    var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+
+    checkin = $('#fecha_inicio').datepicker({
+        onRender: function(date) {
+            return date.valueOf() > now.valueOf() ? 'disabled' : '';
+        },
+        format: 'yyyy-mm-dd',
+        weekStart: 1
+    }).on('changeDate', function(ev) {
+        if (ev.date.valueOf() > checkout.date.valueOf()) {
+            var newDate = new Date(ev.date);
+            newDate.setDate(newDate.getDate() + 1);
+            checkout.setValue(newDate);
+            checkout.minDate(ev.date);
+        }
+        var maxDate = new Date(ev.date);
+        maxDate.setDate(maxDate.getDate() + 30);
+        var dd = maxDate.getDate();
+        var mm = maxDate.getMonth() + 1;
+        var y = maxDate.getFullYear();
+        var dateFormat = y + '-' + mm + '-' + dd;
+        console.log(dateFormat);
+        $('#fecha_fin').datepicker("option", "maxDate", dateFormat);
+        checkin.hide();
+        //$('#fecha_fin')[0].focus();
+        checkout.show();
+
+    }).data('datepicker');
+    checkout = $('#fecha_fin').datepicker({
+        onRender: function(date) {
+            return (date.valueOf() > now.valueOf() ? 'disabled' : '');
+        },
+        format: 'yyyy-mm-dd',
+        weekStart: 1
+    }).on('changeDate', function(ev) {
+        checkout.hide();
+    }).data('datepicker');
+    //$('#datepicker1').datepicker({firstDay: 1, maxDate: 0, minDate: -30, dateFormat: 'yy-mm-dd',onClose: function( selectedDate ) {$( "#datepicker2" ).datepicker( "option", "minDate", selectedDate );}});
+    //$('#datepicker2').datepicker({firstDay: 1, maxDate: 0, minDate: -30, dateFormat: 'yy-mm-dd',onClose: function( selectedDate ) {$( "#datepicker1" ).datepicker( "option", "maxDate", selectedDate );}});
+    /*-----------------------------------------------------------------------------------------------------------------
+                                                            Fin
+     ----------------------------------------------------------------------------------------------------------------*/
 });
 var table;
 var data;

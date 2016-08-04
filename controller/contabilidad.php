@@ -3,6 +3,7 @@ if (isLoggedIn()) {
     $smarty->assign('page', $template_data[1]);
 //            include_header_file('filtertable');
     load_modul('datatable');
+    load_modul('bsdatepicker');
     switch ($template_data[1]) {
         case 'historial':
             $result = $database->query("SELECT historial.id, historial.fecha, hotspots.ServerName, locales.nombre FROM `historial` INNER JOIN `hotspots` ON hotspots.id = historial.id_hotspot INNER JOIN `locales` ON hotspots.Local = locales.id".(($_SESSION['cliente'] != 'admin')? " INNER JOIN `clientes` ON clientes.id = locales.cliente  WHERE ".((isset($_SESSION['local']))?"locales.nombre = '".$_SESSION['local']."''":"clientes.nombre = '".$_SESSION['cliente']):""));
@@ -32,6 +33,16 @@ if (isLoggedIn()) {
             } else {
                 header('Location: '.DOMAIN);
                 die();
+            }
+            break;
+        case 'ventas':
+            if ($_SESSION['cliente'] == 'admin') {
+                $result = $database->query("SELECT perfiles.ServerName, perfiles.Id_hotspot FROM ventashotspot INNER JOIN lotes ON ventashotspot.Id_Lote = lotes.Id INNER JOIN perfiles ON lotes.Id_perfil = perfiles.Id GROUP BY ServerName");
+                if ($result->num_rows > 0) {
+                    $out = array();
+                    while ($aux = $result->fetch_assoc()) $out[] = array("server"=> $aux['ServerName'], "id" => $aux['Id_hotspot']);
+                    $smarty->assign("servers", $out);
+                }
             }
             break;
         default:
