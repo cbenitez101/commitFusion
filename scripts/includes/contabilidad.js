@@ -84,14 +84,6 @@ $(document).ready(function(){
             checkout.setValue(newDate);
             checkout.minDate(ev.date);
         }
-        var maxDate = new Date(ev.date);
-        maxDate.setDate(maxDate.getDate() + 30);
-        var dd = maxDate.getDate();
-        var mm = maxDate.getMonth() + 1;
-        var y = maxDate.getFullYear();
-        var dateFormat = y + '-' + mm + '-' + dd;
-        console.log(dateFormat);
-        $('#fecha_fin').datepicker("option", "maxDate", dateFormat);
         checkin.hide();
         //$('#fecha_fin')[0].focus();
         checkout.show();

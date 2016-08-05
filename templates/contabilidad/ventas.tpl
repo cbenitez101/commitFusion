@@ -10,30 +10,30 @@
 			<div class="panel-body">
 				<div class="dataTable_wrapper row">
 					<div class="col-md-12">
-						<form role="form" class="form-horizontal">
+						<form role="form" class="form-horizontal" method="GET" target="_blank" action="/informeventas">
 							<div class="form-group input-group">
 								<span class="input-group-addon"><i class="fa fa-calendar"></i> </span>
-								<input class="form-control" type="text" name="fechainicio" placeholder="Inicio"
+								<input class="form-control" type="text" name="fechaini" placeholder="Inicio"
                                        id="fecha_inicio">
 								<input class="form-control" type="text" name="fechafin" placeholder="Fin"
 								       id="fecha_fin">
 							</div>
 							<div class="form-group input-group">
 								<span class="input-group-addon"><i class="fa fa-folder-open"></i></span>
-								<select class="form-control" name="informe">
+								<select class="form-control" name="modo">
 									<option value="">Elija un tipo de informe</option>
-									<option>Normal</option>
-									<option>Devueltos (Usuarios devueltos)</option>
-									<option>Completo (Todos los usuarios)</option>
+									<option value="0">Normal</option>
+									<option value="1">Devueltos (Usuarios devueltos)</option>
+									<option value="2">Completo (Todos los usuarios)</option>
 								</select>
 							</div>
 							{if isset($servers)}
 								<div class="form-group input-group">
 									<span class="input-group-addon"><i class="fa fa-hdd-o"></i> </span>
-									<select class="form-control" name="server">
+									<select class="form-control" name="hotspot">
 										<option value="">Elija Hotspot</option>
 										{foreach item=item from=$servers}
-											<option value="{$item.id}">{$item.server}</option>
+											<option value="{$item.server}">{$item.server}</option>
 										{/foreach}
 									</select>
 								</div>

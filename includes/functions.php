@@ -1340,7 +1340,7 @@ function pdf($in, $local, $print = false, $mes = FALSE, $users = FALSE, $informe
     } else {
         $totalfin['Gastos'] = 0;
     }
-    if (!$informe) cabecera($pdf, $x);
+    cabecera($pdf, $x);
     foreach ($in as $key => $value) {
         $lote = $database->query("SELECT perfiles.Descripcion FROM lotes INNER JOIN perfiles ON perfiles.id = lotes.Id_perfil WHERE lotes.id = $key");
         $duracion = $lote->fetch_assoc();
