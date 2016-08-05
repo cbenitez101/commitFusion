@@ -585,7 +585,7 @@ function external_informepdf(){
 function external_informeventas(){
     if (isset($_GET['hotspot']) && isset($_GET['fechaini']) && isset($_GET['fechafin']) && isset($_GET['modo'])) {
         global $database;
-        $result = $database->query("SELECT * FROM ventashotspot WHERE Usuario LIKE '".$_GET['hotspot']."\_%'".((!empty($_GET['fechaini']))?" AND FechaVenta > '".$_GET['fechaini']." 00:00:00'".((!empty($_GET['fechafin']))?" AND FechaVenta < '".$_GET['fechaini']." 23:59:59'":""):""));
+        $result = $database->query("SELECT * FROM ventashotspot WHERE Usuario LIKE '".$_GET['hotspot']."\_%'".((!empty($_GET['fechaini']))?" AND FechaVenta > '".$_GET['fechaini']." 00:00:00'".((!empty($_GET['fechafin']))?" AND FechaVenta < '".$_GET['fechafin']." 23:59:59'":""):""));
         if ($result->num_rows > 0) {
             $out = array();
             while ($aux = $result->fetch_assoc()) {
