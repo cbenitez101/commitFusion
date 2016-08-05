@@ -716,7 +716,7 @@ function external_importar_bloc() {
                             }
                         }
                         // Se inserta en ventas hotspot? como? a que precio?
-                        $database->query("INSERT INTO `ventashotspot`(`Id_Lote`, `FechaVenta`, `Usuario`, `Precio`, `identificador`) VALUES ('".$lote['Id']."',NOW(),'".$perfil['ServerName'].'_'.$aux['user']."','".$lote['Precio']."','Ticket $count del Bloc')");
+                        $database->query("INSERT INTO `ventashotspot`(`Id_Lote`, `FechaVenta`, `Usuario`, `Precio`, `identificador`) VALUES ('".$lote['Id']."',NOW(),'".$perfil['ServerName'].'_'.$aux['user']."','".$lote['Precio']."','Ticket $count del Bloc ".$_POST['id']."')");
                     }   
                 }  
             }
