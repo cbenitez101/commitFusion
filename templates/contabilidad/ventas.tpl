@@ -21,7 +21,7 @@
 							<div class="form-group input-group">
 								<span class="input-group-addon"><i class="fa fa-folder-open"></i></span>
 								<select class="form-control" name="modo">
-									<option value="">Elija un tipo de informe</option>
+									{*<option value="">Elija un tipo de informe</option>*}
 									<option value="0">Normal</option>
 									<option value="1">Devueltos (Usuarios devueltos)</option>
 									<option value="2">Completo (Todos los usuarios)</option>
