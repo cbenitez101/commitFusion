@@ -37,6 +37,8 @@
 										{/foreach}
 									</select>
 								</div>
+							{else}
+							<input type="hidden" name="hotspot" value="{$smarty.session.local}">
 							{/if}
 							<button type="submit" class="btn btn-success">Generar</button>
 						</form>
