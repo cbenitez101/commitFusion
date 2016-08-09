@@ -3,7 +3,7 @@ if (isLoggedIn()) {
     $smarty->assign('page', $template_data[1]);
 //            include_header_file('filtertable');
     load_modul('datatable');
-    load_modul('bsdatepicker');
+    load_modul('bootstrap-datepicker');
     switch ($template_data[1]) {
         case 'historial':
             $result = $database->query("SELECT historial.id, historial.fecha, hotspots.ServerName, locales.nombre FROM `historial` INNER JOIN `hotspots` ON hotspots.id = historial.id_hotspot INNER JOIN `locales` ON hotspots.Local = locales.id".(($_SESSION['cliente'] != 'admin')? " INNER JOIN `clientes` ON clientes.id = locales.cliente  WHERE ".((isset($_SESSION['local']))?"locales.nombre = '".$_SESSION['local']."''":"clientes.nombre = '".$_SESSION['cliente']):""));

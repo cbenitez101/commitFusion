@@ -3,7 +3,7 @@ if (isLoggedIn()) {
     $smarty->assign('page', $template_data[1]);
     include_header_file('printPage');
     load_modul('datatable');
-    load_modul('bsdatepicker');
+    load_modul('bootstrap-datepicker');
     switch ($template_data[1]) {
         case 'crear':
             // dump($_SESSION, true);
