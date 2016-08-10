@@ -36,7 +36,7 @@ function getTemplateData($getparams) {
 
 function get_subdoamin() {
     global $database;
-    $subdomain = strstr($_SERVER['SERVER_NAME'], '.www.plataforma.openwebcanarias.es/', TRUE);   //se extrae la parte delante de subdomain si no hay .servinet se devuelve false
+    $subdomain = strstr($_SERVER['SERVER_NAME'], '.servibyte.net', TRUE);   //se extrae la parte delante de subdomain si no hay .servinet se devuelve false
     if (strpos($subdomain, '.')) {
         $cliente = strstr($subdomain, '.', TRUE);
         $local = substr($subdomain, strpos($subdomain, '.')+1);
