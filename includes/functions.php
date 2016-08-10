@@ -605,7 +605,7 @@ function external_informeventas(){
             if (count($suma)>0) {
                 $result = $database->query("SELECT * FROM `hotspots` WHERE ServerName = '".$_GET['hotspot']."'");
                 $hotspot = $result->fetch_assoc();
-                pdf($suma, $hotspot, TRUE, ((isset($_GET['fechaini']))? $_GET['fechaini'].((isset($_GET['fechafin']))?" - ":""):"").((isset($_GET['fechafin']))?$_GET['fechafin']:""),$_GET['modo'], TRUE);
+                pdf($suma, $hotspot, TRUE, ((!empty($_GET['fechaini']))? $_GET['fechaini'].((!empty($_GET['fechafin']))?" - ":""):"").((!empty($_GET['fechafin']))?$_GET['fechafin']:""),$_GET['modo'], TRUE);
             }
         }
     }
