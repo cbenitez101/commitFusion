@@ -8,37 +8,89 @@ and open the template in the editor.
     <head>
         <meta charset="UTF-8">
         <title></title>
+        <link rel="stylesheet" type="text/css" media="all" href="grid960/reset.css" /> 
+        <link rel="stylesheet" type="text/css" media="all" href="grid960/text.css" /> 
+        <link rel="stylesheet" type="text/css" media="all" href="grid960/960.css" /> 
         <style type="text/css">
-            <?php
-                if (isset($_GET['full'])) {
-                    echo '@page {size: A4;margin: 0;} @media print {html, body {width: 210mm;height: 297mm;}} .logo{display:none;} .data{ padding-top: 175px; margin-left: -30px;} .border {border: 1px solid black;display: inline-block}'.((file_exists(getcwd().'/../images/'.$_GET['full']))?' body{background-image: url("/images/'.$_GET['full'].'"); height: 29cm; width: 21cm; background-repeat: no-repeat; background-size: 21cm 29cm;}':'');
-                } else {
-                    echo '@media print {html, body {width: 80mm;}} body {width: 8cm; text-align: center; font-size: 30px;}';
-                }
-                function secondsToTime($seconds) {
-                    $dtF = new \DateTime('@0');
-                    $dtT = new \DateTime("@$seconds");
-                    return $dtF->diff($dtT)->format((($seconds >= 86400)?'%a days':'%h hours'));
-}
-            ?>
-            .logo {
-                text-align: center;
-            }
-            .data {
-                text-align: center;
-            }
-            .border {
-                text-align: center;
-                width: 300px;
-            }
-        </style>
+	        
+	      
+	             <?php if (isset($_GET['full'])): ?>
+	                 @page {size: A4;margin: 0;} @media print {html, body {width: 210mm;height: 297mm;}}  .data{ padding-top: 5px; margin-left: -30px;} .border {border: 1px solid black;display: inline-block}
+	             <?php else: ?>
+	                 @media print {html, body {width: 80mm;}} body {width: 8cm; text-align: center; font-size: 30px;}
+	             <?php endif; ?>
+	             
+	             
+	             <?php
+        	           
+        	            function secondsToTime($seconds) {
+        	                $dtF = new \DateTime('@0');
+        	                $dtT = new \DateTime("@$seconds");
+        	                return $dtF->diff($dtT)->format((($seconds >= 86400)?'%a days':'%h hours'));
+        				}
+	        ?>
+	        .logo {
+	            text-align: center;
+	            float: center;
+	        }
+	        #logo{
+	        	max-width: 350px;
+	        	max-height: 250px;
+	        	padding-top: 30px;
+	        	padding-bottom: 30px;
+	        	
+	        }
+	        .logo2 {
+	            text-align: center;
+	        	padding-bottom: 5px;
+	        	padding-left: 10px;
+	        	max-width: 350px;
+	        }
+	        .data {
+	            text-align: center;
+                 
+	        }
+	        
+	        .border {
+	            text-align: center;
+	            width: 350px;
+	            padding-bottom: 5px;
+	            <?php if (!isset($_GET['full'])): ?>
+	                padding-top:5px;
+	                padding-left: 20px;
+	           <?php else: ?>
+	                padding-top:20px;
+	           <?php endif; ?>
+	            
+	        }
+	        .grid_5{
+	        	font-size: 90%;
+	            padding-top: 30px;
+	            text-align: justify;
+	        } 
+	        .flags {
+	            margin-top: -100px;
+	        }
+	        .flagimg{
+	            max-width:100px;
+	            text-align: center;
+	        }
+	      
+	        
+	        </style>
     </head>
-    <body>
-        <div class='logo'>
-            <img src="/images/logo.png">
-        </div>
+    <body>    
+		
         <div class='data'>
-            <div class='border'>
+            <?php 
+    		//Si se pasa por parámetro una foto con nombre $hotspot, se buscará $hotspot.hotspot.es y si existe se utiliza como logo
+                $logo = ((file_exists(getcwd().'/../images/logos/'.$_GET['hotspot'].'.'.$_GET['hotspot'].'.png'))?'logos/'.$_GET['hotspot'].'.'.$_GET['hotspot']:"logo");
+            ?>
+            <div class="logo<?php echo ((isset($_GET['full']))? '':'2')?>">
+                 <img id="logo" src="../images/<?php echo $logo ?>.png">
+            </div>
+              
+        	<div class='border'>
                 <p>User: <?php echo $_GET['user']; ?></p>
                 <?php if (!empty($_GET['pass'])): ?>
                     <p>Pass: <?php echo $_GET['pass']; ?></p>
@@ -61,6 +113,58 @@ and open the template in the editor.
                     </p>
                 <?php endif; ?>
             </div>
+            <?php if(isset($_GET['full'])): ?> 
+            	<!-- Parte de los términos. Se utiliza grid360 para las columnas-->
+            	
+            	<div class="flags container_12">
+            	    <div class="grid_1"> &nbsp;</div>
+            	    <div class="grid_2">
+            	        <img class="flagimg" src="../images/es.png" alt="es"></img>
+            	    </div>
+            	    <div class="grid_6"> &nbsp;</div>
+            	    <div class="grid_2">
+            	        <img class="flagimg" src="../images/en.png" alt="en"></img>
+            	    </div>
+            	</div>
+                <div class="clear">&nbsp;</div> 
+                <div class="container_12">
+                    <div class="grid_1">&nbsp; </div>
+                    <div class="grid_5"> 
+                        <ol>
+                            <li><strong>¿Puedo coneectarme con más de un dispositivo a la vez? </strong>Si, hay un límite de x dispositivos por sesión. No, para poder conectar otro dispositivo primero tiene que cerrar la sesión en el que está en uso. Para saber como desconectar consulte el punto 6.</li>
+                            <li><strong>¿Hay limitaciones de tráfico, velocidad o aplicaciones? </strong>Los límites están establecidos en la velocidad de descarga y de subida. No hay límites en la cantidad de tráfico ni en aplicaciones.</li>
+                            <li><strong>¿Formas de pago?</strong>Se puede pagar en mostrador del establecimiento en efectivo o tarjeta, o mediante la plataforma de pago paypal en el portal de la red wifi (donde se pide el código de conexión).</li>
+                            <li><strong>¿Seguridad de los datos?</strong>Todas las redes están protegidas para que los usuarios no se vean entre sí. Los datos de conexión del dispositivo serán registrados acorde con la Ley Orgánica de Protección de Datos (LOPD).</li>
+                            <li><strong>¿Cómo me conecto?</strong>Antes de todo compruebe que el Wifi del dispositivo está activado (en la configuración de redes del dispositivo). Entre las redes que le aparezcan seleccione la red del establecimiento. Está configurado para libre acceso, sin contraseña, seleccione la red y conéctese a ella. Una vez conectado, si no se le abre una página web pidiendo la clave de conexión, abra un navegador e intente navegar a cualquier página web (intente acceder a google por ejemplo). Una vez con la pantalla de solicitud del código de conexión introdúzcalo, acepte las condiciones y pulse acceder. Se le mostrará un mensaje de confirmación y ya podrá navegar.</li>
+                            <li><strong>¿Cómo me desconecto?</strong>Para cerrar la conexión acceda a http://exit.com. La sesión se cerrará automáticamente si no se conecta en un periodo de 7 días.</li>
+                            <li><strong>Solución de problemas</strong>
+                                <ol>
+                                    <li><u>No me puedo conectar:</u> Dependiendo del número de dispositivos autorizados en el establecimiento puede ser que tenga otros dispositivos con la sesión abierta. Cierre la sesión en todos los sdispositivos y vuelva a conectarse. Si este no es el caso o habiendo cerrado todos los dispositivos sigue sin poder conectar, borre las cookies del navegador (en la configuración del navegador del dispositivo) y en las conexiones wifi escoja olvidar la red del establecimiento (en la configuración wifi del dispoditivo).</li>
+                                    <li><u>Estoy conctado pero no navego:</u> Asegúrese de que ha iniciado la sesión en el dispositivo, si no sabe si está iniciada la sesión, ciérrela y vuelva a iniciar la sesión.</li>
+                                    <li><u>Otras dudas:</u> En caso de no poder solucionar las dudas acuda al mostrador del establecimiento donde le podrán asesorar y en el caso abrir un ticket de incidencia.</li>
+                                </ol>
+                            </li>
+                        </ol>
+                    </div> 
+                    <div class="grid_5"> 
+                        <ol>
+                            <li><strong>Can I connect more than one device at the same time? </strong>Yes, there is a limit of x devices per session. No, if you want to connect another device must first log out wich is in use. To know how to disconnect, see point 6.</li>
+                            <li><strong>Are there limitations of traffic, speed or applications? </strong>The limits are set at download and upload speed. There is no limitation about the traffic amount or kind of applications.</li>
+                            <li><strong>Payment?</strong>You can pay cash or credit card at info establishment's desk, or by paypal payment at wireless wabsite platform (where connection code is required).</li>
+                            <li><strong>Data security?</strong>All networks are protected that users can not see each other. The connection data device will be recorded according to Spanish Data Protection Law (LOPD).</li>
+                            <li><strong>How do I connect?</strong>First of all, check that the wireless device is tuned on (at device network configuration). Select establishment. It is open acces without password, select the network and connect to it. Once connected, if it does not open a webpage asking the connection pass, open a browser and try to navigate to any web page (try access to google for example). Once the webpage is loaded insert code request connection, accept the terms and press enter. It will show a confirmation message and then you can navigate.</li>
+                            <li><strong>How do I disconnect?</strong>To log out reach http://exit.com. The session will close automatically if it is not connected over a period of 7 days</li>
+                            <li><strong>Troubleshooting</strong>
+                                <ol>
+                                    <li><u>I can not connect:</u> Depending on the number of authorized devices at the same time you might have another device logged in. Log out all devices and try again. If this is not the case or having closed all devices still can not be able to connect, delete browser cookier (in device browser settings) and Wi-Fi connections choose "forget network" option (in the wireless device configuration).</li>
+                                    <li><u>I am connected to the network but not navigate:</u> Make sure you are logged in, if you do not know if you're logged in, then logout and try again to log in.</li>
+                                    <li><u>Other questions:</u> If you have more doubt, please ask in establishment info where they will advise you and if it's needed open a sat ticket.</li>
+                                </ol>
+                            </li>
+                        </ol>
+                    </div> 
+                </div>
+            <?php endif; ?>
         </div>
     </body>
 </html>
