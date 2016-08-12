@@ -474,7 +474,7 @@ function external_crea_ticket() {
             }  
         }    
         
-        echo (($_POST['password'] == 'usuario')?(($_POST['servername'] == "coronablanca")?"user=$usuario&full=corona.png&identificador=".$_POST['identificador']."&precio=".$_POST['precio']."&duracion=".$_POST['duracion']:"user=$usuario"):"user=$usuario&pass=$contrasena");
+        echo (($_POST['password'] == 'usuario')?(($_POST['servername'] == "coronablanca")?"user=$usuario&full=1&identificador=".$_POST['identificador']."&precio=".$_POST['precio']."&duracion=".$_POST['duracion']."&hotspot=coronablanca":"user=$usuario"):"user=$usuario&pass=$contrasena");
         die();
     }
 }
