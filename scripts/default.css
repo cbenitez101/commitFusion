@@ -140,5 +140,5 @@ span.ui-menu-icon {display: none}
     display: none;
 }
 .datepicker-days .day:not(.disabled){ 
-    font-weight: bold;
+    font-weight: bold !important;
 }
