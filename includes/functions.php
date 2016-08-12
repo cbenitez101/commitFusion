@@ -781,6 +781,25 @@ function external_guardar_bono(){
     }
 }
 
+function external_guardar_dispositivo() {
+    if (isset($_POST['descripcion']) && isset($_POST['notas']) && isset($_POST['hotspot']) && isset($_POST['tipo']) && isset($_POST['action'])) {
+        global $database;
+        if ($_POST['action'] == 1) {
+            if ($database->query("DELETE FROM `dispositivos` WHERE `id`=".$_POST['id'])) die();
+        } else {
+            if (empty($_POST['id'])) {
+                if ($database->query('INSERT INTO `dispositivos`(`id_hotspot`, `tipo`, `descripcion`, `notas`) VALUES ("'.$_POST['hotspot'].'","'.$_POST['tipo'].'","'.$_POST['descripcion'].'","'.$_POST['notas'].'")')) die();
+            } else {
+                if ($database->query('UPDATE `bonos` SET `id_hotspot`="'.$_POST['id_hotspot'].'",`cantidad`="'.$_POST['cantidad'].'",`tipo`="'.$_POST['tipo'].'" WHERE `id`='.$_POST['id'])) die();
+            }
+        }
+    }
+}
+
+function external_actualiza_dispositivos() {
+    file_put_contents('actualiza', print_r($_POST, true));
+}
+
 function external_script_hotspot() {
     if (strstr($_SERVER['HTTP_USER_AGENT'], 'Mikrotik') && (isset($_GET['id_hotspot'])) && (isset($_GET['hotspot_serial']))) {
         global $database;

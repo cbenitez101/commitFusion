@@ -18,6 +18,7 @@
 						id="table-search" width="100%"' loop=$dispositivos}
 					</div>
 				</div>
+				{if $smarty.session.cliente == 'admin'}	
 				<div class="row">
 					<div class="col-md-1 col-md-offset-11">
 						<button type="button" class="btn btn-success" data-toggle="modal" data-target=".modal">
@@ -25,7 +26,7 @@
 						</button>
 					</div>
 				</div>
-				<div class="modal fade" id="modal_gasto" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal fade" id="modal_dispositivo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 					<div class="modal-dialog">
 						<div class="modal-content">
 							<div class="modal-header">
@@ -38,6 +39,7 @@
 									<div class="form-group">
 										<label>Hotspot</label>
 										<select class="form-control" name="dispositivohotspot" id="modal_dispositivohotspot">
+												<option value="">Seleccione un Hotspot</option>
 											{foreach item=item from=$hotspot }
 												<option value="{$item.0}">{$item.1}</option>
 											{/foreach}
@@ -72,6 +74,7 @@
 						</div><!-- /.modal-content -->
 					</div><!-- /.modal-dialog -->
 				</div><!-- /.modal -->
+				{/if}
 			</div>
 		</div>
 	</div>
