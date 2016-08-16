@@ -853,7 +853,7 @@ print
 /ip firewall nat add action=passthrough chain=unused-hs-chain comment= "place hotspot rules here" disabled=yes
 :delay 1s;
 /ip firewall nat add action=masquerade chain=srcnat comment= "masquerade hotspot network" src-address=172.21.0.0/22
-/ip hotspot set hotspot1 name='.$hotspot['ServerName'].' address-pool=none
+/ip hotspot set hotspot1 name='.$hotspot['ServerName'].' address-pool=none profile=hsprof1
 /ip hotspot user profile add name=tecnico shared-users=5
 /ip hotspot user profile set default shared-users=1 rate-limit=380k/2M idle-timeout=none keepalive-timeout=20m status-autorefresh=1m mac-cookie-timeout=7d session-timeout=0s
 /ip hotspot user set '.$hotspot['ServerName'].'_SBYTE profile=tecnico
