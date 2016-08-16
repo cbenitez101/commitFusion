@@ -22,12 +22,12 @@ and open the template in the editor.
 	             
 	             
 	             <?php
-        	           
-        	            /*function secondsToTime($seconds) {
+        	            date_default_timezone_set('Atlantic/Canary');
+        	            function secondsToTime($seconds) {
         	                $dtF = new \DateTime('@0');
         	                $dtT = new \DateTime("@$seconds");
         	                return $dtF->diff($dtT)->format((($seconds >= 86400)?'%a days':'%h hours'));
-        				}*/
+        				}
 	        ?>
 	        .logo {
 	            text-align: center;
@@ -109,7 +109,7 @@ and open the template in the editor.
                 <?php if (!empty($_GET['precio'])): ?>
                     <p>
                         <?php echo $_GET['precio']; ?>€
-                         &nbsp;<?php //echo secondsToTime($_GET['duracion']); ?>
+                         &nbsp;<?php echo secondsToTime($_GET['duracion']); ?>
                     </p>
                 <?php endif; ?>
             </div>
