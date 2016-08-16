@@ -108,7 +108,7 @@ and open the template in the editor.
                 <?php endif; ?>
                 <?php if (!empty($_GET['precio'])): ?>
                     <p>
-                        <?php echo $_GET['precio']; ?>€
+                        <?php echo (($_GET['precio'] == '0.00')?"Free":$_GET['precio']."€"); ?>
                          &nbsp;<?php echo secondsToTime($_GET['duracion']); ?>
                     </p>
                 <?php endif; ?>
