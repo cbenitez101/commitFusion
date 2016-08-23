@@ -574,7 +574,7 @@ function external_informepdf(){
             if (count($in)>0) {
                 $result = $database->query("SELECT * FROM `hotspots` WHERE id = ".$aux['id_hotspot']);
                 $hotspot = $result->fetch_assoc();
-                pdf($in, $hotspot, TRUE, spanish(date('F', strtotime('- 1 month',strtotime($aux['fecha'])))),$_GET['modo']);
+                pdf($in, $hotspot, TRUE, spanish(date('F', strtotime('- 1 month',strtotime($aux['fecha'])))).' '.date('Y', strtotime($aux['fecha'])),$_GET['modo']);
             }
         }  
         die();
@@ -1251,8 +1251,9 @@ function subtotal($pdf, $concepto) {
 }
 
 function cierreinforme($pdf, $total, $comision) {
-    $subtotal1 = (((isset($total['PayPal']))?$total['Tickets'] + $total['PayPal']:$total['Tickets']) - $total['Gastos'])*($comision/100);
-    $subtotal = $subtotal1 + $total['Gastos'];
+    $total['Gastos'] /= 2;
+    $subtotal1 = (((isset($total['PayPal']))?$total['Costo'] - $total['PayPal']:$total['Costo']));
+    $subtotal = $subtotal1 + ($total['Gastos']);
     $sinigic = (($subtotal*100)/107);
     $x = $pdf->GetY();
     $x+=12;
@@ -1269,19 +1270,23 @@ function cierreinforme($pdf, $total, $comision) {
     $pdf->Cell(35, 5, 'Total sin IGIC', 1,0, 'C');
     $pdf->Cell(35, 5, number_format($sinigic, 2,',','.').chr(128), 1,0, 'C');
     
-    $pdf->SetX(100);
-    $pdf->Cell(35, 5, 'Gastos', 0,0, 'R');
-    $pdf->Cell(35, 5, ' ', 1,0, 'C');
-    $pdf->Cell(35, 5, number_format($total['Gastos'], 2,',','.').chr(128), 1,1, 'C');
-    
-    
+    if ($total['Gastos'] != 0) {
+         $pdf->SetX(100);
+        $pdf->Cell(35, 5, 'Gastos', 0,0, 'R');
+        $pdf->Cell(35, 5, '50%', 1,0, 'C');
+        $pdf->Cell(35, 5, number_format($total['Gastos'], 2,',','.').chr(128), 1,1, 'C');
+    } else {
+        $x = $pdf->GetY();
+        $x +=5;
+        $pdf->SetY($x);
+    }
     
     $pdf->Cell(35, 5, 'IGIC', 1,0, 'C');
     $pdf->Cell(35, 5, number_format($sinigic*0.07, 2,',','.').chr(128), 1,0, 'C');
     
     $pdf->SetX(100);
-    $pdf->Cell(35, 5, '% Comision', 0,0, 'R');
-    $pdf->Cell(35, 5, "$comision%", 1,0, 'C');
+    $pdf->Cell(35, 5, 'Costo Tickets', 0,0, 'R');
+    $pdf->Cell(35, 5, " ", 1,0, 'C');
     $pdf->Cell(35, 5, number_format($subtotal1, 2,',','.').  chr(128), 1,1, 'C');
     
     
@@ -1308,6 +1313,10 @@ function cierreinforme($pdf, $total, $comision) {
  * $users => modo de informe. 0 => no salen relación de usuarios, 1 => usuarios anulados, 2 => todos los usuarios.
  */
 function pdf($in, $local, $print = false, $mes = FALSE, $users = FALSE, $informe=FALSE) {
+    //dump($local);
+    //echo $mes;
+    
+    //dump($in);
     global $fulldomain;
     require getcwd().'/scripts/fpdf/fpdf.php';
     global $suma;
@@ -1327,11 +1336,10 @@ function pdf($in, $local, $print = false, $mes = FALSE, $users = FALSE, $informe
     $pdf->Write(0, "Local: ".$local['ServerName']);
     $x = $x+12;
     $pdf->SetY($x);
-    $pdf->Write(0, 'Mes: '.  (($mes)?$mes:spanish(date('F', strtotime('-1 month')))));
+    $pdf->Write(0, 'Mes: '.  (($mes)?strstr($mes, ' ', true):spanish(date('m'))));
     $x = $x+12;
     $pdf->SetY($x);
-    //Cambiar año
-    $pdf->Write(0, utf8_decode('Año: ').  date('Y'));
+    $pdf->Write(0, utf8_decode('Año: ').  (($mes)? substr(strstr($mes, ' '), 1) :date('Y')));
     $pdf->SetFont('Arial', 'B', 12);
     $x = $x+12;
     $pdf->SetY($x);
@@ -1346,12 +1354,17 @@ function pdf($in, $local, $print = false, $mes = FALSE, $users = FALSE, $informe
         $totalfin['Gastos'] = 0;
     }
     cabecera($pdf, $x);
+    $totalfin['Costo'] = 0;
     foreach ($in as $key => $value) {
-        $lote = $database->query("SELECT perfiles.Descripcion FROM lotes INNER JOIN perfiles ON perfiles.id = lotes.Id_perfil WHERE lotes.id = $key");
+        $lote = $database->query("SELECT perfiles.Descripcion, costo FROM lotes INNER JOIN perfiles ON perfiles.id = lotes.Id_perfil WHERE lotes.id = $key");
         $duracion = $lote->fetch_assoc();
         //checkear el indice del array para ver si usar el id del ticket para sacar la duracion.
         //cabecera($pdf, $x, $value['cantidad'], "Ticket ".(($value['precio']==5)?'1 Dia':(($value['precio']==10)?'3 Dias':'1 Semana')), $value['precio']);
-        if (!strstr($duracion['Descripcion'], "PAYPAL")) cabecera($pdf, $x, $value['cantidad'], $duracion['Descripcion'], $value['precio']);
+        if (!strstr($duracion['Descripcion'], "PAYPAL")) {
+            cabecera($pdf, $x, $value['cantidad'], $duracion['Descripcion'], $value['precio']);
+            $totalfin['Costo'] += $duracion['costo']*$value['cantidad'];
+        }
+        
     }
     $totalfin['Tickets'] = subtotal($pdf, 'Tickets');
     $paypal = false;

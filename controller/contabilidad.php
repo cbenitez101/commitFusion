@@ -4,6 +4,8 @@ if (isLoggedIn()) {
 //            include_header_file('filtertable');
     load_modul('datatable');
     load_modul('bootstrap-datepicker');
+    include_header_file('https://code.highcharts.com/stock/highstock.js');
+    include_header_file('https://code.highcharts.com/stock/modules/exporting.js');
     switch ($template_data[1]) {
         case 'historial':
             $result = $database->query("SELECT historial.id, historial.fecha, hotspots.ServerName, locales.nombre FROM `historial` INNER JOIN `hotspots` ON hotspots.id = historial.id_hotspot INNER JOIN `locales` ON hotspots.Local = locales.id".(($_SESSION['cliente'] != 'admin')? " INNER JOIN `clientes` ON clientes.id = locales.cliente  WHERE ".((isset($_SESSION['local']))?"locales.nombre = '".$_SESSION['local']."''":"clientes.nombre = '".$_SESSION['cliente']):""));
@@ -105,18 +107,11 @@ if (isLoggedIn()) {
                     }
                     $datosgraf3 = array();
                     foreach ($franjas as $key => $value) $datosgraf3[] = array(strtotime($key)*1000, $value);
-                    //echo json_encode($datosgraf3, JSON_NUMERIC_CHECK);
                     include_header_content("datosgraf3 = ".json_encode($datosgraf3, JSON_NUMERIC_CHECK));
-                  
                     $smarty->assign("num_con", $result->num_rows);
                     $smarty->assign("mes", spanish(date('F')));
                     $smarty->assign("media_con",  round (($result->num_rows) / (count($array_resultado)), 2));
                     $smarty->assign("media_sesion", secondsToTime(round($tiempototal/$result->num_rows, 0)));
-                    //include_header_file('https://www.gstatic.com/charts/loader.js');
-                    //include_header_file('https://code.highcharts.com/highcharts.js');
-                    //include_header_file('https://code.highcharts.com/modules/exporting.js');
-                    include_header_file('https://code.highcharts.com/stock/highstock.js');
-                    include_header_file('https://code.highcharts.com/stock/modules/exporting.js');
                 }
             }
             break;
