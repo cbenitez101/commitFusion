@@ -1204,16 +1204,6 @@ function secondsToTime($seconds) {
     return $dtF->diff($dtT)->format((($seconds > 86400)?'%ad %hh%Im%Ss':'%hh%Im%Ss'));
 }
 /**
- * Compara si la fecha dada en $evaluame esta entre $start_date y $end_date
- * $start_date, $end_date y $evaluame son fechas en formato string. Xej: 2016-08-17 17:00:00
- */
-function check_in_range($start_date, $end_date, $evaluame) {
-    $start_ts = strtotime($start_date);
-    $end_ts = strtotime($end_date);
-    $user_ts = strtotime($evaluame);
-    return (($user_ts >= $start_ts) && ($user_ts <= $end_ts));
-}
-/**
  * Función para añadir una línea de producto
  * @global array $suma
  * @param type $pdf
@@ -1339,7 +1329,8 @@ function pdf($in, $local, $print = false, $mes = FALSE, $users = FALSE, $informe
     $pdf->SetY($x);
     $pdf->Write(0, 'Mes: '.  (($mes)?$mes:spanish(date('F', strtotime('-1 month')))));
     $x = $x+12;
-    $pdf->SetY($x); 
+    $pdf->SetY($x);
+    //Cambiar año
     $pdf->Write(0, utf8_decode('Año: ').  date('Y'));
     $pdf->SetFont('Arial', 'B', 12);
     $x = $x+12;
