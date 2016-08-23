@@ -59,12 +59,137 @@ $(document).ready(function(){
             window.open('/informepdf?id='+data[0]+'&modo='+$('#historico input[type="radio"]:checked').val(), '_blank','menubar=no,status=no,titlebar=no,toolbar=no,scrollbars=yes,location=no');
         }
     });
-    /*$('.hisorialtable tbody td').on('click', function(){
-        var data = table.row($(this).parent()).data();
-        if (!$(this).hasClass('sorting_1')) {
-            window.open('/informepdf?id='+data[0]+'&fecha='+data[1], '_blank','menubar=no,status=no,titlebar=no,toolbar=no,scrollbars=yes,location=no');
-        }
-    })*/
+    
+    $('#estadistica_server').val('');
+    $('#estadistica_server').change(function(){
+        window.location = window.location.href + '/' + $('#estadistica_server').val();
+    });
+    
+    //PIE CHART
+    // Build the chart
+    $('#container2').highcharts({
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie'
+        },
+        title: {
+            text: 'Venta de tickets'
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.y}</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: false
+                },
+                showInLegend: true
+            }
+        },
+        credits: {
+            enabled: false
+        },
+        series: [{
+            name: 'Tickets vendidos',
+            colorByPoint: true,
+            data: datosgraf2
+        }]
+    });
+   Highcharts.setOptions({
+    lang: {
+        contextButtonTitle: "Chart context menu",
+        downloadJPEG: "Descargar imagen JPEG",
+        downloadPDF: "Descargar PDF",
+        downloadPNG: "Descargar PNG",
+        downloadSVG: "Descargar SVG",
+        months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',  'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+        weekdays: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        decimalPoint: ",",
+        rangeSelectorFrom: "Desde",
+        rangeSelectorTo: "Hasta",
+        thousandsSep: ".",
+        shortMonths: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',  'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+        loading: "Cargando",
+        printChart: "Imprimir gráfica"
+        },
+    });
+    // create the chart
+    $('#container').highcharts('StockChart', {
+        title: {
+            text: 'Conexiones por franja horaria'
+        },
+        xAxis: {
+            gapGridLineWidth: 0,
+            type: 'datetime',
+            dateTimeLabelFormats: {
+                hour: '%H:%M:%S',
+                day: '%d-%m<br/>%Y',
+                week: '%d-%m<br/>%Y',
+                month: '%Y-%m',
+                year: '%Y'
+            }
+        },
+        rangeSelector : {
+            buttons : [{
+                type : 'hour',
+                count : 1,
+                text : '1Hora'
+            }, {
+                type : 'day',
+                count : 1,
+                text : '1Dia'
+            }, {
+                type : 'week',
+                count : 1,
+                text : '1Semana'
+            }, {
+                type : 'all',
+                count : 1,
+                text : 'Todo'
+            }
+            ],
+            buttonTheme: {
+                width: 50,
+                height: 20,
+                padding: 5,
+                margin: 0
+            },
+            selected : 2,
+            buttonSpacing: 20,
+            inputEnabled : false,
+            allButtonsEnabled: true
+        },
+        credits: {
+            enabled: false
+        },
+        series : [{
+            name : 'Conexiones',
+            type: 'area',
+            data : datosgraf3,
+            gapSize: 5,
+            color: '#4F7327',
+            tooltip: {
+                valueDecimals: 0
+            },
+            fillColor : {
+                linearGradient : {
+                    x1: 0,
+                    y1: 0,
+                    x2: 0,
+                    y2: 1
+                },
+                stops : [
+                    [0, '#4F7327'],
+                    [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                ]
+            },
+            threshold: null
+        }]
+    });
      /*-----------------------------------------------------------------------------------------------------------------
                                                 Parte para el datepicker de la búsqueda
      ----------------------------------------------------------------------------------------------------------------*/
@@ -122,6 +247,7 @@ var row;
 var checkin;
 var checkout;
 var dataok = [];
+var datosgraf, datosgraf2, datosgraf3;
 function guardar_gasto(action) {
     var guardar = [];
     $('[id^="modal_gasto"] input').each(function(){

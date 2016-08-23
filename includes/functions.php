@@ -99,7 +99,6 @@ function include_header_content($code, $type= 'js') {
     } elseif ($type == 'css') {
         $includeheader['css'][]='<style type="text/css">'.str_replace("  ", " ", str_replace(array("\r","\n"), "", $code)).'</style>';
     }
-    
 }
 /**
  * This function add a file which is stored in script folder or in a URL. Is not needed to specify
@@ -1199,6 +1198,11 @@ function spanish($mes){
             break;
     }
 }
+function secondsToTime($seconds) {
+    $dtF = new \DateTime('@0');
+    $dtT = new \DateTime("@$seconds");
+    return $dtF->diff($dtT)->format((($seconds > 86400)?'%ad %hh%Im%Ss':'%hh%Im%Ss'));
+}
 /**
  * Función para añadir una línea de producto
  * @global array $suma
@@ -1325,7 +1329,8 @@ function pdf($in, $local, $print = false, $mes = FALSE, $users = FALSE, $informe
     $pdf->SetY($x);
     $pdf->Write(0, 'Mes: '.  (($mes)?$mes:spanish(date('F', strtotime('-1 month')))));
     $x = $x+12;
-    $pdf->SetY($x); 
+    $pdf->SetY($x);
+    //Cambiar año
     $pdf->Write(0, utf8_decode('Año: ').  date('Y'));
     $pdf->SetFont('Arial', 'B', 12);
     $x = $x+12;
