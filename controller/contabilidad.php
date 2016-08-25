@@ -107,16 +107,11 @@ if (isLoggedIn()) {
                     }
                     $datosgraf3 = array();
                     foreach ($franjas as $key => $value) $datosgraf3[] = array(strtotime($key)*1000, $value);
-                    //echo json_encode($datosgraf3, JSON_NUMERIC_CHECK);
                     include_header_content("datosgraf3 = ".json_encode($datosgraf3, JSON_NUMERIC_CHECK));
-                  
                     $smarty->assign("num_con", $result->num_rows);
                     $smarty->assign("mes", spanish(date('F')));
                     $smarty->assign("media_con",  round (($result->num_rows) / (count($array_resultado)), 2));
                     $smarty->assign("media_sesion", secondsToTime(round($tiempototal/$result->num_rows, 0)));
-                    //include_header_file('https://www.gstatic.com/charts/loader.js');
-                    //include_header_file('https://code.highcharts.com/highcharts.js');
-                    //include_header_file('https://code.highcharts.com/modules/exporting.js');
                 }
             }
             break;

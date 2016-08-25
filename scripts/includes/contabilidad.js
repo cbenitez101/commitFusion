@@ -247,7 +247,7 @@ var row;
 var checkin;
 var checkout;
 var dataok = [];
-var datosgraf, datosgraf2, datosgraf3;
+var datosgraf2, datosgraf3;
 function guardar_gasto(action) {
     var guardar = [];
     $('[id^="modal_gasto"] input').each(function(){
