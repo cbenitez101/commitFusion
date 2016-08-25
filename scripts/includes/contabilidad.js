@@ -65,6 +65,25 @@ $(document).ready(function(){
         window.location = window.location.href + '/' + $('#estadistica_server').val();
     });
     
+    Highcharts.setOptions({
+        lang: {
+            contextButtonTitle: "Chart context menu",
+            downloadJPEG: "Descargar imagen JPEG",
+            downloadPDF: "Descargar PDF",
+            downloadPNG: "Descargar PNG",
+            downloadSVG: "Descargar SVG",
+            months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',  'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            weekdays: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            decimalPoint: ",",
+            rangeSelectorFrom: "Desde",
+            rangeSelectorTo: "Hasta",
+            thousandsSep: ".",
+            shortMonths: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',  'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+            loading: "Cargando",
+            printChart: "Imprimir gráfica"
+        }
+    });
+    
     //PIE CHART
     // Build the chart
     $('#container2').highcharts({
@@ -99,25 +118,8 @@ $(document).ready(function(){
             data: datosgraf2
         }]
     });
-   Highcharts.setOptions({
-    lang: {
-        contextButtonTitle: "Chart context menu",
-        downloadJPEG: "Descargar imagen JPEG",
-        downloadPDF: "Descargar PDF",
-        downloadPNG: "Descargar PNG",
-        downloadSVG: "Descargar SVG",
-        months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',  'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-        weekdays: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
-        decimalPoint: ",",
-        rangeSelectorFrom: "Desde",
-        rangeSelectorTo: "Hasta",
-        thousandsSep: ".",
-        shortMonths: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',  'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
-        loading: "Cargando",
-        printChart: "Imprimir gráfica"
-        },
-    });
-    // create the chart
+   
+    // Highstock gráfica
     $('#container').highcharts('StockChart', {
         title: {
             text: 'Conexiones por franja horaria'

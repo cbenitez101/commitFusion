@@ -1203,6 +1203,31 @@ function secondsToTime($seconds) {
     $dtT = new \DateTime("@$seconds");
     return $dtF->diff($dtT)->format((($seconds > 86400)?'%ad %hh%Im%Ss':'%hh%Im%Ss'));
 }
+// Funcion para conversion de bytes en kb, MB, y GB para las estadísticas
+function bytes_to_size($bytes){
+    $flag = true;
+    $out = $bytes;
+    $size = 0;
+    while ($flag) {
+        $out/=1024;
+        $size++;
+        if (($out < 1024) || ($size == 4)) $flag = false;
+    }
+    switch($size) {
+        case 1:
+            return number_format ($out, 2,",",".")." kB";
+            break;
+        case 2:
+            return number_format ($out, 2,",",".")." MB";
+            break;
+        case 3:
+            return number_format ($out, 2,",",".")." GB";
+            break;
+        case 4:
+            return number_format ($out, 2,",",".")." TB";
+            break;
+    }
+}
 /**
  * Función para añadir una línea de producto
  * @global array $suma
@@ -1364,7 +1389,6 @@ function pdf($in, $local, $print = false, $mes = FALSE, $users = FALSE, $informe
             cabecera($pdf, $x, $value['cantidad'], $duracion['Descripcion'], $value['precio']);
             $totalfin['Costo'] += $duracion['costo']*$value['cantidad'];
         }
-        
     }
     $totalfin['Tickets'] = subtotal($pdf, 'Tickets');
     $paypal = false;
