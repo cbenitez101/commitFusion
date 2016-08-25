@@ -95,6 +95,8 @@ if (isLoggedIn()) {
                 if ($result->num_rows > 0) {
                     $array_resultado = array();
                     $tiempototal=0;
+                    $bytes_descarga = 0;
+                    $bytes_subida = 0;
                     while ($aux = $result->fetch_assoc()){ 
                         $array_resultado[$aux['username']][$aux['callingstationid']][] = array('duracion'=> $aux['acctsessiontime'], 'inicio'=>$aux['acctstarttime'], 'fin'=>$aux['acctstoptime']);
                         $tiempototal += $aux['acctsessiontime'];
@@ -104,14 +106,18 @@ if (isLoggedIn()) {
                         	$franjas[$iter]++;
                         	$iter = date('Y-m-d H:00:00',strtotime('+1 hour', strtotime($iter)));
                         }
+                        $bytes_descarga += $aux['acctinputoctets'];
+                        $bytes_subida += $aux['acctoutputoctets'];
                     }
                     $datosgraf3 = array();
                     foreach ($franjas as $key => $value) $datosgraf3[] = array(strtotime($key)*1000, $value);
                     include_header_content("datosgraf3 = ".json_encode($datosgraf3, JSON_NUMERIC_CHECK));
                     $smarty->assign("num_con", $result->num_rows);
                     $smarty->assign("mes", spanish(date('F')));
-                    $smarty->assign("media_con",  round (($result->num_rows) / (count($array_resultado)), 2));
+                    $smarty->assign("media_con",  number_format(round (($result->num_rows) / (count($array_resultado)), 2), 2, ",", "."));
                     $smarty->assign("media_sesion", secondsToTime(round($tiempototal/$result->num_rows, 0)));
+                    $smarty->assign("bytes_descarga", bytes_to_size($bytes_descarga));
+                    $smarty->assign("bytes_subida", bytes_to_size($bytes_subida));
                 }
             }
             break;

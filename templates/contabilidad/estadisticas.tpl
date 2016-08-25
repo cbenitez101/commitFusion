@@ -65,23 +65,25 @@
 							<div class="row">
 								<div class="col-md-12">
 									<div class="panel-heading align_center">
-			                            <h3>Estadísticas</h3>
+			                            <h3>Datos</h3>
 			                        </div>
-			                        <div class="panel-body align_center interlineado">
+			                        <div class="panel-body align_center panel_estadisticas">
 			                            {if isset($num_con)}
-											<label>Número de conexiones: </label> <br>{$num_con}<br><br>
+											<label>Número de conexiones: </label> <br>{$num_con}<br>
 										{/if}
 										{if isset($media_con)}
-											<label>Número medio de conexiones por usuario: </label><br>{$media_con}<br><br>
+											<label>Número medio de conexiones por usuario: </label><br>{$media_con}<br>
 										{/if}
 										{if isset($media_sesion)}
 											<label>Tiempo medio de sesion: </label><br>{$media_sesion}<br>
 										{/if}
-			                        </div>
-									<!--
-									{foreach item=item from=$estadisticas}
-										<p>{$item.Descripcion} ===> {$item.Cuenta}</p>
-									{/foreach}	-->				
+										{if isset($bytes_descarga)}
+											<label>Datos subidos: </label><br>{$bytes_descarga}<br>
+										{/if}
+										{if isset($bytes_subida)}
+											<label>Datos descargados: </label><br>{$bytes_subida}<br>
+										{/if}
+			                        </div>			
 								</div>
 							</div>
 						</div>
