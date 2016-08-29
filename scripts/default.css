@@ -142,3 +142,103 @@ span.ui-menu-icon {display: none}
 .datepicker-days .day:not(.disabled){ 
     font-weight: bold !important;
 }
+
+span[class^="dispositivos"]{
+    display: inline-block;
+    height: 34px;
+    background-image: url("images/dispositivos.png");
+    background-repeat: no-repeat;
+}
+.dispositivos-ap-on{
+    background-position: 0 0;
+    background-size: 265px;
+    width: 11px !important;
+}
+.dispositivos-ap-off{
+    background-position: -14px 0;
+    background-size: 265px;
+    width: 11px !important;
+}
+.dispositivos-switch2-on{
+    background-position: -38px -14px;
+    width: 44px !important;
+}
+.dispositivos-switch2-off{
+    background-position: -82px -16px;
+    width: 44px !important;
+}
+.dispositivos-balanceador2-on{
+    background-position: -125px -13px;
+    width: 44px !important;
+}
+.dispositivos-balanceador2-off{
+    background-position: -169px -14px;
+    width: 44px !important;
+}
+.dispositivos-hotspot2-on{
+    background-position: -209px -13px;
+    background-size: 391px;
+    width: 48px !important;
+}
+.dispositivos-hotspot2-off{
+    background-position: -265px -12px;
+    width: 48px !important;
+}
+.dispositivos-switch3-on{
+    background-position: -313px -13px;
+    width: 44px !important;
+}
+.dispositivos-switch3-off{
+    background-position: -356px -13px;
+    width: 44px !important; 
+}
+.dispositivos-otros-on{
+    background-position: -2px -30px;
+    background-size: 209px;
+    width: 22px !important;
+}
+.dispositivos-otros-off{
+    background-position: -23px -30px;
+    background-size: 209px;
+    width: 21px !important;        
+}
+.dispositivos-hotspotw-on{
+    background-position: -79px -50px;
+    background-size: 380px;
+    width: 52px !important;
+}
+.dispositivos-hotspotw-off{
+    background-position: -79px -85px;
+    background-size: 380px;
+    width: 51px !important;
+}
+.dispositivos-hotspot-on{
+    background-position: -138px -69px;
+    height: 20px !important;
+    width: 51px !important;
+}
+.dispositivos-hotspot-off{
+    background-position: -138px -88px;
+    height: 20px !important;
+    width: 51px !important;
+}
+.dispositivos-switch-on{
+    background-position: -191px -68px;
+    width: 51px !important;
+    height: 20px !important;
+}
+.dispositivos-switch-off{
+    background-position: -191px -89px;
+    width: 51px !important;
+    height: 20px !important; 
+}
+.dispositivos-balanceador-on{
+    background-position: -165px -43px;
+    background-size: 270px;
+    width: 47px !important;
+}
+.dispositivos-balanceador-off{
+    background-position: -212px -43px;
+    background-size: 270px;
+    width: 47px !important;
+}
