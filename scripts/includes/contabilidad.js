@@ -59,12 +59,12 @@ $(document).ready(function(){
             window.open('/informepdf?id='+data[0]+'&modo='+$('#historico input[type="radio"]:checked').val(), '_blank','menubar=no,status=no,titlebar=no,toolbar=no,scrollbars=yes,location=no');
         }
     });
-    
+
     $('#estadistica_server').val('');
     $('#estadistica_server').change(function(){
         window.location = window.location.href + '/' + $('#estadistica_server').val();
     });
-    
+
     Highcharts.setOptions({
         lang: {
             contextButtonTitle: "Chart context menu",
@@ -83,14 +83,14 @@ $(document).ready(function(){
             printChart: "Imprimir gráfica"
         }
     });
-    
+
     //PIE CHART
     // Build the chart
     $('#container2').highcharts({
         chart: {
             plotBackgroundColor: null,
             plotBorderWidth: null,
-            plotShadow: false,
+            plotShadow: true,
             type: 'pie'
         },
         title: {
@@ -118,7 +118,40 @@ $(document).ready(function(){
             data: datosgraf2
         }]
     });
-   
+
+    $('#container3').highcharts({
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie'
+        },
+        title: {
+            text: 'Conexiones según la marca del dispositivo'
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.y}</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: false
+                },
+                showInLegend: true
+            }
+        },
+        credits: {
+            enabled: false
+        },
+        series: [{
+            name: 'Dispositivos',
+            colorByPoint: true,
+            data: datosgraf4
+        }]
+    });
+
     // Highstock gráfica
     $('#container').highcharts('StockChart', {
         title: {
@@ -206,19 +239,19 @@ $(document).ready(function(){
          language: 'es',
          todayHighlight: true
     }).on('changeDate', function(e) {
-        //  Calculo de la fecha máxima para sacar ticket   
+        //  Calculo de la fecha máxima para sacar ticket
         var newMaxDate = new Date(e.date);
         newMaxDate.setMonth(e.date.getMonth() + 1);
         $('#fecha_fin').datepicker("setEndDate", newMaxDate);
         //  En caso de que la fecha fin este vacia, se le emplaza la fecha actual seleccionada en inicio
-        //  y se establece la fecha maxima seleccionable 
+        //  y se establece la fecha maxima seleccionable
         if($('#fecha_fin').val() == ''){
             $('#fecha_fin').datepicker("setDate", e.date);
             $('#fecha_fin').datepicker("setEndDate", newMaxDate);
             $('#fecha_fin').datepicker('show');
         }
     });
-    
+
      checkout = $('#fecha_fin').datepicker({
          format: 'yyyy-mm-dd',
          weekStart: 1,
@@ -238,7 +271,7 @@ $(document).ready(function(){
         }
         $('#fecha_fin').datepicker("hide");
     });
-    
+
     /*-----------------------------------------------------------------------------------------------------------------
                                                             Fin
      ----------------------------------------------------------------------------------------------------------------*/
