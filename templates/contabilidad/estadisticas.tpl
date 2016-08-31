@@ -102,6 +102,7 @@
 									<div id="connectionschart" >
 										<div id="container"></div>
 									</div>
+								
 								</div>
 							</div>
 						</div>
