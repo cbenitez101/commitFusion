@@ -797,7 +797,26 @@ function external_guardar_dispositivo() {
 }
 
 function external_actualiza_dispositivos() {
-    file_put_contents('actualiza', print_r($_POST, true));
+    //Se recepciona los datos
+    $input = file_get_contents('php://input');
+    // Se comprueba que tenga contenido
+    if(strlen($input) > 0) {
+        $json = json_decode($input, true);
+        //Se comprueba que sea un json
+        if (!is_null($json)) {
+            //Comrpuebo que el array tenga elementos
+            if ((count($json) > 0 ) ) {
+                global $database;
+                foreach ($json as $key => $value) {
+                    // se comprueba que 
+                    if (count($value) == 5) {
+                        $database->query("INSERT INTO `syslog`(`fecha`, `ip`, `local`, `dispositivo`, `info`) VALUES ('".$value['fecha']."','".$value['ip']."','".$value['local']."','".$value['dispositivo']."','".json_encode($value['info'])."') ON DUPLICATE KEY UPDATE fecha='".$value['fecha']."', info='".json_encode($value['info'])."'");
+                    }
+                }
+            }
+        }
+    }
+    die();
 }
 
 function external_script_hotspot() {
