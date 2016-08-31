@@ -99,7 +99,6 @@ function include_header_content($code, $type= 'js') {
     } elseif ($type == 'css') {
         $includeheader['css'][]='<style type="text/css">'.str_replace("  ", " ", str_replace(array("\r","\n"), "", $code)).'</style>';
     }
-    
 }
 /**
  * This function add a file which is stored in script folder or in a URL. Is not needed to specify
@@ -474,7 +473,7 @@ function external_crea_ticket() {
             }  
         }    
         
-        echo (($_POST['password'] == 'usuario')?(($_POST['servername'] == "coronablanca")?"user=$usuario&full=corona.png&identificador=".$_POST['identificador']."&precio=".$_POST['precio']."&duracion=".$_POST['duracion']:"user=$usuario"):"user=$usuario&pass=$contrasena");
+        echo (($_POST['password'] == 'usuario')?(($_POST['servername'] == "coronablanca")?"user=$usuario&full=1&identificador=".$_POST['identificador']."&precio=".$_POST['precio']."&duracion=".$_POST['duracion']."&hotspot=coronablanca":"user=$usuario"):"user=$usuario&pass=$contrasena");
         die();
     }
 }
@@ -575,7 +574,7 @@ function external_informepdf(){
             if (count($in)>0) {
                 $result = $database->query("SELECT * FROM `hotspots` WHERE id = ".$aux['id_hotspot']);
                 $hotspot = $result->fetch_assoc();
-                pdf($in, $hotspot, TRUE, spanish(date('F', strtotime('- 1 month',strtotime($aux['fecha'])))),$_GET['modo']);
+                pdf($in, $hotspot, TRUE, spanish(date('F', strtotime('- 1 month',strtotime($aux['fecha'])))).' '.date('Y', strtotime($aux['fecha'])),$_GET['modo']);
             }
         }  
         die();
@@ -605,7 +604,7 @@ function external_informeventas(){
             if (count($suma)>0) {
                 $result = $database->query("SELECT * FROM `hotspots` WHERE ServerName = '".$_GET['hotspot']."'");
                 $hotspot = $result->fetch_assoc();
-                pdf($suma, $hotspot, TRUE, spanish(date('F', strtotime(((empty($_GET['fechaini']))?"now":$_GET['fechaini'])))),$_GET['modo'], TRUE);
+                pdf($suma, $hotspot, TRUE, ((!empty($_GET['fechaini']))? $_GET['fechaini'].((!empty($_GET['fechafin']))?" - ":""):"").((!empty($_GET['fechafin']))?$_GET['fechafin']:""),$_GET['modo'], TRUE);
             }
         }
     }
@@ -891,7 +890,7 @@ print
 /ip firewall nat add action=passthrough chain=unused-hs-chain comment= "place hotspot rules here" disabled=yes
 :delay 1s;
 /ip firewall nat add action=masquerade chain=srcnat comment= "masquerade hotspot network" src-address=172.21.0.0/22
-/ip hotspot set hotspot1 name='.$hotspot['ServerName'].'
+/ip hotspot set hotspot1 name='.$hotspot['ServerName'].' address-pool=none profile=hsprof1
 /ip hotspot user profile add name=tecnico shared-users=5
 /ip hotspot user profile set default shared-users=1 rate-limit=380k/2M idle-timeout=none keepalive-timeout=20m status-autorefresh=1m mac-cookie-timeout=7d session-timeout=0s
 /ip hotspot user set '.$hotspot['ServerName'].'_SBYTE profile=tecnico
@@ -1237,6 +1236,36 @@ function spanish($mes){
             break;
     }
 }
+function secondsToTime($seconds) {
+    $dtF = new \DateTime('@0');
+    $dtT = new \DateTime("@$seconds");
+    return $dtF->diff($dtT)->format((($seconds > 86400)?'%ad %hh%Im%Ss':'%hh%Im%Ss'));
+}
+// Funcion para conversion de bytes en kb, MB, y GB para las estadísticas
+function bytes_to_size($bytes){
+    $flag = true;
+    $out = $bytes;
+    $size = 0;
+    while ($flag) {
+        $out/=1024;
+        $size++;
+        if (($out < 1024) || ($size == 4)) $flag = false;
+    }
+    switch($size) {
+        case 1:
+            return number_format ($out, 2,",",".")." kB";
+            break;
+        case 2:
+            return number_format ($out, 2,",",".")." MB";
+            break;
+        case 3:
+            return number_format ($out, 2,",",".")." GB";
+            break;
+        case 4:
+            return number_format ($out, 2,",",".")." TB";
+            break;
+    }
+}
 /**
  * Función para añadir una línea de producto
  * @global array $suma
@@ -1285,8 +1314,9 @@ function subtotal($pdf, $concepto) {
 }
 
 function cierreinforme($pdf, $total, $comision) {
-    $subtotal1 = (((isset($total['PayPal']))?$total['Tickets'] + $total['PayPal']:$total['Tickets']) - $total['Gastos'])*($comision/100);
-    $subtotal = $subtotal1 + $total['Gastos'];
+    $total['Gastos'] /= 2;
+    $subtotal1 = (((isset($total['PayPal']))?$total['Costo'] - $total['PayPal']:$total['Costo']));
+    $subtotal = $subtotal1 + ($total['Gastos']);
     $sinigic = (($subtotal*100)/107);
     $x = $pdf->GetY();
     $x+=12;
@@ -1303,19 +1333,23 @@ function cierreinforme($pdf, $total, $comision) {
     $pdf->Cell(35, 5, 'Total sin IGIC', 1,0, 'C');
     $pdf->Cell(35, 5, number_format($sinigic, 2,',','.').chr(128), 1,0, 'C');
     
-    $pdf->SetX(100);
-    $pdf->Cell(35, 5, 'Gastos', 0,0, 'R');
-    $pdf->Cell(35, 5, ' ', 1,0, 'C');
-    $pdf->Cell(35, 5, number_format($total['Gastos'], 2,',','.').chr(128), 1,1, 'C');
-    
-    
+    if ($total['Gastos'] != 0) {
+         $pdf->SetX(100);
+        $pdf->Cell(35, 5, 'Gastos', 0,0, 'R');
+        $pdf->Cell(35, 5, '50%', 1,0, 'C');
+        $pdf->Cell(35, 5, number_format($total['Gastos'], 2,',','.').chr(128), 1,1, 'C');
+    } else {
+        $x = $pdf->GetY();
+        $x +=5;
+        $pdf->SetY($x);
+    }
     
     $pdf->Cell(35, 5, 'IGIC', 1,0, 'C');
     $pdf->Cell(35, 5, number_format($sinigic*0.07, 2,',','.').chr(128), 1,0, 'C');
     
     $pdf->SetX(100);
-    $pdf->Cell(35, 5, '% Comision', 0,0, 'R');
-    $pdf->Cell(35, 5, "$comision%", 1,0, 'C');
+    $pdf->Cell(35, 5, 'Costo Tickets', 0,0, 'R');
+    $pdf->Cell(35, 5, " ", 1,0, 'C');
     $pdf->Cell(35, 5, number_format($subtotal1, 2,',','.').  chr(128), 1,1, 'C');
     
     
@@ -1342,6 +1376,10 @@ function cierreinforme($pdf, $total, $comision) {
  * $users => modo de informe. 0 => no salen relación de usuarios, 1 => usuarios anulados, 2 => todos los usuarios.
  */
 function pdf($in, $local, $print = false, $mes = FALSE, $users = FALSE, $informe=FALSE) {
+    //dump($local);
+    //echo $mes;
+    
+    //dump($in);
     global $fulldomain;
     require getcwd().'/scripts/fpdf/fpdf.php';
     global $suma;
@@ -1361,10 +1399,10 @@ function pdf($in, $local, $print = false, $mes = FALSE, $users = FALSE, $informe
     $pdf->Write(0, "Local: ".$local['ServerName']);
     $x = $x+12;
     $pdf->SetY($x);
-    $pdf->Write(0, 'Mes: '.  (($mes)?$mes:spanish(date('F', strtotime('-1 month')))));
+    $pdf->Write(0, 'Mes: '.  (($mes)?strstr($mes, ' ', true):spanish(date('m'))));
     $x = $x+12;
-    $pdf->SetY($x); 
-    $pdf->Write(0, utf8_decode('Año: ').  date('Y'));
+    $pdf->SetY($x);
+    $pdf->Write(0, utf8_decode('Año: ').  (($mes)? substr(strstr($mes, ' '), 1) :date('Y')));
     $pdf->SetFont('Arial', 'B', 12);
     $x = $x+12;
     $pdf->SetY($x);
@@ -1379,12 +1417,16 @@ function pdf($in, $local, $print = false, $mes = FALSE, $users = FALSE, $informe
         $totalfin['Gastos'] = 0;
     }
     cabecera($pdf, $x);
+    $totalfin['Costo'] = 0;
     foreach ($in as $key => $value) {
-        $lote = $database->query("SELECT perfiles.Descripcion FROM lotes INNER JOIN perfiles ON perfiles.id = lotes.Id_perfil WHERE lotes.id = $key");
+        $lote = $database->query("SELECT perfiles.Descripcion, costo FROM lotes INNER JOIN perfiles ON perfiles.id = lotes.Id_perfil WHERE lotes.id = $key");
         $duracion = $lote->fetch_assoc();
         //checkear el indice del array para ver si usar el id del ticket para sacar la duracion.
         //cabecera($pdf, $x, $value['cantidad'], "Ticket ".(($value['precio']==5)?'1 Dia':(($value['precio']==10)?'3 Dias':'1 Semana')), $value['precio']);
-        if (!strstr($duracion['Descripcion'], "PAYPAL")) cabecera($pdf, $x, $value['cantidad'], $duracion['Descripcion'], $value['precio']);
+        if (!strstr($duracion['Descripcion'], "PAYPAL")) {
+            cabecera($pdf, $x, $value['cantidad'], $duracion['Descripcion'], $value['precio']);
+            $totalfin['Costo'] += $duracion['costo']*$value['cantidad'];
+        }
     }
     $totalfin['Tickets'] = subtotal($pdf, 'Tickets');
     $paypal = false;

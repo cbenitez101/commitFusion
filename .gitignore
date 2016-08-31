@@ -9,3 +9,5 @@ templates_c/*
 @eaDir/
 /@eaDir/
 /.c9
+.DS_Store
+/.DS_Store

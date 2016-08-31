@@ -3,7 +3,9 @@ if (isLoggedIn()) {
     $smarty->assign('page', $template_data[1]);
 //            include_header_file('filtertable');
     load_modul('datatable');
-    load_modul('bsdatepicker');
+    load_modul('bootstrap-datepicker');
+    include_header_file('https://code.highcharts.com/stock/highstock.js');
+    include_header_file('https://code.highcharts.com/stock/modules/exporting.js');
     switch ($template_data[1]) {
         case 'historial':
             $result = $database->query("SELECT historial.id, historial.fecha, hotspots.ServerName, locales.nombre FROM `historial` INNER JOIN `hotspots` ON hotspots.id = historial.id_hotspot INNER JOIN `locales` ON hotspots.Local = locales.id".(($_SESSION['cliente'] != 'admin')? " INNER JOIN `clientes` ON clientes.id = locales.cliente  WHERE ".((isset($_SESSION['local']))?"locales.nombre = '".$_SESSION['local']."''":"clientes.nombre = '".$_SESSION['cliente']):""));
@@ -42,6 +44,80 @@ if (isLoggedIn()) {
                     $out = array();
                     while ($aux = $result->fetch_assoc()) $out[] = array("server"=> $aux['ServerName'], "id" => $aux['Id_hotspot']);
                     $smarty->assign("servers", $out);
+                }
+            }
+            break;
+        case 'estadisticas':
+            // Si usuario es Admin y url termina en /hotspot utilizamos dicho servidor para estadisticas
+            if ($_SESSION['cliente'] == 'admin') {
+                if(isset($template_data[2])){
+                    $server = $template_data[2];
+                }else{
+                    // Si no tenemos /hotspot en la url, se muestra formulario para selección del hotspot
+                    $result = $database->query("SELECT ServerName FROM hotspots");
+                    if ($result->num_rows > 0) {
+                        $out = array();
+                        while ($aux = $result->fetch_assoc()) $out[] = array("server"=> $aux['ServerName'], "id" => $aux['Id_hotspot']);
+                        $smarty->assign("servers", $out);
+                    }
+                }
+            }else{
+                // Si es cualquier otro usuario, se toma el hotspot de la variable $_SESSION del usuario.
+                $server = $_SESSION['local'];
+            }
+            // Querys para estadisticas
+            if (isset($server)){
+                // Query para obtener tickets vendidos
+                $result = $database->query("SELECT Descripcion, ventashotspot.Precio,  COUNT(*) as Cuenta FROM `ventashotspot` INNER JOIN lotes ON lotes.id = ventashotspot.Id_Lote INNER JOIN perfiles ON perfiles.id = lotes.Id_perfil WHERE FechaVenta >= '2016-".date('m')."-01 00:00:00'AND perfiles.ServerName = '$server' GROUP BY ventashotspot.Precio");
+                if ($result->num_rows > 0) {
+                    $out = array();
+                    $prueba = array();
+                    while ($aux = $result->fetch_assoc()) $out[] = $aux;
+                    
+                    foreach ($out as $fila) {
+                        $sum += $fila['Precio']*$fila['Cuenta'];
+                        $prueba[] = array("name" => $fila['Descripcion'], 'y' => $fila['Cuenta']);
+                    }
+                    $smarty->assign("cuenta", $sum);
+                    $smarty->assign("estadisticas", $out);
+                }
+                include_header_content("datosgraf2 = ".json_encode($prueba, JSON_NUMERIC_CHECK));
+                
+                //Formateo array intervalos para estadísticas por horas
+                $fechas = strtotime(date('Y').'-'.date('m').'-01 00:00:00');
+                $franjas = array();
+                while ($fechas <= strtotime(date('Y-m-d H:00:00'))){
+                    $franjas[date('Y-m-d H:00:00',$fechas)] = 0;
+                    $fechas = strtotime ('+1 hour',$fechas);
+                }
+                //Query donde se obtienen usuarios, MAC de los dispositivos y conexiones realizadas
+                $result = $radius->query("SELECT * FROM radacct WHERE username LIKE '$server\_%' AND acctstarttime >= '".date('Y')."-".date('m')."-01 00:00:00'");
+                if ($result->num_rows > 0) {
+                    $array_resultado = array();
+                    $tiempototal=0;
+                    $bytes_descarga = 0;
+                    $bytes_subida = 0;
+                    while ($aux = $result->fetch_assoc()){ 
+                        $array_resultado[$aux['username']][$aux['callingstationid']][] = array('duracion'=> $aux['acctsessiontime'], 'inicio'=>$aux['acctstarttime'], 'fin'=>$aux['acctstoptime']);
+                        $tiempototal += $aux['acctsessiontime'];
+                        $iter = date('Y-m-d H:00:00',strtotime($aux['acctstarttime']));
+                        $lim = ((empty($aux['acctstoptime']))?date('Y-m-d H:00:00'):date('Y-m-d H:00:00',strtotime($aux['acctstoptime'])));
+                        while (strtotime($iter) <= strtotime($lim)) {
+                        	$franjas[$iter]++;
+                        	$iter = date('Y-m-d H:00:00',strtotime('+1 hour', strtotime($iter)));
+                        }
+                        $bytes_descarga += $aux['acctinputoctets'];
+                        $bytes_subida += $aux['acctoutputoctets'];
+                    }
+                    $datosgraf3 = array();
+                    foreach ($franjas as $key => $value) $datosgraf3[] = array(strtotime($key)*1000, $value);
+                    include_header_content("datosgraf3 = ".json_encode($datosgraf3, JSON_NUMERIC_CHECK));
+                    $smarty->assign("num_con", $result->num_rows);
+                    $smarty->assign("mes", spanish(date('F')));
+                    $smarty->assign("media_con",  number_format(round (($result->num_rows) / (count($array_resultado)), 2), 2, ",", "."));
+                    $smarty->assign("media_sesion", secondsToTime(round($tiempototal/$result->num_rows, 0)));
+                    $smarty->assign("bytes_descarga", bytes_to_size($bytes_descarga));
+                    $smarty->assign("bytes_subida", bytes_to_size($bytes_subida));
                 }
             }
             break;

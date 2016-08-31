@@ -138,35 +138,48 @@ $(document).ready(function(){
     var nowTemp = new Date();
     var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
 
-    checkin = $('#fecha_inicio').datepicker({
-        onRender: function(date) {
-            return date.valueOf() > now.valueOf() ? 'disabled' : '';
-        },
-        format: 'yyyy-mm-dd',
-        weekStart: 1
-    }).on('changeDate', function(ev) {
-        if (ev.date.valueOf() > checkout.date.valueOf()) {
-            var newDate = new Date(ev.date)
-            newDate.setDate(newDate.getDate() + 1);
-            checkout.setValue(newDate);
-            checkout.minDate(ev.date);
+       checkin = $('#fecha_inicio').datepicker({
+         format: 'yyyy-mm-dd',
+         weekStart: 1,
+         autoclose: true,
+         endDate: now,
+         language: 'es',
+         todayHighlight: true
+    }).on('changeDate', function(e) {
+        //  Calculo de la fecha máxima para sacar ticket   
+        var newMaxDate = new Date(e.date);
+        newMaxDate.setMonth(e.date.getMonth() + 1);
+        $('#fecha_fin').datepicker("setEndDate", newMaxDate);
+        //  En caso de que la fecha fin este vacia, se le emplaza la fecha actual seleccionada en inicio
+        //  y se establece la fecha maxima seleccionable 
+        if($('#fecha_fin').val() == ''){
+            $('#fecha_fin').datepicker("setDate", e.date);
+            $('#fecha_fin').datepicker("setEndDate", newMaxDate);
+            $('#fecha_fin').datepicker('show');
         }
-        checkin.hide();
-        //$('#fecha_fin')[0].focus();
-        checkout.show();
-
-    }).data('datepicker');
-    checkout = $('#fecha_fin').datepicker({
-        onRender: function(date) {
-            return (date.valueOf() > now.valueOf() ? 'disabled' : '');
-        },
-        format: 'yyyy-mm-dd',
-        weekStart: 1
-    }).on('changeDate', function(ev) {
-        checkout.hide();
-    }).data('datepicker');
-    //$('#datepicker1').datepicker({firstDay: 1, maxDate: 0, minDate: -30, dateFormat: 'yy-mm-dd',onClose: function( selectedDate ) {$( "#datepicker2" ).datepicker( "option", "minDate", selectedDate );}});
-    //$('#datepicker2').datepicker({firstDay: 1, maxDate: 0, minDate: -30, dateFormat: 'yy-mm-dd',onClose: function( selectedDate ) {$( "#datepicker1" ).datepicker( "option", "maxDate", selectedDate );}});
+    });
+    
+     checkout = $('#fecha_fin').datepicker({
+         format: 'yyyy-mm-dd',
+         weekStart: 1,
+         autoclose: true,
+         endDate: now,
+         language: 'es',
+         orientation: 'bottom',
+         todayHighlight: true
+    }).on('changeDate', function(e) {
+        $('#fecha_inicio').datepicker("setStartDate", newMinDate);
+        var newMinDate = new Date(e.date);
+        newMinDate.setMonth(e.date.getMonth() - 1);
+        // Si Inicio no tiene contenido, abre datepicker estableciendo fecha limite minima selecionable
+        if($('#fecha_inicio').val() == ''){
+            $('#fecha_inicio').datepicker("setDate", e.date);
+            $('#fecha_inicio').datepicker("setStartDate", newMinDate);
+            $('#fecha_inicio').datepicker("show");
+        }
+        $('#fecha_fin').datepicker("hide");
+    });
+   
     /*-----------------------------------------------------------------------------------------------------------------
                                                             Fin
      ----------------------------------------------------------------------------------------------------------------*/
