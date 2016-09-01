@@ -142,6 +142,8 @@ span.ui-menu-icon {display: none}
 .datepicker-days .day:not(.disabled){ 
     font-weight: bold !important;
 }
+
+/* ICONOS 1 */
 span[class^="dispositivos"]{
     display: inline-block;
     height: 34px;
@@ -240,4 +242,57 @@ span[class^="dispositivos"]{
     background-position: -212px -43px;
     background-size: 270px;
     width: 47px !important;
+}
+
+/*  ICONOS 2  */
+span[class^="internet"]{
+    display: inline-block;
+    height: 34px;
+    background-size: 269px;
+    background-image: url("/images/internet.png");
+    background-repeat: no-repeat;
+}
+.internet-pc{
+    background-position: -62px -224px;
+    height: 33px !important;
+    width: 37px !important;
+}
+.internet-pc2{
+    background-position: -11px -16px;
+    width: 38px !important;
+}
+.internet-portatil{
+    background-position: -48px -60px;
+    height: 30px !important;
+    width: 45px !important;
+}
+.internet-balanceador{
+    background-position: -100px -69px;
+    height: 21px !important;
+    width: 48px !important;
+}
+.internet-server{
+    background-position: -61px -16px;
+    height: 32px !important;
+    width: 28px !important;
+}
+.internet-switch{
+    background-position: -183px -112px;
+    height: 20px !important;
+    width: 45px !important;
+}
+.internet-tablet{
+    background-position: -139px -143px;
+    height: 30px !important;
+    width: 35px !important;
+}
+.internet-internet{
+    background-position: -98px -143px;
+    height: 30px !important;
+    width: 31px !important;
+}
+.internet-impresora{
+    background-position: -52px -101px;
+    height: 31px !important;
+    width: 40px !important;
 }

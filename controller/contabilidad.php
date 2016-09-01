@@ -48,7 +48,7 @@ if (isLoggedIn()) {
             }
             break;
         case 'estadisticas':
-            // Si usuario es Admin y url termina en /hotspot utilizamos dicho servidor para estadisticas
+            //Si usuario es Admin y url termina en /hotspot utilizamos dicho servidor para estadisticas
             if ($_SESSION['cliente'] == 'admin') {
                 if(isset($template_data[2])){
                     $server = $template_data[2];
@@ -73,7 +73,6 @@ if (isLoggedIn()) {
                     $out = array();
                     $prueba = array();
                     while ($aux = $result->fetch_assoc()) $out[] = $aux;
-                    
                     foreach ($out as $fila) {
                         $sum += $fila['Precio']*$fila['Cuenta'];
                         $prueba[] = array("name" => $fila['Descripcion'], 'y' => $fila['Cuenta']);
@@ -82,7 +81,6 @@ if (isLoggedIn()) {
                     $smarty->assign("estadisticas", $out);
                 }
                 include_header_content("datosgraf2 = ".json_encode($prueba, JSON_NUMERIC_CHECK));
-                
                 //Formateo array intervalos para estadísticas por horas
                 $fechas = strtotime(date('Y').'-'.date('m').'-01 00:00:00');
                 $franjas = array();
@@ -91,12 +89,13 @@ if (isLoggedIn()) {
                     $fechas = strtotime ('+1 hour',$fechas);
                 }
                 //Query donde se obtienen usuarios, MAC de los dispositivos y conexiones realizadas
-                $result = $radius->query("SELECT * FROM radacct WHERE username LIKE '$server\_%' AND acctstarttime >= '".date('Y')."-".date('m')."-01 00:00:00'");
+                $result = $radius->query("SELECT username,callingstationid,acctsessiontime, acctstarttime, acctstoptime,acctinputoctets,acctoutputoctets FROM radacct WHERE username LIKE '$server\_%' AND acctstarttime >= '".date('Y')."-".date('m')."-01 00:00:00'");
                 if ($result->num_rows > 0) {
-                    $array_resultado = array();
+                    $mac = array();
                     $tiempototal=0;
                     $bytes_descarga = 0;
                     $bytes_subida = 0;
+                    //$vendor = 0;
                     while ($aux = $result->fetch_assoc()){ 
                         $array_resultado[$aux['username']][$aux['callingstationid']][] = array('duracion'=> $aux['acctsessiontime'], 'inicio'=>$aux['acctstarttime'], 'fin'=>$aux['acctstoptime']);
                         $tiempototal += $aux['acctsessiontime'];
@@ -118,6 +117,41 @@ if (isLoggedIn()) {
                     $smarty->assign("media_sesion", secondsToTime(round($tiempototal/$result->num_rows, 0)));
                     $smarty->assign("bytes_descarga", bytes_to_size($bytes_descarga));
                     $smarty->assign("bytes_subida", bytes_to_size($bytes_subida));
+                   
+                }
+                /*METODO 2: Se utiliza query para simplificar el proceso de conteo de conexiones*/
+                $result = $radius->query("SELECT SUBSTRING( callingstationid, 1, 8 ) AS principiomac, COUNT( SUBSTRING( callingstationid, 1, 8 ) ) AS countF FROM radacct WHERE username LIKE  '$server\_%' AND acctstarttime >=  '".date('Y')."-".date('m')."-01 00:00:00' GROUP BY SUBSTRING( callingstationid, 1, 8 ) ");
+                $mac=array();
+                if ($result->num_rows > 0) {
+                    while ($aux = $result->fetch_assoc()){
+                        // Se van metiendo registros en $mac, llevando la cuenta de las conexiones
+                        $marca = strtolower(strstr(mac_vendor($aux['principiomac']),' ', true));
+                        if (array_key_exists((($marca=='apple,')?substr($marca, 0, -1):$marca), $mac)){
+                            if($marca == 'apple,'){
+                                $mac[substr($marca, 0, -1)] += $aux['countF'];
+                            }else{
+                                $mac[$marca] += $aux['countF'];
+                            }  
+                        }else{
+                            if($marca == 'apple,'){
+                                $mac[substr($marca, 0, -1)] = $aux['countF'];
+                            }else{
+                                $mac[$marca] = $aux['countF'];
+                            }  
+                        }
+                    }
+                    // Se ordena de forma descendente $mac, se toman los 5 principales dispositivos y se muetsran en la grafica
+                    arsort($mac);
+                    $macouto = array_slice($mac, 0, 5,true);
+                    if (array_key_exists('', $macouto)) {
+                        $macouto['Otros'] = $macouto[''];
+                        unset($macouto['']);
+                    }
+                    $macouto['Otros'] = array_sum(array_slice($mac, 5));
+                     foreach ($macouto as $key => $value) {
+                         $datos4[] = array("name" => $key, 'y' => $value); 
+                    }
+                    include_header_content("datosgraf4 = ".json_encode($datos4, JSON_NUMERIC_CHECK));
                 }
             }
             break;

@@ -1376,6 +1376,7 @@ function cierreinforme($pdf, $total, $comision) {
  * $users => modo de informe. 0 => no salen relación de usuarios, 1 => usuarios anulados, 2 => todos los usuarios.
  */
 function pdf($in, $local, $print = false, $mes = FALSE, $users = FALSE, $informe=FALSE) {
+
     global $fulldomain;
     require getcwd().'/scripts/fpdf/fpdf.php';
     global $suma;
@@ -1414,6 +1415,8 @@ function pdf($in, $local, $print = false, $mes = FALSE, $users = FALSE, $informe
     }
     cabecera($pdf, $x);
     $totalfin['Costo'] = 0;
+    $out = array();
+    $anulados = array();
     foreach ($in as $key => $value) {
         $lote = $database->query("SELECT perfiles.Descripcion, costo FROM lotes INNER JOIN perfiles ON perfiles.id = lotes.Id_perfil WHERE lotes.id = $key");
         $duracion = $lote->fetch_assoc();
@@ -1422,8 +1425,28 @@ function pdf($in, $local, $print = false, $mes = FALSE, $users = FALSE, $informe
         if (!strstr($duracion['Descripcion'], "PAYPAL")) {
             cabecera($pdf, $x, $value['cantidad'], $duracion['Descripcion'], $value['precio']);
             $totalfin['Costo'] += $duracion['costo']*$value['cantidad'];
-        }
+            if($users){
+                if ($value['cantidad'] !=  count($value['usuarios'])) {
+                    foreach ($value['usuarios'] as $item) {
+                        if (strstr($item, 'ANULADO')) $out[]= strstr($item, ' ', TRUE)." -  ".$duracion['Descripcion'];
+                    }
+                } 
+            }
+            if($informe){
+                // En caso de ser un informe de ventas, construimos un array con las anulaciones, su descripcion y precio
+                if($value['cantidad'] != count($value['usuarios'])) $anulados[$duracion['Descripcion']] = array('precio' => -$value['precio'], 'cantidad'=> count($value['usuarios'])-$value['cantidad']);
+            }
+        } 
     }
+    
+    $pdf->SetTextColor(255, 0, 0);
+    // Imprimimos en el informe de ventas las anulaciones, poniéndolas en color rojo.
+    if($informe && !empty($anulados)){
+        foreach ($anulados as $key => $value) cabecera($pdf, $x, $value['cantidad'], $key.' - ANULADO', $value['precio']);
+    }
+    
+    $pdf->SetTextColor(0);
+    
     $totalfin['Tickets'] = subtotal($pdf, 'Tickets');
     $paypal = false;
     foreach ($in as $key => $value) {
@@ -1438,18 +1461,6 @@ function pdf($in, $local, $print = false, $mes = FALSE, $users = FALSE, $informe
     }
     if ($paypal) $totalfin['PayPal'] = subtotal($pdf, 'PayPal');
     if (!$informe) $factura = cierreinforme($pdf, $totalfin, 50);
-    $out = array();
-    foreach ($in as $key => $value) {
-        if ($value['cantidad'] !=  count($value['usuarios'])) {
-            foreach ($value['usuarios'] as $item) {
-                if (strstr($item, ' ')) {
-                    $lote = $database->query("SELECT perfiles.Descripcion FROM lotes INNER JOIN perfiles ON perfiles.id = lotes.Id_perfil WHERE lotes.id = $key");
-                    $duracion = $lote->fetch_assoc();
-                    $out[]= strstr($item, ' ', TRUE)." -  ".$duracion['Descripcion'];
-                }
-            }
-        }
-    }
     // Si hay q poner los usuarios cancelados $users a 1, si tambíen hay q poner los creados hay q poner users a 2
     if ($users) {
         $pdf->Cell(30,5," ",0,1,'L');
