@@ -10,8 +10,10 @@ $(document).ready(function(){
                             row = api.row($(this).parent());
                             data = api.row($(this).parent()).data();
                             //$('.modal').modal();
-                            console.log(data);
-                            window.location.href = "/mantenimiento/dispositivos/" + data[0];
+                            if (!data[0].includes("span")) {
+                                //Condición para que sólo cargue cuando estamos en la lista de hotspot y no cuando hay un dispositivo
+                                window.location.href = "/mantenimiento/dispositivos/" + data[0];
+                            }
                         }
                     });
                 }

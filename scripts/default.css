@@ -142,11 +142,10 @@ span.ui-menu-icon {display: none}
 .datepicker-days .day:not(.disabled){ 
     font-weight: bold !important;
 }
-
 span[class^="dispositivos"]{
     display: inline-block;
     height: 34px;
-    background-image: url("images/dispositivos.png");
+    background-image: url("/images/dispositivos.png");
     background-repeat: no-repeat;
 }
 .dispositivos-ap-on{

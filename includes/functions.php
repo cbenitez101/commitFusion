@@ -1376,10 +1376,6 @@ function cierreinforme($pdf, $total, $comision) {
  * $users => modo de informe. 0 => no salen relación de usuarios, 1 => usuarios anulados, 2 => todos los usuarios.
  */
 function pdf($in, $local, $print = false, $mes = FALSE, $users = FALSE, $informe=FALSE) {
-    //dump($local);
-    //echo $mes;
-    
-    //dump($in);
     global $fulldomain;
     require getcwd().'/scripts/fpdf/fpdf.php';
     global $suma;
