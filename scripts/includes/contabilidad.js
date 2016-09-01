@@ -230,8 +230,8 @@ $(document).ready(function(){
      ----------------------------------------------------------------------------------------------------------------*/
     var nowTemp = new Date();
     var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-
-    checkin = $('#fecha_inicio').datepicker({
+   
+    var checkin = $('#fecha_inicio').datepicker({
          format: 'yyyy-mm-dd',
          weekStart: 1,
          autoclose: true,
@@ -239,20 +239,23 @@ $(document).ready(function(){
          language: 'es',
          todayHighlight: true
     }).on('changeDate', function(e) {
-        //  Calculo de la fecha máxima para sacar ticket
-        var newMaxDate = new Date(e.date);
-        newMaxDate.setMonth(e.date.getMonth() + 1);
-        $('#fecha_fin').datepicker("setEndDate", newMaxDate);
-        //  En caso de que la fecha fin este vacia, se le emplaza la fecha actual seleccionada en inicio
-        //  y se establece la fecha maxima seleccionable
-        if($('#fecha_fin').val() == ''){
-            $('#fecha_fin').datepicker("setDate", e.date);
+            //  Calculo de la fecha máxima para sacar ticket
+            var newMaxDate = new Date(e.date);
+            newMaxDate.setMonth(e.date.getMonth() + 1);
             $('#fecha_fin').datepicker("setEndDate", newMaxDate);
-            $('#fecha_fin').datepicker('show');
-        }
+            
+            //  En caso de que la fecha fin este vacia, se le emplaza la fecha actual seleccionada en inicio
+            //  y se establece la fecha maxima seleccionable
+            if($('#fecha_fin').val() == ''){
+                $('#fecha_fin').datepicker("setDate", e.date);
+                $('#fecha_fin').datepicker("setEndDate", newMaxDate);
+                $('#fecha_fin').datepicker('show');
+            }
+            $('#fecha_fin').datepicker("setStartDate", $('#fecha_inicio').val());
+        
     });
-
-     checkout = $('#fecha_fin').datepicker({
+  
+    var checkout = $('#fecha_fin').datepicker({
          format: 'yyyy-mm-dd',
          weekStart: 1,
          autoclose: true,
@@ -270,6 +273,7 @@ $(document).ready(function(){
             $('#fecha_inicio').datepicker("show");
         }
         $('#fecha_fin').datepicker("hide");
+        $('#fecha_inicio').datepicker("setEndDate", $('#fecha_fin').val());
     });
 
     /*-----------------------------------------------------------------------------------------------------------------
@@ -282,7 +286,7 @@ var row;
 var checkin;
 var checkout;
 var dataok = [];
-var datosgraf2, datosgraf3;
+var datosgraf2, datosgraf3, datosgraf4;
 function guardar_gasto(action) {
     var guardar = [];
     $('[id^="modal_gasto"] input').each(function(){
