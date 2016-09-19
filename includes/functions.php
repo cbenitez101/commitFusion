@@ -358,6 +358,12 @@ function external_edita_menus() {
         if ($database->query("UPDATE users SET menu_".  strtolower($_POST['menu'])."=".($_POST['action']== 'add' ? 1 : 0)." WHERE id=".$_POST['user'])) die();
     }
 }
+function external_edita_dash() {
+    if (isset($_POST['user']) && isset($_POST['dash']) && isset($_POST['action'])) if (intval($_POST['user']) && ($_POST['action']) == 'add' || $_POST['action'] == 'del') {
+        global $database;
+        if ($database->query("UPDATE users SET dash_".  strtolower($_POST['dash'])."=".($_POST['action']== 'add' ? 1 : 0)." WHERE id=".$_POST['user'])) die();
+    }
+}
 function external_quitar_menu() {
     if (!empty($_POST['menu'])) if (substr($_POST['menu'], 0, 5) == 'menu_') {
         global $database;
@@ -365,6 +371,16 @@ function external_quitar_menu() {
             if ($database->query('ALTER TABLE `users` DROP `'.strtolower($_POST['menu']).'`;')) die();
         } elseif ($_POST['action'] == 0) {
             if ($database->query("ALTER TABLE `users` ADD `".  strtolower($_POST['menu'])."` INT(1) NOT NULL DEFAULT '0' ;")) die();
+        }  
+    }
+}
+function external_quitar_dash() {
+    if (!empty($_POST['dash'])) if (substr($_POST['dash'], 0, 5) == 'dash_') {
+        global $database;
+        if ($_POST['action'] == 1) {
+            if ($database->query('ALTER TABLE `users` DROP `'.strtolower($_POST['dash']).'`;')) die();
+        } elseif ($_POST['action'] == 0) {
+            if ($database->query("ALTER TABLE `users` ADD `".  strtolower($_POST['dash'])."` INT(1) NOT NULL DEFAULT '0' ;")) die();
         }  
     }
 }

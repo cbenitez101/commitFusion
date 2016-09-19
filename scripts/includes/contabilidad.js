@@ -91,7 +91,8 @@ $(document).ready(function(){
             plotBackgroundColor: null,
             plotBorderWidth: null,
             plotShadow: true,
-            type: 'pie'
+            type: 'pie',
+            
         },
         title: {
             text: 'Venta de tickets'
@@ -225,6 +226,7 @@ $(document).ready(function(){
             threshold: null
         }]
     });
+
      /*-----------------------------------------------------------------------------------------------------------------
                                                 Parte para el datepicker de la búsqueda
      ----------------------------------------------------------------------------------------------------------------*/
@@ -252,7 +254,6 @@ $(document).ready(function(){
                 $('#fecha_fin').datepicker('show');
             }
             $('#fecha_fin').datepicker("setStartDate", $('#fecha_inicio').val());
-        
     });
   
     var checkout = $('#fecha_fin').datepicker({
