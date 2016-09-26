@@ -1,14 +1,17 @@
 $(document).ready(function(){
     $('.ticket-crear .btnPrint').printPage({
         attr: 'data-url',
-        message:'Se esta imprimiendo el ticket.'
+        message:'Se esta imprimiendo el ticket.',
+        // Se elimina el padding que introduce printPage a la derecha del body
+        callback: function(){
+            $('body').css("padding-right", "");
+        }
     });
     $('.ticket').on('click', function() {
         ticket = $(this).data();
         // creaticket.dialog("open");
     });
     $('.modal_creaticket').click(function(){
-        console.log("Identificando");
         creatickets();
     });
     // Manejador de la tabla, se le pone que al hacer lick en una fila llame al modal y guarda los datos de la tabla
@@ -131,11 +134,13 @@ $(document).ready(function(){
             window.location = "/tickets/buscar/"+data[0]+'_'+data[data.length-1];
         }
     });
+    
+   
 
     /*-----------------------------------------------------------------------------------------------------------------
                                                 Parte para el datepicker de la búsqueda
      ----------------------------------------------------------------------------------------------------------------*/
-     var nowTemp = new Date();
+    var nowTemp = new Date();
     var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
    
     var checkin = $('#fecha_inicio').datepicker({
@@ -212,6 +217,7 @@ $(document).ready(function(){
     $('#imprimirticket').on('click', function(){
         $('.btnPrint').click();
         $('.modal-backdrop').hide();
+       
     });
 
     var bloc;
@@ -219,6 +225,8 @@ $(document).ready(function(){
         bloc = $(this).parent();
         $('#modalbloc').modal();
     });
+    
+    
 });
 var table;
 var data;
