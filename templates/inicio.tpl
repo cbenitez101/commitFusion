@@ -25,7 +25,7 @@
 			{if $item !='tickets/buscar'}
 				<div class="col-md-6">
 					<div class="panel panel-default">
-						<iframe class="dash_iframe {$item}" id="{$item}" src="http://www.plataforma.openwebcanarias.es/{$item}" frameborder="0" scrolling="no" width="100%"></iframe>
+						<iframe class="dash_iframe {$item}" id="{$item}" src="/{$item}" frameborder="0" scrolling="no" width="100%"></iframe>
 					</div>
 				</div>
 			{else}

@@ -1,7 +1,7 @@
 $(document).ready(function(){
     // Manejador de la tabla, se le pone que al hacer lick en una fila llame al modal y guarda los datos de la tabla
     // en data.
-    /*Configuracion -> Hotspot*/
+    
     table = $('#table-search.hotspottable').DataTable({
         //"iDisplayLength": 25, //Hay un error cuando se pasa de página que no me capta el evento onclick. Checkear eventos en la pagina del datatable
         "preDrawCallback" : function() {
@@ -35,7 +35,7 @@ $(document).ready(function(){
                 }
             ]
     });
-    /*Configuracion -> Hotspot, Usuarios, Clientes, Clientes */
+    
     table = $('#table-search:not(.hotspottable, .permisostable, .clientestable, .localestable)').DataTable({
         //"iDisplayLength": 25, //Hay un error cuando se pasa de página que no me capta el evento onclick. Checkear eventos en la pagina del datatable
         "preDrawCallback" : function() {
@@ -49,7 +49,6 @@ $(document).ready(function(){
             });
             $('tbody tr td:first-child').click(function() {
                 $('tr.child .check_menu').change(function() {
-                    console.log('menu clicked');
                     $.ajax({
                         url: '/edita_menus',
                         type: 'POST',
@@ -72,7 +71,7 @@ $(document).ready(function(){
         },
         "responsive" : true
     });
-    /*Configuracion -> Usuarios */
+    
     var table1 = $('#table-permisos').DataTable({
         //"iDisplayLength": 25, //Hay un error cuando se pasa de página que no me capta el evento onclick. Checkear eventos en la pagina del datatable
         "preDrawCallback" : function() {
@@ -91,7 +90,7 @@ $(document).ready(function(){
         },
         "responsive" : true
     });
-    /*Configuracion -> Usuarios */
+    
     var table2 = $('#table-menu').DataTable({
         //"iDisplayLength": 25, //Hay un error cuando se pasa de página que no me capta el evento onclick. Checkear eventos en la pagina del datatable
         "preDrawCallback" : function() {
@@ -110,7 +109,7 @@ $(document).ready(function(){
         },
         "responsive" : true
     });
-    /*Configuracion -> Clientes */
+    
     table = $('#table-cliente').DataTable({
         //"iDisplayLength": 25, //Hay un error cuando se pasa de página que no me capta el evento onclick. Checkear eventos en la pagina del datatable
         "preDrawCallback" : function() {
@@ -128,7 +127,7 @@ $(document).ready(function(){
         },
         "responsive" : true
     });
-    /*Configuracion -> Clientes */
+    
     table1 = $('#table-local').DataTable({
         //"iDisplayLength": 25, //Hay un error cuando se pasa de página que no me capta el evento onclick. Checkear eventos en la pagina del datatable
         "preDrawCallback" : function() {
@@ -146,7 +145,7 @@ $(document).ready(function(){
         },
         "responsive" : true
     });
-    /*Configuracion -> Clientes */
+    
     $('#tabs a').click(function (e) {
       e.preventDefault()
       $(this).tab('show')
@@ -478,7 +477,6 @@ check-for-updates once\r\n\
         files = event.target.files;
     });
     $(document).on("change", ".check_menu" ,function() {
-        console.log('menu clicked');
         $.ajax({
             url: '/edita_menus',
             type: 'POST',
@@ -496,7 +494,6 @@ check-for-updates once\r\n\
     });
     /* CHECK PARA ACTIVAR/DESACTIVAR MENUS DE DASHBOARD*/
      $(document).on("change", ".check_dash" ,function() {
-        console.log('menu clicked');
         $.ajax({
             url: '/edita_dash',
             type: 'POST',
