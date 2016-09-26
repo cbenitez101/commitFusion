@@ -2,10 +2,9 @@
 $(document).ready(function(){
     //Eliminamos el menu del dash del contenido del iframe
     $('.dash_iframe').load(function(){
-        // $('.dash_iframe').contents().find('nav').hide();
-        // $('.dash_iframe').contents().find('.graficas').hide();
         $('.dash_iframe').contents().find('nav').addClass('displaynone');
         $('.dash_iframe').contents().find('.graficas').addClass('displaynone');
+        $('.dash_iframe').contents().find('#page-wrapper').css('margin', '0');
         var contheight = $('.contabilidad\\/estadisticas').contents().find('#page-wrapper').height();
         var buscarheight = $('.tickets\\/buscar').contents().find('#page-wrapper').height();
         var crearheight = $('.tickets\\/crear').contents().find('#page-wrapper').height();
@@ -13,40 +12,6 @@ $(document).ready(function(){
         $('.tickets\\/buscar').css('height',buscarheight);
         $('.tickets\\/crear').css('height',crearheight);
         $('#buscar').css('margin-left','21px');
-        
-        // $('div iframe').contents().find('body, html').css('padding','0px');
-        // $('div iframe').contents().find('body, html').css('margin','0px');
-        // $('div iframe').contents().find('body, html').css('overflow','hidden');
-        // $('iframe').css('overflow','hidden');
-        // $('iframe').css('margin','0px');
-        // $('iframe').css('padding','0px');
-   
-        // $('div iframe').css('width','300px');
-        // $('div iframe').css('height','100%');
-        // $('div iframe').css('margin','0');
-        // $('div iframe').css('padding','0');
-        // $('div iframe').css('opacity','0.8');
-        // $('div iframe').css('display','block');
-        // $('.dash_iframe').contents().find('html').css("margin","0");
-        // $('.dash_iframe').contents().find('html').css("padding","0");
-        // $('.dash_iframe').css('padding','0');
-        // $('.dash_iframe').css('margin','0');
-        // $('.dash_iframe').attr('style', 'margin-bottom: 0 !important');
-        // $('.dash_iframe').contents().find('html').attr('style', 'margin: 0 !important');
-        // $('.dash_iframe').contents().find('html').attr('style', 'padding: 0 !important;');
-        // $('.contabilidad\\/estadisticas').attr('style', 'margin: 0 !important; height:5000px;');
-        // $('.contabilidad\\/estadisticas').attr('style', 'padding: 0 !important');
-        
-        // $('.dash_iframe').css('display','block');
-        // $('.dash_iframe').css('align','right');
-        // $('iframe').css('margin','0 0 0 0 !important');
-        // $('iframe').css('float','left');
-        // $('.tickets\\/buscar').css('height',buscarheight);
-        // $('.tickets\\/crear').css('height',crearheight);
-        // $('.dash_iframe').css('height', height);
-        // console.log(contheight);
-        // console.log(buscarheight);
-        // console.log(crearheight);
     });
     /*-----------------------------------------------------------------------------------------------------------------
                                                 Parte para el datepicker de la búsqueda
