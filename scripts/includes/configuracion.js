@@ -1,6 +1,7 @@
 $(document).ready(function(){
     // Manejador de la tabla, se le pone que al hacer lick en una fila llame al modal y guarda los datos de la tabla
     // en data.
+    /*Configuracion -> Hotspot*/
     table = $('#table-search.hotspottable').DataTable({
         //"iDisplayLength": 25, //Hay un error cuando se pasa de página que no me capta el evento onclick. Checkear eventos en la pagina del datatable
         "preDrawCallback" : function() {
@@ -34,12 +35,12 @@ $(document).ready(function(){
                 }
             ]
     });
-    
+    /*Configuracion -> Hotspot, Usuarios, Clientes, Clientes */
     table = $('#table-search:not(.hotspottable, .permisostable, .clientestable, .localestable)').DataTable({
         //"iDisplayLength": 25, //Hay un error cuando se pasa de página que no me capta el evento onclick. Checkear eventos en la pagina del datatable
         "preDrawCallback" : function() {
             var api = this.api();
-            $('#table-search:not(.permisostable, .menutable) tbody td').click(function() {
+            $('#table-search:not(.permisostable, .menutable, .dashtable) tbody td').click(function() {
                 if (!$(this).hasClass('sorting_1')) {
                     row = api.row($(this).parent());
                     data = api.row($(this).parent()).data();
@@ -71,7 +72,7 @@ $(document).ready(function(){
         },
         "responsive" : true
     });
-    
+    /*Configuracion -> Usuarios */
     var table1 = $('#table-permisos').DataTable({
         //"iDisplayLength": 25, //Hay un error cuando se pasa de página que no me capta el evento onclick. Checkear eventos en la pagina del datatable
         "preDrawCallback" : function() {
@@ -90,7 +91,7 @@ $(document).ready(function(){
         },
         "responsive" : true
     });
-    
+    /*Configuracion -> Usuarios */
     var table2 = $('#table-menu').DataTable({
         //"iDisplayLength": 25, //Hay un error cuando se pasa de página que no me capta el evento onclick. Checkear eventos en la pagina del datatable
         "preDrawCallback" : function() {
@@ -109,7 +110,7 @@ $(document).ready(function(){
         },
         "responsive" : true
     });
-    
+    /*Configuracion -> Clientes */
     table = $('#table-cliente').DataTable({
         //"iDisplayLength": 25, //Hay un error cuando se pasa de página que no me capta el evento onclick. Checkear eventos en la pagina del datatable
         "preDrawCallback" : function() {
@@ -127,7 +128,7 @@ $(document).ready(function(){
         },
         "responsive" : true
     });
-    
+    /*Configuracion -> Clientes */
     table1 = $('#table-local').DataTable({
         //"iDisplayLength": 25, //Hay un error cuando se pasa de página que no me capta el evento onclick. Checkear eventos en la pagina del datatable
         "preDrawCallback" : function() {
@@ -145,7 +146,7 @@ $(document).ready(function(){
         },
         "responsive" : true
     });
-    
+    /*Configuracion -> Clientes */
     $('#tabs a').click(function (e) {
       e.preventDefault()
       $(this).tab('show')
@@ -254,7 +255,7 @@ check-for-updates once\r\n\
             $('#modal_usuariopasssend').prop('checked', true);
             $('#passrefresh').click();
             $('#tabholder').addClass('disableed');
-            $('.modal:not("#modal_borrar") .btn-danger').addClass('displaynone');
+            $('.modal:not("#modal_borrar, #modal_borrar_dash") .btn-danger').addClass('displaynone');
         }
     });
     // Resetea los campos del formulario
@@ -299,7 +300,7 @@ check-for-updates once\r\n\
                 }
                 guardar_perfil(0);
             }
-            if ($('#modal_lote').length !== 0) { // Solo entra aqui si existe el modal_hotspot
+            if ($('#modal_lote').length !== 0) { // Solo entra aqui si existe el modal_lote
                 if ($('#modal_loteid').val() !== "") {
                     $('.modal-body [id^="modal_lote"]').each(function(elem) {
                         dataok.push($(this).val());
@@ -307,7 +308,7 @@ check-for-updates once\r\n\
                 }
                 guardar_lote(0);
             } 
-            if ($('#modal_usuario').length !== 0) { // Solo entra aqui si existe el modal_hotspot
+            if ($('#modal_usuario').length !== 0) { // Solo entra aqui si existe el modal_usuario
                 if ($('#modal_usuarioid').val() !== "") {
                     $('.modal-body [id^="modal_usuario"]').each(function(elem) {
                         if ($(this).attr('id') !== "modal_usuariopasssend") {
@@ -320,10 +321,15 @@ check-for-updates once\r\n\
                 }
                 guardar_usuario(0);
             }
-            if ($('#modal_menu').length !== 0) { // Solo entra aqui si existe el modal_hotspot
+            if ($('#modal_menu').length !== 0) { // Solo entra aqui si existe el modal_menu
                 guardar_menu(0, $('#modal_menuname').val());
             }
-            if ($('#modal_cliente').length !== 0) { // Solo entra aqui si existe el modal_hotspot
+            if ($('#modal_dash').length !== 0) { // Solo entra aqui si existe el modal_menu
+                guardar_dash(0, $('#modal_dashname').val());
+            }
+           
+             
+            if ($('#modal_cliente').length !== 0) { // Solo entra aqui si existe el modal_cliente
                 if ($('#modal_clienteid').val() !== "") {
                     $('.modal-body [id^="modal_cliente"]').each(function(elem) {
                         dataok.push($(this).val());
@@ -331,7 +337,7 @@ check-for-updates once\r\n\
                 }
                 guardar_cliente(0);
             }
-            if ($('#modal_local').length !== 0) { // Solo entra aqui si existe el modal_hotspot
+            if ($('#modal_local').length !== 0) { // Solo entra aqui si existe el modal_local
                 if ($('#modal_localid').val() !== "") {
                     $('.modal-body [id^="modal_local"]').each(function(elem) {
                         dataok.push($(this).val());
@@ -360,12 +366,7 @@ check-for-updates once\r\n\
                 if (($('#modal_usuarioid').val()!== "")) {
                     //Si estamos creando no hay id asignado y no se llama a la función
                     guardar_usuario(1);
-                }
-            } else if ($('#modal_borrar').length !== 0) {
-                if (($('#modal_menunameborrar').val()!== "")) {
-                    //Si estamos creando no hay id asignado y no se llama a la función
-                    guardar_menu(1, $('#modal_menunameborrar').val());
-                }
+                }  
             } else if ($('#modal_cliente').length !== 0) {
                 if (($('#modal_clienteid').val()!== "")) {
                     //Si estamos creando no hay id asignado y no se llama a la función
@@ -375,6 +376,17 @@ check-for-updates once\r\n\
                 if (($('#modal_local').val()!== "")) {
                     //Si estamos creando no hay id asignado y no se llama a la función
                     guardar_local(1);
+                }
+            } else if ($('#modal_borrar').length !== 0) {
+                if (($('#modal_menunameborrar').val()!== "")) {
+                    console.log("olrai");
+                    //Si estamos creando no hay id asignado y no se llama a la función
+                    guardar_menu(1, $('#modal_menunameborrar').val());
+                }
+            } else if ($('#modal_borrar_dash').length !== 0) {
+                if (($('#modal_dashnameborrar').val()!== "")) {
+                    //Si estamos creando no hay id asignado y no se llama a la función
+                    guardar_dash(1, $('#modal_dashnameborrar').val());
                 }
             }
         } else if ($(this).text() == ' Mkt Code') {
@@ -471,6 +483,24 @@ check-for-updates once\r\n\
             url: '/edita_menus',
             type: 'POST',
             data: {user: $(this).data('id'), menu: $(this).data('menu'), action: $(this).prop('checked') ? 'add' : 'del' }
+        })
+        .done(function(){
+            if ($(this).prop('checked')) {
+                mensajealert('ok');
+            } else {
+                mensajealert('delete');
+            }
+        }).fail(function(){
+            mensajealert('error');
+        });
+    });
+    /* CHECK PARA ACTIVAR/DESACTIVAR MENUS DE DASHBOARD*/
+     $(document).on("change", ".check_dash" ,function() {
+        console.log('menu clicked');
+        $.ajax({
+            url: '/edita_dash',
+            type: 'POST',
+            data: {user: $(this).data('id'), dash: $(this).data('dash'), action: $(this).prop('checked') ? 'add' : 'del' }
         })
         .done(function(){
             if ($(this).prop('checked')) {
@@ -646,6 +676,16 @@ function guardar_menu(action, value) {
         url: '/quitar_menu',
         type: 'POST',
         data: {menu: 'menu_'+ value, action: action}
+    }).done(function(){
+        window.location = document.URL;
+    });
+}
+// GUARDAR MENU, CAMBIADO PARA QUE GUARDE dash_{entrada}
+function guardar_dash(action, value) {
+    $.ajax({
+        url: '/quitar_dash',
+        type: 'POST',
+        data: {dash: 'dash_'+ value, action: action}
     }).done(function(){
         window.location = document.URL;
     });
