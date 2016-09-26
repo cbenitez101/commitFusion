@@ -255,7 +255,7 @@ if (isLoggedIn()) {
                 die();
             }
         case 'dashboard':
-            // if ($_SESSION['cliente'] == 'admin') {
+            if ($_SESSION['cliente'] == 'admin') {
                 // Se busca en la tabla users la columna que comienza por dash_ la cual determina si se dispone de ese menu en inicio o no,
                 // construyendose la tabla que se va a mostrar en el menu
                 $result = $database->query("SELECT * FROM users");
@@ -279,10 +279,10 @@ if (isLoggedIn()) {
                     $smarty->assign('menus', array_slice(array_keys($menu[0]), 3));
                 }
                 break;
-            // } else {
-            //     header('Location: '.DOMAIN);
-            //     die();
-            // }
+            } else {
+                header('Location: '.DOMAIN);
+                die();
+            }
         default:
             header('Location: '.DOMAIN);
             die();

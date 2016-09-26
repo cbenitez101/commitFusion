@@ -1,6 +1,5 @@
 <?php
     if (isLoggedIn()) {
-        include_header_file('inicio');
         load_modul('bootstrap-datepicker');
         $result = $database->query("SELECT * FROM users WHERE nombre='".$_SESSION['user']."'");
         if ($result->num_rows > 0) {
@@ -13,8 +12,6 @@
             }
         }
         $smarty->assign('menu', $menu);
-        
-        
         if (isset($template_data[2])) {
             $result = $radius->query("SELECT * FROM radacct WHERE username = '$template_data[2]' ORDER BY acctstarttime ASC");
             $out = array();
@@ -62,7 +59,6 @@
                     }
                 }  
             }
-            //dump($out, true);
             $smarty->assign('estado', (($cancelado)?"CANCELADO":$estado));
             $smarty->assign('out', $out);
             } else {
@@ -73,7 +69,6 @@
 		        }
                 $smarty->assign('busqueda', true);
             }
-        
     } else {
         header('Location: '.DOMAIN);
     }
