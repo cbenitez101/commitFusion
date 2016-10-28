@@ -5,7 +5,7 @@ $(document).ready(function(){
         "preDrawCallback" : function() {
                 var api = this.api();
                 if ($('#modal_dispositivo').length !== 0) { // Solo entra aqui si existe el modal_dispositivo
-                    $('#table-search tbody td').click(function() {
+                    $('#table-search:not(.server) tbody td').click(function() {
                         if (!$(this).hasClass('sorting_1')) {
                             row = api.row($(this).parent());
                             data = api.row($(this).parent()).data();
@@ -61,6 +61,9 @@ $(document).ready(function(){
             window.open('/informepdf?id='+data[0]+'&modo='+$('#historico input[type="radio"]:checked').val(), '_blank','menubar=no,status=no,titlebar=no,toolbar=no,scrollbars=yes,location=no');
         }
     });
+    $('.checkhabilitado').change(function(){
+        habilitar_dispositivo($(this).attr('id').split('-').pop(), ($(this).prop('checked'))? 1 : 0);
+    });
 });
 var table;
 var data;
@@ -92,6 +95,19 @@ function guardar_dispositivo(action) {
         } else {
             row.remove().draw();
             mensajealert('delete');
+        }
+    });
+}
+function habilitar_dispositivo(id, valor) {
+    $.ajax({
+        url: '/habilitar_dispositivo',
+        type: 'POST',
+        data: {id: id, estado: valor}
+    }).done(function(){
+        if (valor == 0) {
+            mensajealert('delete');
+        } else {
+            mensajealert('ok');
         }
     });
 }

@@ -818,6 +818,25 @@ function external_actualiza_dispositivos() {
     die();
 }
 
+function external_habilitar_dispositivo() {
+    if (!empty($_POST['id']) && isset($_POST['estado'])) {
+        global $database;
+        if ($database->query("UPDATE `dispositivos` SET `habilitado`=".$_POST['estado']." WHERE `id`=".$_POST['id'])) die();
+    }
+}
+
+function external_standalone() {
+    global $database;
+    $result = $database->query("SELECT syslog.local, syslog.dispositivo, syslog.fecha, syslog.ip FROM syslog LEFT JOIN dispositivos ON dispositivos.descripcion = syslog.dispositivo WHERE (dispositivos.habilitado = 1 OR syslog.dispositivo = 'hotspot') AND syslog.fecha < '".date("Y-m-d H:i:s", strtotime("-30 min"))."'  GROUP BY  syslog.dispositivo");
+    $out = array();
+    if ($result->num_rows > 0) while ($aux = $result->fetch_assoc()) $out[] = $aux;
+    $echo = '<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta http-equiv="refresh" content="900"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content=""><meta name="author" content="Servibyte SCP"><title>Servibyte Platform</title><link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"><!-- MetisMenu CSS --><link href="/scripts/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet"><!-- Custom CSS --><link href="/scripts/dist/css/sb-admin-2.css" rel="stylesheet"><!-- Custom Fonts --><link href="/scripts/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"><!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries --><!-- WARNING: Respond.js does not work if you view the page via file:// --><!--[if lt IE 9]><script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script><script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script><![endif]--><link rel="stylesheet" type="text/css" media="all" href="http://sbyte-rub3ncillo.c9.io/scripts/default.css"/><link rel="stylesheet" type="text/css" media="all" href="http://sbyte-rub3ncillo.c9.io/scripts/datatable/zzz.responsive.dataTables.min.css"/><link rel="stylesheet" type="text/css" media="all" href="http://sbyte-rub3ncillo.c9.io/scripts/datatable/jquery.dataTables.min.css"/><link rel="stylesheet" type="text/css" media="all" href="http://sbyte-rub3ncillo.c9.io/scripts/includes/mantenimiento.css"/><script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script><script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script><!-- Metis Menu Plugin JavaScript --><script src="/scripts/bower_components/metisMenu/dist/metisMenu.min.js"></script><!-- Custom Theme JavaScript --><script src="/scripts/dist/js/sb-admin-2.js"></script><script type="text/javascript" src="http://sbyte-rub3ncillo.c9.io/scripts/datatable/jquery.dataTables.min.js"></script><script type="text/javascript" src="http://sbyte-rub3ncillo.c9.io/scripts/datatable/zzz.dataTables.responsive.min.js"></script><script type="text/javascript" src="http://sbyte-rub3ncillo.c9.io/scripts/default.js"></script><script type="text/javascript" src="http://sbyte-rub3ncillo.c9.io/scripts/includes/mantenimiento.js"></script></head><body><h1 class="page-header align_center"><img src="/images/logos/admin.png"></h1><div class="dataTable_wrapper row"><div class="col-md-12"><table border="0" class="tabledit standalone server hover" id="table-search" width="100%"><thead><tr><th>local</th><th>dispositivo</th><th>fecha</th><th>ip</th><th>notas</th></tr></thead><tbody>';
+foreach ($out as $value) $echo .= "<tr><td>".$value['local']."</td><td>".$value['dispositivo']."</td><td>".$value['fecha']."</td><td>".$value['ip']."</td><td>".$value['notas']."</td></tr>";
+
+echo $echo.'</tbody></table></div></div></div></div></body></html>';
+die();
+}
+
 function external_script_hotspot() {
     if (strstr($_SERVER['HTTP_USER_AGENT'], 'Mikrotik') && (isset($_GET['id_hotspot'])) && (isset($_GET['hotspot_serial']))) {
         global $database;
