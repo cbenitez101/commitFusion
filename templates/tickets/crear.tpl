@@ -1,4 +1,3 @@
-
 <div class="row">
 	<div class="col-lg-12">
 		<h1 class="page-header">Tickets</h1>
@@ -33,7 +32,7 @@
 							<div class="ticket col-md-2 col-xs-4" {foreach item=data key=key from=$item}{if ($key != 'duraciontexto')} data-{$key}="{$data}"{/if}{/foreach}>
 								<div class="row">
 									<div class="col-md-12">
-										<button type="button" class="btn btn-success btn-circle btn-xl" data-toggle="modal" data-target=".modal">
+										<button type="button" class="btn btn-success btn-circle btn-xl prueba" data-toggle="modal" data-target=".modal">
 											<i class="fa fa-ticket"></i>
 										</button>
 									</div>

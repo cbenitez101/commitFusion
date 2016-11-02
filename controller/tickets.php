@@ -411,7 +411,6 @@ if (isLoggedIn()) {
                         }
                     }  
                 }
-                //dump($out, true);
                 $smarty->assign('estado', (($cancelado)?"CANCELADO":$estado));
                 $smarty->assign('out', $out);
             } else {

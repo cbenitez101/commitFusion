@@ -91,7 +91,8 @@ $(document).ready(function(){
             plotBackgroundColor: null,
             plotBorderWidth: null,
             plotShadow: true,
-            type: 'pie'
+            type: 'pie',
+            
         },
         title: {
             text: 'Venta de tickets'
@@ -225,6 +226,7 @@ $(document).ready(function(){
             threshold: null
         }]
     });
+
      /*-----------------------------------------------------------------------------------------------------------------
                                                 Parte para el datepicker de la búsqueda
      ----------------------------------------------------------------------------------------------------------------*/
@@ -242,8 +244,10 @@ $(document).ready(function(){
             //  Calculo de la fecha máxima para sacar ticket
             var newMaxDate = new Date(e.date);
             newMaxDate.setMonth(e.date.getMonth() + 1);
+             var today = new Date();
+            // Ponemos la fecha máxima seleccionable. Si el mes sobrepasa el dia actual, se establece este mismo como limite
+            if(newMaxDate > today) newMaxDate = today;
             $('#fecha_fin').datepicker("setEndDate", newMaxDate);
-            
             //  En caso de que la fecha fin este vacia, se le emplaza la fecha actual seleccionada en inicio
             //  y se establece la fecha maxima seleccionable
             if($('#fecha_fin').val() == ''){
@@ -252,7 +256,6 @@ $(document).ready(function(){
                 $('#fecha_fin').datepicker('show');
             }
             $('#fecha_fin').datepicker("setStartDate", $('#fecha_inicio').val());
-        
     });
   
     var checkout = $('#fecha_fin').datepicker({

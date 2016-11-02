@@ -1,6 +1,6 @@
 function actualizar_permiso (usuario, cliente, local, accion) {
     $.ajax({
-                url: "http://servibyte.net/actualiza_permiso",
+                url: "/actualiza_permiso",
                 type: "POST",
                 data: {
                     usuario: usuario,

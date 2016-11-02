@@ -54,6 +54,7 @@ if (isLoggedIn()) {
                     $server = $template_data[2];
                 }else{
                     // Si no tenemos /hotspot en la url, se muestra formulario para selección del hotspot
+                    /* AÑADIR ID A LA QUERY SIGUIENTE. ¿DE DONDE SACA Id_hotspot?? */
                     $result = $database->query("SELECT ServerName FROM hotspots");
                     if ($result->num_rows > 0) {
                         $out = array();
@@ -68,7 +69,8 @@ if (isLoggedIn()) {
             // Querys para estadisticas
             if (isset($server)){
                 // Query para obtener tickets vendidos
-                $result = $database->query("SELECT Descripcion, ventashotspot.Precio,  COUNT(*) as Cuenta FROM `ventashotspot` INNER JOIN lotes ON lotes.id = ventashotspot.Id_Lote INNER JOIN perfiles ON perfiles.id = lotes.Id_perfil WHERE FechaVenta >= '2016-".date('m')."-01 00:00:00'AND perfiles.ServerName = '$server' GROUP BY ventashotspot.Precio");
+                // Cambio en query '2016' por date('Y')
+                $result = $database->query("SELECT Descripcion, ventashotspot.Precio,  COUNT(*) as Cuenta FROM `ventashotspot` INNER JOIN lotes ON lotes.id = ventashotspot.Id_Lote INNER JOIN perfiles ON perfiles.id = lotes.Id_perfil WHERE FechaVenta >= '".date('Y')."-".date('m')."-01 00:00:00'AND perfiles.ServerName = '$server' GROUP BY ventashotspot.Precio");
                 if ($result->num_rows > 0) {
                     $out = array();
                     $prueba = array();
@@ -89,21 +91,23 @@ if (isLoggedIn()) {
                     $fechas = strtotime ('+1 hour',$fechas);
                 }
                 //Query donde se obtienen usuarios, MAC de los dispositivos y conexiones realizadas
-                $result = $radius->query("SELECT username,callingstationid,acctsessiontime, acctstarttime, acctstoptime,acctinputoctets,acctoutputoctets FROM radacct WHERE username LIKE '$server\_%' AND acctstarttime >= '".date('Y')."-".date('m')."-01 00:00:00'");
+                $result = $radius->query("SELECT username,callingstationid,acctsessiontime, acctstarttime, acctstoptime,acctinputoctets,acctoutputoctets FROM radacct WHERE username LIKE '$server\_%' AND (acctstarttime >= '".date('Y')."-".date('m')."-01 00:00:00' OR (acctstarttime < '".date('Y')."-".date('m')."-01 00:00:00' AND acctstoptime IS NULL))");
                 if ($result->num_rows > 0) {
                     $mac = array();
                     $tiempototal=0;
                     $bytes_descarga = 0;
                     $bytes_subida = 0;
-                    //$vendor = 0;
-                    while ($aux = $result->fetch_assoc()){ 
+                    while ($aux = $result->fetch_assoc()){
+                        // Si tenemos una franja de un mes anterior, pero accstoptime es NULL la contaremos en la primera franja del mes actual
+                        if(strtotime($aux['acctstarttime']) < strtotime(date('Y').'-'.date('m').'-01 00:00:00')) $aux['acctstarttime'] = date('Y').'-'.date('m').'-01 00:00:00';
                         $array_resultado[$aux['username']][$aux['callingstationid']][] = array('duracion'=> $aux['acctsessiontime'], 'inicio'=>$aux['acctstarttime'], 'fin'=>$aux['acctstoptime']);
                         $tiempototal += $aux['acctsessiontime'];
+                        
                         $iter = date('Y-m-d H:00:00',strtotime($aux['acctstarttime']));
                         $lim = ((empty($aux['acctstoptime']))?date('Y-m-d H:00:00'):date('Y-m-d H:00:00',strtotime($aux['acctstoptime'])));
                         while (strtotime($iter) <= strtotime($lim)) {
-                        	$franjas[$iter]++;
-                        	$iter = date('Y-m-d H:00:00',strtotime('+1 hour', strtotime($iter)));
+                                $franjas[$iter]++;
+                        	    $iter = date('Y-m-d H:00:00',strtotime('+1 hour', strtotime($iter)));
                         }
                         $bytes_descarga += $aux['acctinputoctets'];
                         $bytes_subida += $aux['acctoutputoctets'];
@@ -117,7 +121,6 @@ if (isLoggedIn()) {
                     $smarty->assign("media_sesion", secondsToTime(round($tiempototal/$result->num_rows, 0)));
                     $smarty->assign("bytes_descarga", bytes_to_size($bytes_descarga));
                     $smarty->assign("bytes_subida", bytes_to_size($bytes_subida));
-                   
                 }
                 /*METODO 2: Se utiliza query para simplificar el proceso de conteo de conexiones*/
                 $result = $radius->query("SELECT SUBSTRING( callingstationid, 1, 8 ) AS principiomac, COUNT( SUBSTRING( callingstationid, 1, 8 ) ) AS countF FROM radacct WHERE username LIKE  '$server\_%' AND acctstarttime >=  '".date('Y')."-".date('m')."-01 00:00:00' GROUP BY SUBSTRING( callingstationid, 1, 8 ) ");
@@ -163,4 +166,3 @@ if (isLoggedIn()) {
 } else {
     header('Location: '.DOMAIN);
 }
-

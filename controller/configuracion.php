@@ -1,7 +1,8 @@
 <?php
 if (isLoggedIn()) {
     load_modul('datatable');
-    load_modul('bsdatepicker');
+    // load_modul('bsdatepicker');
+    load_modul('bootstrap-datepicker');
     $smarty->assign('page', $template_data[1]);
     switch ($template_data[1]) {
         case 'usuarios':
@@ -248,6 +249,35 @@ if (isLoggedIn()) {
                 $smarty->assign('local', $locales);
                 $smarty->assign('cols', implode(', ', array_keys($out[0])));
                 $smarty->assign('lotes', $menu);
+                break;
+            } else {
+                header('Location: '.DOMAIN);
+                die();
+            }
+        case 'dashboard':
+            if ($_SESSION['cliente'] == 'admin') {
+                // Se busca en la tabla users la columna que comienza por dash_ la cual determina si se dispone de ese menu en inicio o no,
+                // construyendose la tabla que se va a mostrar en el menu
+                $result = $database->query("SELECT * FROM users");
+                $out = array();
+                while ($aux = $result->fetch_assoc()) $out[] = $aux;
+                $menu = array();
+                foreach ($out as $value) {
+                    $aux1 = array();
+                    foreach ($value as $key => $item) if ((substr($key, 0, 5) == 'dash_') || ($key == 'nombre') || ($key == 'id') || ($key == 'email')) $aux1[ucwords((substr($key, 0, 5) == 'dash_')?  substr($key, 5):$key)] = $item;
+                    $menu[]= $aux1;
+                }
+                if (count($menu)>0) {
+                    $cols = implode(', ', array_keys($menu[0]));
+                    foreach ($menu as $value) {
+                        foreach ($value as $key => $item) {
+                            $table[]=  ($key != 'Id' && $key != 'Nombre' && $key != 'Email') ? '<input type="checkbox" name="check" class="check_dash" data-dash="'.$key.'" data-id="'.$value['Id'].'" value="ON" '.($item == 1 ?'checked="checked"':'').'/>' : $item; //Aqui se pone el checkbox en vez del item
+                        }
+                    }
+                    $smarty->assign('cols', $cols);
+                    $smarty->assign('users', $table);
+                    $smarty->assign('menus', array_slice(array_keys($menu[0]), 3));
+                }
                 break;
             } else {
                 header('Location: '.DOMAIN);

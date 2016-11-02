@@ -1,14 +1,17 @@
 $(document).ready(function(){
     $('.ticket-crear .btnPrint').printPage({
         attr: 'data-url',
-        message:'Se esta imprimiendo el ticket.'
+        message:'Se esta imprimiendo el ticket.',
+        // Se elimina el padding que introduce printPage a la derecha del body
+        callback: function(){
+            $('body').css("padding-right", "");
+        }
     });
     $('.ticket').on('click', function() {
         ticket = $(this).data();
         // creaticket.dialog("open");
     });
     $('.modal_creaticket').click(function(){
-        console.log("Identificando");
         creatickets();
     });
     // Manejador de la tabla, se le pone que al hacer lick en una fila llame al modal y guarda los datos de la tabla
@@ -131,11 +134,13 @@ $(document).ready(function(){
             window.location = "/tickets/buscar/"+data[0]+'_'+data[data.length-1];
         }
     });
+    
+   
 
     /*-----------------------------------------------------------------------------------------------------------------
                                                 Parte para el datepicker de la búsqueda
      ----------------------------------------------------------------------------------------------------------------*/
-     var nowTemp = new Date();
+    var nowTemp = new Date();
     var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
    
     var checkin = $('#fecha_inicio').datepicker({
@@ -149,8 +154,10 @@ $(document).ready(function(){
             //  Calculo de la fecha máxima para sacar ticket
             var newMaxDate = new Date(e.date);
             newMaxDate.setMonth(e.date.getMonth() + 1);
+            var today = new Date();
+            // Ponemos la fecha máxima seleccionable. Si el mes sobrepasa el dia actual, se establece este mismo como limite
+            if(newMaxDate > today) newMaxDate = today;
             $('#fecha_fin').datepicker("setEndDate", newMaxDate);
-            
             //  En caso de que la fecha fin este vacia, se le emplaza la fecha actual seleccionada en inicio
             //  y se establece la fecha maxima seleccionable
             if($('#fecha_fin').val() == ''){
@@ -212,6 +219,7 @@ $(document).ready(function(){
     $('#imprimirticket').on('click', function(){
         $('.btnPrint').click();
         $('.modal-backdrop').hide();
+       
     });
 
     var bloc;
@@ -219,6 +227,8 @@ $(document).ready(function(){
         bloc = $(this).parent();
         $('#modalbloc').modal();
     });
+    
+    
 });
 var table;
 var data;

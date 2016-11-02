@@ -19,46 +19,22 @@
 		</div>
 	</div>
 </div>
-
-
-
-{*<div class="row">
-	<div class="col-lg-12">
-		<h1 class="page-header">Dashboard</h1>
-	</div>
-	<!-- /.col-lg-12 -->
-</div>
-<div class="row">
-	<div class="col-lg-6">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				Usuarios conectados
-			</div>
-			<!-- /.panel-heading -->
-			<div class="panel-body">
-				<div class="dataTable_wrapper row">
-					<div class="col-md-12">
-						{html_table cols=$cols  table_attr='border="0" class="tabledit conectadostable hover"
-						id="table-search" width="100%"' loop=$users}
+{if isset($menu)}
+	<div class="row">
+		{foreach item=item from=$menu}
+			{if $item !='tickets/buscar'}
+				<div class="col-md-6">
+					<div class="panel panel-default">
+						<iframe class="dash_iframe {$item}" id="{$item}" src="/{$item}" frameborder="0" scrolling="no" width="100%"></iframe>
 					</div>
 				</div>
-			</div>
-		</div>
-	</div>
-	<div class="col-lg-6">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				Otra cosa
-			</div>
-			<!-- /.panel-heading -->
-			<div class="panel-body">
-				<div class="dataTable_wrapper row">
-					<div class="col-md-12">
-						{html_table cols=$cols  table_attr='border="0" class="tabledit gastotable hover"
-						id="table-search" width="100%"' loop=$gastos}
+			{else}
+				<div class="col-md-6">
+					<div class="panel panel-default {$item}">
+						{include file="$item.tpl"}
 					</div>
 				</div>
-			</div>
-		</div>
+			{/if}	
+		{/foreach}
 	</div>
-</div>*}
+{/if}
