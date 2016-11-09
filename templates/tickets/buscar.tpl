@@ -130,7 +130,7 @@
 							{if $estado == 'VALIDO'}
 								<input type="button" value="Anular" id="anularticket" class="btn btn-warning"/>
 								<input type="button" value="Imprimir" id="imprimirticket" class="btn btn-primary"/>
-							{elseif $smarty.session.cliente == 'admin'}
+							{elseif ($smarty.session.cliente == 'admin') && ($estado != 'CONSUMIDO')}
 								<input type="button" value="Desanular" id="desanularticket" class="btn btn-success"/>
 							{/if}
 							{if $smarty.session.cliente == 'admin'}
@@ -236,25 +236,13 @@
 											{intval($item['acctsessiontime'] / 86400)} Días {gmdate('H:i:s', $item['acctsessiontime'])}
 										</td>
 										<td>
-											{if $item['acctinputoctets'] > (1024*1024)}
-												{number_format((($item['acctinputoctets']/1024)/1024),0,',','.')}Mb
-											{else}
-												{number_format(($item['acctinputoctets']/1024),0,',','.')}Kb
-											{/if}
+											{bytes_to_size($item['acctinputoctets'])}
 										</td>
 										<td>
-											{if $item['acctoutputoctets'] > (1024*1024)}
-												{number_format((($item['acctoutputoctets']/1024)/1024),0,',','.')}Mb
-											{else}
-												{number_format(($item['acctoutputoctets']/1024),0,',','.')}Kb
-											{/if}
+											{bytes_to_size($item['acctoutputoctets'])}
 										</td>
 										<td>
-											{if ($item['acctoutputoctets']+$item['acctinputoctets']) > (1024*1024)}
-												{number_format(((($item['acctoutputoctets']+$item['acctinputoctets'])/1024)/1024),0,',','.')}Mb
-											{else}
-												{number_format((($item['acctoutputoctets']+$item['acctinputoctets'])/1024),0,',','.')}Kb
-											{/if}
+											{bytes_to_size($item['acctoutputoctets']+$item['acctinputoctets'])}
 										</td>
 									</tr>
 								{/foreach}
@@ -272,27 +260,15 @@
 							</div>
 							<div class="col-md-2">
 								<h4>Subida</h4>
-								{if $out['suma']['in'] > (1024*1024)}
-									{number_format((($out['suma']['in']/1024)/1024),0,',','.')}Mb
-								{else}
-									{number_format(($out['suma']['in']/1024),0,',','.')}Kb
-								{/if}
+								{bytes_to_size($out['suma']['in'])}
 							</div>
 							<div class="col-md-2">
 								<h4>Descarga</h4>
-								{if $out['suma']['out'] > (1024*1024)}
-									{number_format((($out['suma']['out']/1024)/1024),0,',','.')}Mb
-								{else}
-									{number_format(($out['suma']['out']/1024),0,',','.')}Kb
-								{/if}
+									{bytes_to_size($out['suma']['out'])}
 							</div>
 							<div class="col-md-2">
 								<h4>Total</h4>
-								{if ($out['suma']['out']+$out['suma']['in']) > (1024*1024)}
-									{number_format(((($out['suma']['out']+$out['suma']['in'])/1024)/1024),0,',','.')}Mb
-								{else}
-									{number_format((($out['suma']['out']+$out['suma']['in'])/1024),0,',','.')}Kb
-								{/if}
+								{bytes_to_size($out['suma']['out']+$out['suma']['in'])}
 							</div>
 						</div>
 					</div>

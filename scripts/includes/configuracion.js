@@ -162,7 +162,25 @@ $(document).ready(function(){
                 } else if (i == 0) {
                     $(this).val(data[i]);
                     if ((data[i] !== "") && (data[2] === "")) {
-                        $('#button-copy').attr('data-clipboard-text','/ip dns\r\n\
+//                         $('#button-copy').attr('data-clipboard-text','/ip dns\r\n\
+// print\r\n\
+// :if ( [get servers] = "" ) do={/ip dns set servers=8.8.8.8,8.8.4.4 allow-remote-requests=yes}\r\n\
+// /ip dhcp-client\r\n\
+// :if ([:len [find interface=ether2 ]] = 0 ) do={/ip dhcp-client add interface=ether2 disabled=no}\r\n\
+// :delay 1s;\r\n\
+// /\r\n\
+// /system package update\r\n\
+// check-for-updates once\r\n\
+// :delay 1s;\r\n\
+// :if ( [get status] = "New version is available") do={ install }\r\n\
+// :delay 5s;\r\n\
+// /system script add name=start policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive source="/tool fetch url=\\"http://servibyte.net/script_hotspot\\?id_hotspot=' + data[i] + '&hotspot_serial=$[:put [/system routerboard get serial-number]]\\" dst-path=flash/hotspot.rsc \\r\\n:delay 3s\\r\\n/system reset-configuration no-defaults=yes skip-backup=yes run-after-reset=flash/hotspot.rsc"\r\n\
+// /system script run start\r\n\
+// ');
+                        $('#button-copy').show();
+                        clipboard = new Clipboard('#button-copy', {
+                            text: function(trigger) {
+                                return '/ip dns\r\n\
 print\r\n\
 :if ( [get servers] = "" ) do={/ip dns set servers=8.8.8.8,8.8.4.4 allow-remote-requests=yes}\r\n\
 /ip dhcp-client\r\n\
@@ -176,9 +194,22 @@ check-for-updates once\r\n\
 :delay 5s;\r\n\
 /system script add name=start policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive source="/tool fetch url=\\"http://servibyte.net/script_hotspot\\?id_hotspot=' + data[i] + '&hotspot_serial=$[:put [/system routerboard get serial-number]]\\" dst-path=flash/hotspot.rsc \\r\\n:delay 3s\\r\\n/system reset-configuration no-defaults=yes skip-backup=yes run-after-reset=flash/hotspot.rsc"\r\n\
 /system script run start\r\n\
-');
-                        $('#button-copy').show();
-                        var clipboard = new Clipboard('#button-copy');
+';
+                            }
+                        });
+                        clipboard.on('success', function(e) {
+                            console.info('Action:', e.action);
+                            console.info('Text:', e.text);
+                            console.info('Trigger:', e.trigger);
+                        
+                            e.clearSelection();
+                        });
+                        
+                        clipboard.on('error', function(e) {
+                            console.error('Action:', e.action);
+                            console.error('Trigger:', e.trigger);
+                        });
+
                     }
                 } else if (i == 5) {
                     switch (data[i]) {
@@ -273,7 +304,7 @@ check-for-updates once\r\n\
         $('.btn-danger').removeClass('displaynone');
         $('#clienteimagen').html('');
         $('#localimagen').html('');
-        $('#button-copy').attr('data-clipboard-text',"");
+        //$('#button-copy').attr('data-clipboard-text',"");
         $("#button-copy").hide();
     });
     // Acciones de los botones
@@ -539,6 +570,7 @@ var dataok = [];
 var checkout;
 var api1;
 var files;
+var clipboard;
 function guardar_hotspot(action) {
     var guardar = [];
     $('input[id^="modal_server"]').each(function(){
