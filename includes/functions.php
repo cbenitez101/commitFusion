@@ -871,12 +871,11 @@ function external_script_hotspot() {
             header("Pragma: no-cache");
             header("Expires: 0");
             echo '/user set admin name=administrador password="sb_A54\$x"
-/ip address add address=192.168.1.5/24 interface=ether1
+/ip dhcp-client add default-route-distance=0 dhcp-options=hostname,clientid disabled=no interface=ether1
 /ip dns
 print
 :if ( [get servers] = "" ) do={/ip dns set servers=8.8.8.8,8.8.4.4 allow-remote-requests=yes}
 /
-/ip route add dst-address=0.0.0.0/0 gateway=192.168.1.1
 /ip dhcp-client
 :if ([:len [find interface=ether2 ]] = 0 ) do={/ip dhcp-client add interface=ether2 disabled=no}
 /
@@ -920,12 +919,12 @@ print
 /ip dns static add name=hotspot.wifipremium.com address=172.21.0.1 ttl=5m
 /ip hotspot profile add dns-name=hotspot.wifipremium.com hotspot-address=172.21.0.1 name=hsprof1
 /ip dhcp-server add address-pool=hs-pool-14 authoritative=yes bootp-support=static disabled=no interface=bridge_hotspot lease-time=24h name=dhcp1
-/ip hotspot user add name='.$hotspot['ServerName'].'_SBYTE password=sbboscosos
+/ip hotspot user add name='.$hotspot['ServerName'].'_SBBOSCOSOS password=SBBOSCOSOS
 /ip firewall filter add action=passthrough chain=unused-hs-chain comment="place hotspot rules here" disabled=yes
 /ip firewall nat add action=passthrough chain=unused-hs-chain comment= "place hotspot rules here" disabled=yes
 :delay 1s;
 /ip firewall nat add action=masquerade chain=srcnat comment= "masquerade hotspot network" src-address=172.21.0.0/22
-/ip hotspot set hotspot1 name='.$hotspot['ServerName'].' address-pool=none profile=hsprof1
+/ip hotspot set hotspot1 name='.$hotspot['ServerName'].' address-pool=none profile=hsprof1 idle-timeout=none
 /ip hotspot user profile add name=tecnico shared-users=5
 /ip hotspot user profile set default shared-users=1 rate-limit=380k/2M idle-timeout=none keepalive-timeout=20m status-autorefresh=1m mac-cookie-timeout=7d session-timeout=0s
 /ip hotspot user set '.$hotspot['ServerName'].'_SBYTE profile=tecnico
@@ -1035,7 +1034,7 @@ print
 /system script add name=testinternet owner=administrador policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive source=":global internetactivo;\r\    \n\r\    \nif (\$internetactivo!=0 && \$internetactivo!=1) do={\r\    \n    :set internetactivo 0;\r\    \n        :log error \"Comienza Test Internet\";\r\    \n        /file print file=\$myfile\r\    \n        /file set \$file contents=\"interneterror.html\";\r\    \n        /ip dns static enable [find comment~\"Capturador\"] \r\    \n\r\    \n}\r\    \n\r\    \n:local myfile \"hotspot/testinternet\";\r\    \n:local file (\$myfile);\r\    \n\r\    \n:local pingresultado [/ping 4.2.2.4 count=5];\r\    \n\r\    \n:if (\$pingresultado>0) do={\r\    \n    :if (\$internetactivo=0) do={\r\    \n        :log error \"Internet funcionando\";\r\    \n        :set internetactivo 1;\r\    \n        /file print file=\$myfile\r\    \n        /file set \$file contents=\"https://wifipremium.com/login.php\";\r\    \n        /ip dns static disable [find comment~\"Capturador\"] \r\    \n    }\r\    \n}\r\    \n\r\    \n:if (\$pingresultado=0) do={\r\    \n    :if (\$internetactivo=1) do={\r\    \n        :log error \"Internet caido\";\r\    \n        :set internetactivo 0;\r\    \n        /file print file=\$myfile\r\    \n        /file set \$file contents=\"interneterror.html\";\r\    \n        /ip dns static enable [find comment~\"Capturador\"] \r\    \n    }\r\    \n}"
 /system scheduler add name=testinternet interval=5s on-event=testinternet
 /ip dns static add name=exit.com address=172.21.0.1 ttl=1d
-/ip dns static add name=".*\\\..*" address=172.21.0.1 ttl=1d disabled=yes comment="Capturador DNS cuando no hay internet"
+/ip dns static add name="" regexp=".*\\\..*" address=172.21.0.1 ttl=1d disabled=yes comment="Capturador DNS cuando no hay internet"
 /system ntp client set enabled=yes primary-ntp=129.67.1.160 secondary-ntp=129.67.1.164
 /system clock set time-zone-name=Atlantic/Canary
 /interface pptp-client add connect-to=217.125.25.165 user='.$hotspot['ServerName'].' password="A54_sb\?8" profile=default-encryption disabled=no
