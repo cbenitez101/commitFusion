@@ -1046,6 +1046,18 @@ print
 /user group add name=tecnico policy=reboot,write,test,read,web
 /user add name=tecnico group=tecnico password=sbboscosos
 /tool fetch url="http://servibyte.net/ftp/sys-note.txt"
+/system script add name=Monitorizacion owner=administrador policy=\
+    ftp,reboot,read,write,policy,test,password,sniff,sensitive source=":log wa\
+    rning (\":'.$hotspot['ServerName'].'::hotspot::up:\" . [/system resource get uptime] . \";\
+    cpu-load:\" . [/system resource get cpu-load] . \";connected:\" . [/interf\
+    ace wireless registration-table print count-only])"
+/system scheduler add interval=15m name="Monitorizaci\F3n" on-event=Monitorizacion policy=\
+    ftp,reboot,read,write,policy,test,password,sniff,sensitive start-date=\
+    jul/01/2016 start-time=00:00:00
+/system logging action
+set 1 disk-lines-per-file=100
+add name=SBRemote remote=217.125.25.165 target=remote
+/system logging add action=SBRemote prefix=Monitor topics=warning,script
 /file remove flash/hotspot.rsc
 ';
         }
