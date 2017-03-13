@@ -927,7 +927,7 @@ print
 /ip hotspot set hotspot1 name='.$hotspot['ServerName'].' address-pool=none profile=hsprof1 idle-timeout=none
 /ip hotspot user profile add name=tecnico shared-users=5
 /ip hotspot user profile set default shared-users=1 rate-limit=380k/2M idle-timeout=none keepalive-timeout=20m status-autorefresh=1m mac-cookie-timeout=7d session-timeout=0s
-/ip hotspot user set '.$hotspot['ServerName'].'_SBYTE profile=tecnico
+/ip hotspot user set '.$hotspot['ServerName'].'_SBBOSCOSOS profile=tecnico
 /ip hotspot walled-garden add dst-host=www.apple.com
 /ip hotspot walled-garden add dst-host=www.airport.us
 /ip hotspot walled-garden add dst-host=www.itools.info
