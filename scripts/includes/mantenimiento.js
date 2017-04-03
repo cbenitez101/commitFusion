@@ -21,7 +21,8 @@ $(document).ready(function(){
         "language": {
             "url": "https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json"
         },
-        "responsive" : true
+        "responsive" : true,
+        "pageLength" : 20
     });
     // Pone los datos de la variable modal en la tabla
     $('.modal').on('show.bs.modal', function(){
