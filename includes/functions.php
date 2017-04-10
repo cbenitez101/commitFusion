@@ -825,6 +825,9 @@ function external_actualiza_dispositivos() {
                 foreach ($json as $key => $value) {
                     // se comprueba que 
                     if (count($value) == 5) {
+                        $result = $database->query("SELECT `fecha`  FROM `syslog` WHERE `local` = '".$value['dispositivo']."' AND `dispositivo` = '".$value['local']."'");
+                        $fecha = $result->fetch_assoc();
+                        if (strtotime($fecha) < strtotime('-30 min')) external_telegram($value['local']." - ".$value['dispositivo']." => Online");
                         $database->query("INSERT INTO `syslog`(`fecha`, `ip`, `local`, `dispositivo`, `info`) VALUES ('".$value['fecha']."','".$value['ip']."','".$value['local']."','".$value['dispositivo']."','".json_encode($value['info'])."') ON DUPLICATE KEY UPDATE fecha='".$value['fecha']."', info='".json_encode($value['info'])."'");
                     }
                 }
@@ -849,7 +852,10 @@ function external_standalone() {
     $echo = '<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta http-equiv="refresh" content="900"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content=""><meta name="author" content="Servibyte SCP"><title>Servibyte Platform</title><link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"><!-- MetisMenu CSS --><link href="/scripts/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet"><!-- Custom CSS --><link href="/scripts/dist/css/sb-admin-2.css" rel="stylesheet"><!-- Custom Fonts --><link href="/scripts/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"><!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries --><!-- WARNING: Respond.js does not work if you view the page via file:// --><!--[if lt IE 9]><script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script><script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script><![endif]--><link rel="stylesheet" type="text/css" media="all" href="/scripts/default.css"/><link rel="stylesheet" type="text/css" media="all" href="/scripts/datatable/zzz.responsive.dataTables.min.css"/><link rel="stylesheet" type="text/css" media="all" href="/scripts/datatable/jquery.dataTables.min.css"/><link rel="stylesheet" type="text/css" media="all" href="/scripts/includes/mantenimiento.css"/><script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script><script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script><!-- Metis Menu Plugin JavaScript --><script src="/scripts/bower_components/metisMenu/dist/metisMenu.min.js"></script><!-- Custom Theme JavaScript --><script src="/scripts/dist/js/sb-admin-2.js"></script><script type="text/javascript" src="/scripts/datatable/jquery.dataTables.min.js"></script><script type="text/javascript" src="/scripts/datatable/zzz.dataTables.responsive.min.js"></script><script type="text/javascript" src="/scripts/default.js"></script><script type="text/javascript" src="/scripts/includes/mantenimiento.js"></script></head><body><h1 class="page-header align_center"><img src="/images/logos/admin.png"></h1><div class="dataTable_wrapper row"><div class="col-md-12">';
     if (count($out) > 0) {
         $echo .= '<table border="0" class="tabledit standalone server hover" id="table-search" width="100%"><thead><tr><th>local</th><th>dispositivo</th><th>fecha</th><th>ip</th><th>notas</th></tr></thead><tbody>';
-        foreach ($out as $value) $echo .= "<tr><td>".$value['local']."</td><td>".$value['dispositivo']."</td><td>".$value['fecha']."</td><td>".$value['ip']."</td><td>".$value['notas']."</td></tr>";
+        foreach ($out as $value) {
+            if (strtotime($value['fecha']) >= strtotime("-30 min")) external_telegram($value['local']." - ".$value['dispositivo']." => Offline");
+            $echo .= "<tr><td>".$value['local']."</td><td>".$value['dispositivo']."</td><td>".$value['fecha']."</td><td>".$value['ip']."</td><td>".strtotime($value['fecha'])."  -  ".strtotime("-20 min")." ".date("Y-m-d H:i:s")."</td></tr>";
+        }
         $echo .= '</tbody></table>';
     } else {
         $echo .= '<h1 class="page-header align_center"><img src="/images/allok.jpg"></h1>';
@@ -1611,5 +1617,22 @@ function historial($total, $hotspot) {
 /*--------------------------------------------------------------------------*
  *                                 END                                      *
  *--------------------------------------------------------------------------*/
+ 
+function external_telegram($mensaje= null) {
+    global $telegram;
+    if ($mensaje==null && isset($_GET['mensaje'])) {
+        $mensaje = $_GET['mensaje'];
+    }
+    if ($mensaje != null) {
+        $response = $telegram->sendMessage([
+          'chat_id' => '15381028', 
+        //   'chat_id' => '-27075383', 
+          'text' => $mensaje
+        ]);
+    }
+    // $response = $telegram->getUpdates();
+    if (isset($_GET['mensaje'])) die();
+}
+
 ?>
 
