@@ -827,8 +827,8 @@ function external_actualiza_dispositivos() {
                     if (count($value) == 5) {
                         $result = $database->query("SELECT `fecha`  FROM `syslog` WHERE `local` = '".$value['dispositivo']."' AND `dispositivo` = '".$value['local']."'");
                         $fecha = $result->fetch_assoc();
-                        if (strtotime($fecha) < strtotime('-30 min')) external_telegram($value['local']." - ".$value['dispositivo']." => Online");
                         $database->query("INSERT INTO `syslog`(`fecha`, `ip`, `local`, `dispositivo`, `info`) VALUES ('".$value['fecha']."','".$value['ip']."','".$value['local']."','".$value['dispositivo']."','".json_encode($value['info'])."') ON DUPLICATE KEY UPDATE fecha='".$value['fecha']."', info='".json_encode($value['info'])."'");
+                        if (strtotime($fecha) < strtotime('-30 min')) external_telegram($value['local']." - ".$value['dispositivo']." => Online");
                     }
                 }
             }
