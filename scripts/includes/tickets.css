@@ -33,3 +33,7 @@ h4 {
 .serverhidden{
     display: none;
 }
+
+.dt-button > span {
+    font-size: 14px;
+}

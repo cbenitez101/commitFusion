@@ -459,6 +459,8 @@ if (isLoggedIn()) {
             foreach ($out as $value) foreach($value as $item) $menu[]=$item;
             $smarty->assign('cols', implode(',', array_keys($out[0])));
             $smarty->assign('facebook', $menu);
+            
+            
             break;
         case 'bloc':
             if (!empty($postparams)) {
