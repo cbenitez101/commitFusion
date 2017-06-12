@@ -41,8 +41,7 @@ $(document).ready(function(){
                 extend: 'pdfHtml5',
                 text:   '<i class="fa fa-file-pdf-o"></i> Descargar PDF',
                 titleAttr:  'PDF',
-                filename:   'Tickets_Facebook',
-             
+                filename:   'facebookLogs',
                 exportOptions:  {
                     columns:    [2,3]
                     
@@ -51,7 +50,8 @@ $(document).ready(function(){
             {
                 extend:  'csvHtml5',
                 text:   '<i class="fa fa-file-excel-o"></i> Descargar CSV',
-                titleAttr:  'Excel',
+                titleAttr:  'CSV',
+                filename:   'facebookLogs',
                 exportOptions:  {
                     columns:    [2,3]
                 }
@@ -60,6 +60,7 @@ $(document).ready(function(){
                 extend:  'excelHtml5',
                 text:   '<i class="fa fa-file-excel-o"></i> Descargar Excel',
                 titleAttr:  'Excel',
+                filename:   'facebookLogs',
                 exportOptions:  {
                     columns:    [2,3]
                 }
