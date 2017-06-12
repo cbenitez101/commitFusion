@@ -17,7 +17,6 @@ $(document).ready(function(){
     // Manejador de la tabla, se le pone que al hacer lick en una fila llame al modal y guarda los datos de la tabla
     // en data.
     table = $('#table-search').DataTable({
-        
         "preDrawCallback" : function() {
             if (!$('table').hasClass('tickettable') && !$('table').hasClass('fbtable')) {
                 // Caso especial en el que la tabla historial no tiene modal.
@@ -35,13 +34,14 @@ $(document).ready(function(){
             "url": "https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json"
         },
         responsive: true,
-        dom: 'Bfrtip',
+        dom: 'Blfrtip',
         buttons: [
             {
                 extend: 'pdfHtml5',
                 text:   '<i class="fa fa-file-pdf-o"></i> Descargar PDF',
                 titleAttr:  'PDF',
                 filename:   'facebookLogs',
+                className:  'btn btn-success',
                 exportOptions:  {
                     columns:    [2,3]
                     
