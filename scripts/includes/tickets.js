@@ -41,7 +41,6 @@ $(document).ready(function(){
                 text:   '<i class="fa fa-file-pdf-o"></i> Descargar PDF',
                 titleAttr:  'PDF',
                 filename:   'facebookLogs',
-                className:  'btn btn-primary',
                 exportOptions:  {
                     columns:    [2,3]
                     
