@@ -447,20 +447,21 @@ if (isLoggedIn()) {
 
             break;
         case 'facebook':
-            $result = $database->query('SELECT `idlocal`, `fbid`, `name`, `email`, `link`, `username` FROM `facebook`');
-            $out = array();
-            while ($aux = $result->fetch_assoc()) {
-                array_shift($aux);
-                $aux = array_merge(array('Local'=>  strstr($aux['username'], '_', TRUE)), $aux);
-                $aux['username']= substr(strstr($aux['username'], '_'), 1);
-                $out[]=$aux;
+            if ($_SESSION['cliente'] == 'admin') $result = $database->query('SELECT `idlocal`, `fbid`, `name`, `email`, `link`, `username` FROM `facebook`');
+            else $result = $database->query('SELECT `idlocal`, `fbid`, `name`, `email`, `link`, `username` FROM `facebook` WHERE idlocal= (SELECT id FROM `locales` WHERE nombre="'.$_SESSION['local'].'")');
+            if ($result->num_rows > 0) {           
+                $out = array();
+                while ($aux = $result->fetch_assoc()) {
+                    array_shift($aux);
+                    $aux = array_merge(array('Local'=>  strstr($aux['username'], '_', TRUE)), $aux);
+                    $aux['username']= substr(strstr($aux['username'], '_'), 1);
+                    $out[]=$aux;
+                }
+                $menu = array();
+                foreach ($out as $value) foreach($value as $item) $menu[]=$item;
+                $smarty->assign('cols', implode(',', array_keys($out[0])));
+                $smarty->assign('facebook', $menu);
             }
-            $menu = array();
-            foreach ($out as $value) foreach($value as $item) $menu[]=$item;
-            $smarty->assign('cols', implode(',', array_keys($out[0])));
-            $smarty->assign('facebook', $menu);
-            
-            
             break;
         case 'bloc':
             if (!empty($postparams)) {
