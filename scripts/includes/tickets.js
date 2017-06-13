@@ -33,8 +33,42 @@ $(document).ready(function(){
         "language": {
             "url": "https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json"
         },
-        responsive: true
+        responsive: true,
+        dom: 'Blfrtip',
+        buttons: [
+            {
+                extend: 'pdfHtml5',
+                text:   '<i class="fa fa-file-pdf-o"></i> Descargar PDF',
+                titleAttr:  'PDF',
+                filename:   'facebookLogs',
+                className:  'btn btn-success',
+                exportOptions:  {
+                    columns:    [2,3]
+                    
+                }
+            },
+            {
+                extend:  'csvHtml5',
+                text:   '<i class="fa fa-file-excel-o"></i> Descargar CSV',
+                titleAttr:  'CSV',
+                filename:   'facebookLogs',
+                exportOptions:  {
+                    columns:    [2,3]
+                }
+            },
+             {
+                extend:  'excelHtml5',
+                text:   '<i class="fa fa-file-excel-o"></i> Descargar Excel',
+                titleAttr:  'Excel',
+                filename:   'facebookLogs',
+                exportOptions:  {
+                    columns:    [2,3]
+                }
+            },
+        ]
+       
     });
+
     // Pone los datos de la variable modal en la tabla
     $('.modal:not(#modal_importar)').on('show.bs.modal', function(){
 
@@ -228,7 +262,7 @@ $(document).ready(function(){
         $('#modalbloc').modal();
     });
     
-    
+       
 });
 var table;
 var data;
