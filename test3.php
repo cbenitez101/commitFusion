@@ -282,369 +282,375 @@ if ($API->connect($ip, $user, $pass)) {
     
     
     /* FALTA CONEXION A VPN */
-    
+    print_r("- SE ESTABLECE LOGGING ACTIONS -");
     if(enviaComando('/system/logging/action/set', array('numbers'=>'memory', 'memory-lines'=>'100'))){
-        print_r("Action set memory-lines a 100\n");
-    }else print_r("No se pudo realizar action set memory-lines a 100\n");
+        print_r("--Action set memory-lines a 100\n");
+    }else print_r("---ERROR: No se pudo realizar action set memory-lines a 100\n");
     
     if(enviaComando('/system/logging/action/set', array('numbers'=>'disk', 'disk-lines-per-file'=>'100'))){
-        print_r("Action set disk-per-lines a 100\n");
-    }else print_r("No se pudo completar action set disk-per-lines a 100\n");
+        print_r("--Action set disk-per-lines a 100\n");
+    }else print_r("---ERROR: No se pudo completar action set disk-per-lines a 100\n");
     /* SBREMOTE AQUI? */
  
-
+    print_r("- SE ESTABLECE FIREWALL -");
     if(enviaComando('/ip/firewall/filter/add', array('chain'=>'forward','comment'=>'establecidas', 'connection-state'=>'established'))){
-        print_r("Filter añadido\n");
-    }else print_r("Filter NO añadido\n");
+        print_r("--Filter añadido\n");
+    }else print_r("---ERROR: Filter NO añadido\n");
     
     if(enviaComando('/ip/firewall/filter/add', array('chain'=>'input', 'connection-state'=>'established'))){
         print_r("Filter añadido\n");
-    }else print_r("Filter NO añadido\n");
+    }else print_r("---ERROR: Filter NO añadido\n");
     
     if(enviaComando('/ip/firewall/filter/add', array('chain'=>'forward','comment'=>'relacionadas', 'connection-state'=>'related'))){
         print_r("Filter añadido\n");
-    }else print_r("Filter NO añadido\n");
+    }else print_r("---ERROR: Filter NO añadido\n");
     
     if(enviaComando('/ip/firewall/filter/add', array('chain'=>'input', 'connection-state'=>'related'))){
-        print_r("Filter añadido\n");
-    }else print_r("Filter NO añadido\n");
+        print_r("--Filter añadido\n");
+    }else print_r("---ERROR: Filter NO añadido\n");
     
     if(enviaComando('/ip/firewall/filter/add', array('action'=>'drop','chain'=>'forward','comment'=>'invalidas', 'connection-state'=>'invalid'))){
-        print_r("Filter añadido\n");
-    }else print_r("Filter NO añadido\n");
+        print_r("--Filter añadido\n");
+    }else print_r("---ERROR: Filter NO añadido\n");
     
     if(enviaComando('/ip/firewall/filter/add', array('action'=>'drop', 'chain'=>'input', 'connection-state'=>'invalid'))){
-        print_r("Filter añadido\n");
-    }else print_r("Filter NO añadido\n");
+        print_r("--Filter añadido\n");
+    }else print_r("---ERROR: Filter NO añadido\n");
     
     if(enviaComando('/ip/firewall/filter/add', array('action'=>'tarpit', 'chain'=>'forward', 'comment'=>'Port Scan Detection', 'protocol'=>'tcp', 'psd'=>'21,3s,3,1'))){
-        print_r("Filter añadido\n");
-    }else print_r("Filter NO añadido\n");
+        print_r("--Filter añadido\n");
+    }else print_r("---ERROR: Filter NO añadido\n");
     
     if(enviaComando('/ip/firewall/filter/add', array('chain'=>'input', 'comment'=>'ICMP <10 PPS sino drop', 'limit'=>'10,0:packet', 'protocol'=>'icmp'))){
-        print_r("Filter añadido\n");
-    }else print_r("Filter NO añadido\n");
+        print_r("--Filter añadido\n");
+    }else print_r("---ERROR: Filter NO añadido\n");
     
     if(enviaComando('/ip/firewall/filter/add', array('action'=>'drop', 'chain'=>'input', 'protocol'=>'icmp'))){
-        print_r("Filter añadido\n");
-    }else print_r("Filter NO añadido\n");
+        print_r("--Filter añadido\n");
+    }else print_r("---ERROR: Filter NO añadido\n");
     
-
+    print_r("- SCRIPT MONITORIZACION -\n");
     if(enviaComando('/system/script/add', array('name'=>'Monitorizacion', 'owner'=>"administrador",'policy'=>' ftp,reboot,read,write,policy,test,password,sniff,sensitive', 'source'=>":log warning (\":API::Air1::up:\" .[/system resource get uptime] . \";cpu-load:\" . [/system resource get cpu-load] . \";connected:\" . [/interface wireless registration-table print count-only])"))){
-        print_r("Script Monitorizacion añadido\n");
+        print_r("--Script Monitorizacion añadido\n");
         if(enviaComando('/system/scheduler/add', array('interval'=>'15m', 'name'=>"Monitorizacion",'on-event'=>'Monitorizacion', 'policy'=>'ftp,reboot,read,write,policy,test,password,sniff,sensitive', 'start-date'=>'jul/01/2016', 'start-time'=>'00:00:00'))){
-            print_r("SCHEDULER añadido\n");
-        }else print_r("SCHEDULER NO añadido\n");
-    }else print_r("Script NO añadido\n");
+            print_r("--SCHEDULER añadido\n");
+        }else print_r("---ERROR: SCHEDULER NO añadido\n");
+    }else print_r("---ERROR: Script MONITORIZACION NO añadido\n");
 
+
+    print_r("- LAYER7 -");
     if(enviaComando('/ip/firewall/layer7-protocol/add', array("name"=>"facebook","regexp"=>"^.+(facebook.com).*\$"))){
-        print_r("layer7-protocol añadido\n");
-    }else print_r("layer7-protocol no se ha añadido\n"); 
+        print_r("--layer7-protocol añadido\n");
+    }else print_r("---ERROR: layer7-protocol no se ha añadido\n"); 
     
     if(enviaComando('/ip/firewall/layer7-protocol/add', array("name"=>"facebook2","regexp"=>".+(facebook.com)*dialog"))){
-        print_r("layer7-protocol añadido\n");
-    }else print_r("layer7-protocol no se ha añadido\n");
+        print_r("--layer7-protocol añadido\n");
+    }else print_r("---ERROR: layer7-protocol no se ha añadido\n");
     
     if(enviaComando('/ip/firewall/layer7-protocol/add', array("name"=>"facebook3","regexp"=>".+(facebook.com)*login"))){
-        print_r("layer7-protocol añadido\n");
-    }else print_r("layer7-protocol no se ha añadido\n");
+        print_r("--layer7-protocol añadido\n");
+    }else print_r("---ERROR: layer7-protocol no se ha añadido\n");
     
 
+
+    print_r("- CREACION DE HOTSPOT -\n");
     if (enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/certificate.crt"))){
-        print_r("Fetch del primer certificado\n");
+        print_r("--Fetch del primer certificado\n");
         if(enviaComando('/certificate/import', array("file-name"=> "certificate.crt", "passphrase"=>"PwpXXf8bPwpXXf8b"))){
-            print_r("Se ha importado el certificado con exito\n");
+            print_r("--Se ha importado el certificado con exito\n");
             
             if (enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot.key"))){
-                print_r("Fetch del segundo certificado\n");
+                print_r("--Fetch del segundo certificado\n");
                 if(enviaComando('/certificate/import', array("file-name"=> "hotspot.key", "passphrase"=>"PwpXXf8bPwpXXf8b"))){
-                    print_r("Se ha importado el segundo certificado con exito\n");
+                    print_r("--Se ha importado el segundo certificado con exito\n");
                     
                     if (enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/certificate.ca-crt"))){
-                        print_r("Fetch del tercer certificado\n");
+                        print_r("--Fetch del tercer certificado\n");
                         if(enviaComando('/certificate/import', array("file-name"=> "certificate.ca-crt", "passphrase"=>"PwpXXf8bPwpXXf8b"))){
-                            print_r("Se ha importado el tercer certificado con exito\n");
+                            print_r("--Se ha importado el tercer certificado con exito\n");
                         
                             print_r("-> Perfiles y usuarios del hotspot <-\n");  
                              
                             if(enviaComando('/ip/hotspot/profile/set', array('numbers'=>'default','html-directory'=>'flash/hotspot'))){
-                                print_r("Se establece perfil default de hotspot a directorio flash/hotspot\n");
-                            }else print_r("Se establece perfil default de hotspot a directorio flash/hotspot\n");
+                                print_r("--Se establece perfil default de hotspot a directorio flash/hotspot\n");
+                            }else print_r("--Se establece perfil default de hotspot a directorio flash/hotspot\n");
                             
                             if(enviaComando('/ip/hotspot/profile/add', array('dns-name'=>'hotspot.wifipremium.com', 'hotspot-address'=>'172.21.0.1','http-cookie-lifetime'=>'1w', 'login-by'=>'cookie,http-chap,https,mac-cookie','name'=>'hsprof1', 'ssl-certificate'=>'certificate.crt_0', 'use-radius'=>'yes'))){
-                                print_r("Se añade perfil hsprof1 al hotspot\n");
-                            }else print_r("no se ha podido añadir el perfil de hotspot hsprof1\n");
+                                print_r("--Se añade perfil hsprof1 al hotspot\n");
+                            }else print_r("---ERROR: no se ha podido añadir el perfil de hotspot hsprof1\n");
                             
                             if(enviaComando('/ip/hotspot/add', array('disabled'=>'no', 'idle-timeout'=>'none','interface'=>'bridge1_hs_clientes1','name'=>'API', 'profile'=>'hsprof1'))){
-                                print_r("Se añade hotspot API\n");
+                                print_r("--Se añade hotspot API\n");
                                 print_r("-> IP bindings <-\n");  
                                 if(enviaComando('/ip/hotspot/ip-binding/add', array('address'=>'172.21.9.171','mac-address'=>'04:18:D6:84:83:1A','server'=>'API', 'to-address'=>'172.21.9.171','type'=>'bypassed'))){
-                                    print_r("Se añade IP Binding del Hotspot\n");
-                                }else print_r("no se ha podido añadir IP Binding del Hotspot\n");
+                                    print_r("--Se añade IP Binding del Hotspot\n");
+                                }else print_r("---ERROR: no se ha podido añadir IP Binding del Hotspot\n");
                             
                                 print_r("-> Se añade radius <-\n"); 
                                 if(enviaComando('/radius/add', array("address"=>"176.28.102.26",'secret'=>'tachin','service'=>'hotspot','timeout'=>'5s'))){
-                                    print_r("Se ha añadido radius\n");
-                                }else print_r("No se ha podido radius\n");
+                                    print_r("--Se ha añadido radius\n");
+                                }else print_r("---ERROR: No se ha podido radius\n");
                                 
-                            }else print_r("Error al añadir hotspot API\n");
+                            }else print_r("---ERROR: NO SE HA PODIDO AÑADIR HOTSPOT API\n");
                             
                             if(enviaComando('/ip/hotspot/user/profile/set', array('numbers'=>'default', 'keepalive-timeout'=>'1w','mac-cookie-timeout'=>'1w','rate-limit'=>'3M/3M', 'shared-users'=>'3'))){
-                                 print_r("Se edita perfil de usuario de hotspot default\n");
-                            }else print_r("No se ha podido editar perfil de usuario de hotspot default\n");
+                                 print_r("--Se edita perfil de usuario de hotspot default\n");
+                            }else print_r("---ERROR: No se ha podido editar perfil de usuario de hotspot default\n");
                             
                             if(enviaComando('/ip/hotspot/user/profile/add', array('name'=>'tecnico', 'transparent-proxy'=>'yes','shared-users'=>'5'))){
-                                print_r("Se añade perfil tecnico al hotspot\n");
-                            }else print_r("No se ha podido añadir perfil tecnico al hotspot\n");
+                                print_r("--Se añade perfil tecnico al hotspot\n");
+                            }else print_r("---ERROR: No se ha podido añadir perfil tecnico al hotspot\n");
                             
                             if(enviaComando('/ip/hotspot/user/profile/add', array('keepalive-timeout'=>'1w', 'mac-cookie-timeout'=>'1w','name'=>'uprof1','rate-limit'=>'5M/10M', 'shared-users'=>'3'))){
-                                 print_r("Se añade perfil uprof al hotspot\n");
-                            } else print_r("No se ha podido añadir uprof tecnico al hotspot\n");
+                                 print_r("--Se añade perfil uprof al hotspot\n");
+                            } else print_r("---ERROR: No se ha podido añadir uprof tecnico al hotspot\n");
 
                             print_r("-> Adicion de pool y y DHCP servers <-\n");
                             if(enviaComando('/ip/pool/add', array('name'=>'hs-pool-14', 'ranges'=>'172.21.0.2-172.21.255.254'))){
-                                print_r("Se ha añadido pool hs-pool-14\n");
+                                print_r("--Se ha añadido pool hs-pool-14\n");
                                 if(enviaComando('/ip/dhcp-server/add', array('address-pool'=>'hs-pool-14', 'authoritative'=>'yes','disabled'=>'no','interface'=>'bridge1_hs_clientes1','lease-time'=>'1w','name'=>'dhcp1'))){
-                                    print_r("Se ha añadido DHCP server dhcp1\n");
+                                    print_r("--Se ha añadido DHCP server dhcp1\n");
                                     
                                     /*Añadir aqui las networks*/                            
                                     if(enviaComando('/ip/dhcp-server/network/add', array('address'=>'172.21.0.0/16', 'comment'=>'hotspot network','dns-server'=>'8.8.8.8,8.8.4.4','gateway'=>'172.21.0.1','netmask'=>'32'))){
-                                        print_r("Se añade hotspot network\n");
+                                        print_r("--Se añade hotspot network\n");
                                     }else print_r("\n");
                                      
-                                }else print_r("No se ha podido añadir DHCP server dhcp1\n");
-                            } else print_r("No se ha podido añadir pool hs-pool-14\n");
-                        }else print_r("NO SE HA PODIDO importar el tercer certificado con exito\n");
-                    }else print_r("NO SE HA PODIDO hacer fetch del tercer certificado con exito\n");
-                }else print_r("NO SE HA PODIDO importar el segundo certificado con exito\n");
-            }else print_r("NO SE HA PODIDO hacer fetch del segundo certificado con exito\n");
-        }else print_r("NO SE HA PODIDO importar el certificado con exito\n");
-    }else print_r("NO SE HA PODIDO hacer fetch del certificado con exito\n");
+                                }else print_r("---ERROR: No se ha podido añadir DHCP server dhcp1\n");
+                            } else print_r("---ERROR: No se ha podido añadir pool hs-pool-14\n");
+                        }else print_r("---ERROR: NO SE HA PODIDO importar el tercer certificado con exito\n");
+                    }else print_r("---ERROR: NO SE HA PODIDO hacer fetch del tercer certificado con exito\n");
+                }else print_r("---ERROR: NO SE HA PODIDO importar el segundo certificado con exito\n");
+            }else print_r("---ERROR: NO SE HA PODIDO hacer fetch del segundo certificado con exito\n");
+        }else print_r("---ERROR: NO SE HA PODIDO importar el certificado con exito\n");
+    }else print_r("---ERROR: NO SE HA PODIDOCREAR HOTSPOT\n");
     
 
-    print_r("-> SNMP <-\n");     
+    print_r("- SE ESTABLECE CORREO -\n");     
     if(enviaComando('/snmp/set', array("enabled"=> "yes", "contact"=> "info@servibyte.com", "location"=>"Maspalomas", "trap-community"=>"public", "trap-version"=>"2", "trap-generators"=>"interfaces", "trap-interfaces"=>"all" ))){
-        print_r("Se ha añadido el SNMP con exito\n");
+        print_r("--Se ha añadido el SNMP con exito\n");
         print_r("-> Config. de tool email.\n"); 
         if(enviaComando('/tool/e-mail/set', array("address"=> "74.125.206.108", "port"=> "587", "start-tls"=>"yes", "from"=>"servibyte.log@gmail.com", "user"=>"Servibyte.log", "password"=>"sbyte_14_Mxz"))){
-            print_r("Se ha añadido el email con exito\n");
+            print_r("--Se ha añadido el email con exito\n");
             if(enviaComando('/system/logging/action/add', array("name"=> "email", "target"=> "email", "email-to"=>"servibyte.log@gmail.com", "email-start-tls"=>"yes"))){
                  print_r("Se ha añadido el logging al email con exito\n");
             }else  print_r("No se ha podido añadir el logging al email con exito\n");
-        }else print_r("No se ha podido añadir el email\n");
-    }else print_r("No se ha podido añadir SNMP\n");
+        }else print_r("---ERROR: No se ha podido añadir el email\n");
+    }else print_r("---ERROR: Error al establecer el CORREO\n");
     
-
+    print_r("- FETCH DE SYSNOTE -\n"); 
     if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/sys-note.txt"))){
-        print_r("Se ha realizado el fetch de sys-note\n");
-    }else print_r("No se ha realizado el fetch de sys-note\n");
+        print_r("--Se ha realizado el fetch de sys-note\n");
+    }else print_r("---ERROR: No se ha realizado el fetch de sys-note\n");
     
-    print_r("-> Ip services <-\n");   
+    print_r("- SE ESTABLECE IPSERVICES -\n");   
     if(enviaComando('/ip/service/set', array("numbers"=>"telnet",'disabled'=>'yes'))){
-        print_r("Se deshabilita servicio telnet\n");
-    }else print_r("error al deshabilitar telnet\n");
+        print_r("--Se deshabilita servicio telnet\n");
+    }else print_r("---ERROR: error al deshabilitar telnet\n");
     if(enviaComando('/ip/service/set', array("numbers"=>"ftp",'disabled'=>'yes'))){
-        print_r("Se deshabilita servicio ftp\n");
-    }else print_r("error al deshabilitar ftp\n");
+        print_r("--Se deshabilita servicio ftp\n");
+    }else print_r("---ERROR: error al deshabilitar ftp\n");
     if(enviaComando('/ip/service/set', array("numbers"=>"www",'disabled'=>'yes'))){
-        print_r("Se deshabilita  deshabilitar www\n");
-    }else print_r("error al deshabilitar www\n");
+        print_r("--Se deshabilita  deshabilitar www\n");
+    }else print_r("---ERROR: error al deshabilitar www\n");
     if(enviaComando('/ip/service/set', array("numbers"=>"www-ssl",'certificate'=>'certificate.crt_0','disabled'=>'no'))){
-        print_r("Se importa cert para servicio www-ssl\n");
-    }else print_r("error al importar cert para servicio www-ssl\n");
+        print_r("--Se importa cert para servicio www-ssl\n");
+    }else print_r("---ERROR: error al importar cert para servicio www-ssl\n");
     
     
     /* HAY QUE AÑADIR LAS NETWORKS A LOS DHCP SERVERS -linea390- O NO?*/
+    print_r("- CREACION POOLS Y DHCP SERVERS POOL_ADM -\n"); 
     if(enviaComando('/ip/pool/add', array('name'=>'pool_adm', 'ranges'=>'172.20.0.2-172.20.0.254'))){
-        print_r("Se ha añadido pool pool_adm\n");
+        print_r("--Se ha añadido pool pool_adm\n");
         if(enviaComando('/ip/dhcp-server/add', array('address-pool'=>'pool_adm', 'authoritative'=>'yes','disabled'=>'no','interface'=>'bridge4_administracion','name'=>'dhcp_adm'))){
-            print_r("Se ha añadido DHCP server dhcp_adm\n");
+            print_r("--Se ha añadido DHCP server dhcp_adm\n");
             /*Añadir aqui las networks?*/ 
             if(enviaComando('/ip/dhcp-server/network/add', array('address'=>'172.20.0.0/22', 'comment'=>'admin network','dns-server'=>'8.8.8.8,8.8.4.4','gateway'=>'172.20.0.1','netmask'=>'22'))){
-                print_r("Se añade admin network\n");
-            } else print_r("No se ha podido añadir admin network\n");
-        } else print_r("No se ha podido añadir DHCP server dhcp_adm\n");
-    } else print_r("No se ha podido añadir pool pool_adm\n");
+                print_r("--Se añade admin network\n");
+            } else print_r("---ERROR: No se ha podido añadir admin network\n");
+        } else print_r("---ERROR: No se ha podido añadir DHCP server dhcp_adm\n");
+    } else print_r("---ERROR: No se ha podido añadir pool pool_adm\n");
+     print_r("- CREACION POOLS Y DHCP SERVERS POOL_STAFF -\n"); 
     if(enviaComando('/ip/pool/add', array('name'=>'pool_staff', 'ranges'=>'192.168.50.2-192.168.50.254'))){
-        print_r("Se ha añadido pool pool_staff\n");
+        print_r("--Se ha añadido pool pool_staff\n");
         if(enviaComando('/ip/dhcp-server/add', array('address-pool'=>'pool_staff', 'authoritative'=>'yes','disabled'=>'no','interface'=>'bridge3_hs_staff','name'=>'dhcp_staff'))){
-            print_r("Se ha añadido DHCP server dhcp_staff\n");
+            print_r("--Se ha añadido DHCP server dhcp_staff\n");
             
             /*Añadir aqui las networks?*/
             if(enviaComando('/ip/dhcp-server/network/add', array('address'=>'192.168.50.0/24', 'comment'=>'staff network','dns-server'=>'8.8.8.8,8.8.4.4','gateway'=>'192.168.50.1','netmask'=>'24'))){
-                print_r("Se añade staff network\n");
-            }else print_r("No se ha podido añadir staff network\n");
-        }else print_r("No se ha podido añadir DHCP server dhcp_staff\n");
-    } else print_r("No se ha podido añadir pool pool_staff\n");
+                print_r("--Se añade staff network\n");
+            }else print_r("---ERROR: No se ha podido añadir staff network\n");
+        }else print_r("---ERROR: No se ha podido añadir DHCP server dhcp_staff\n");
+    } else print_r("---ERROR: No se ha podido añadir pool pool_staff\n");
     
     
+    print_r("- CREACION LOGGING ACTION SBREMOTE -\n"); 
     if(enviaComando('/system/logging/action/add', array('name'=>'SBRemote', 'remote'=>'217.125.25.165','target'=>'remote'))){
-        print_r("Se añade action SBRemote\n");
+        print_r("-Se añade action SBRemote\n");
         if(enviaComando('/system/logging/add', array('action'=>'SBRemote', 'prefix'=>'Monitor', 'topics'=>'warning,script'))){
-            print_r("Se añade logging SBRemote\n");
-        }else print_r("No se ha podido realizar la operacion logging SBRemote\n");
-    }else print_r("No se ha podido realizar la operacion action SBRemote\n");
-    
+            print_r("--Se añade logging SBRemote\n");
+        }else print_r("---ERROR: No se ha podido realizar la operacion logging SBRemote\n");
+    }else print_r("---ERROR: No se ha podido realizar la CREACION LOGGING ACTION SBREMOTE\n");
+    print_r("- CREACION LOGGING ACTION HotspotInfo -\n"); 
     if(enviaComando('/system/logging/action/add', array('name'=>'HotspotInfo', 'memory-lines'=>'3000','target'=>'memory'))){
-        print_r("Se añade HotspotInfo\n");
+        print_r("--Se añade HotspotInfo\n");
          if(enviaComando('/system/logging/add', array('action'=>'HotspotInfo', 'topics'=>'hotspot,info'))){
-            print_r("Se añade logging HotspotInfo\n");
+            print_r("--Se añade logging HotspotInfo\n");
         }else print_r("No se ha podido realizar la operacion HotspotInfo\n");
-    }else print_r("No se ha podido realizar la operacion\n");
-    
+    }else print_r("---ERROR: No se ha podido realizar la CREACION LOGGING ACTION HotspotInfo\n");
+    print_r("- CREACION LOGGING ACTION HotspotDebug -\n"); 
     if(enviaComando('/system/logging/action/add', array('name'=>'HotspotDebug', 'memory-lines'=>'3000','target'=>'memory'))){
-        print_r("Se añade HotspotDebug\n");
+        print_r("--Se añade HotspotDebug\n");
          if(enviaComando('/system/logging/add', array('action'=>'HotspotDebug', 'topics'=>'hotspot,debug'))){
-            print_r("Se añade logging HotspotDebug\n");
-        }else print_r("No se ha podido realizar la operacion HotspotDebug\n");
-    }else print_r("No se ha podido realizar la operacion HotspotDebug\n");
+            print_r("--Se añade logging HotspotDebug\n");
+        }else print_r("---ERROR: No se ha podido realizar la operacion HotspotDebug\n");
+    }else print_r("---ERROR: No se ha podido realizar la CREACION LOGGING ACTION HotspotDebug\n");
     
     print_r("-> Se establece enc-algorithm a IP > Proposal\n"); 
     
     if(enviaComando('/ip/ipsec/proposal/set', array('numbers'=>'default', 'enc-algorithms'=>'aes-128-cbc'))){
-        print_r("Se establece IP ipsec proposal default\n");
-    }else print_r("No se ha podido establecer el proposal\n");
+        print_r("--Se establece IP ipsec proposal default\n");
+    }else print_r("---ERROR: No se ha podido establecer el proposal\n");
 
     
-    print_r("-> Entradas estaticas para el DNS <-\n"); 
-    
+    print_r("- ENTRADAS ESTATICAS DNS -\n"); 
     if(enviaComando('/ip/dns/static/add', array('address'=>'172.21.0.1','name'=>'exit.com'))){
-        print_r("Añadido exit.com\n");
+        print_r("--Añadido exit.com\n");
         
         if(enviaComando('/ip/dns/static/add', array('address'=>'172.21.0.1','comment'=>'Capturador DNS cuando no hay internet', 'disabled'=>'yes','regexp'=>".*\\..*"))){
-            print_r("Añadido capturador dns cuando no hay internet\n");
-        }else print_r("No se ha podido añadir capturador dns cuando no hay internet\n");
-    }else print_r("No se ha podido añadir exit.com\n");
+            print_r("--Añadido capturador dns cuando no hay internet\n");
+        }else print_r("---ERROR: No se ha podido añadir capturador dns cuando no hay internet\n");
+    }else print_r("---ERROR: No se ha podido añadir ENTRADAS ESTATICAS DNS\n");
     
 
     
     
      
     /*DIRECCIONES ESTÁTICAS */
+    print_r("- IP ADDRESSES -\n"); 
     if(enviaComando('/ip/address/add', array('address'=>'172.21.0.1/16','comment'=>'hotspot network', 'interface'=>'bridge1_hs_clientes1','network'=>'172.21.0.0'))){
-        print_r("Se añade IP estatica a bridge1_hs_clientes1\n");
-    }else print_r("No se ha podido añadir IP estatica a bridge1_hs_clientes1\n");
+        print_r("--Se añade IP estatica a bridge1_hs_clientes1\n");
+    }else print_r("---ERROR: No se ha podido añadir IP estatica a bridge1_hs_clientes1\n");
     if(enviaComando('/ip/address/add', array('address'=>'172.20.0.1/22', 'interface'=>'bridge4_administracion','network'=>'172.20.0.0'))){
-        print_r("Se añade IP estatica a bridge4_administracion\n");
-    }else print_r("No se ha podido añadir IP estatica a bridge4_administracion\n");
+        print_r("--Se añade IP estatica a bridge4_administracion\n");
+    }else print_r("---ERROR: No se ha podido añadir IP estatica a bridge4_administracion\n");
     if(enviaComando('/ip/address/add', array('address'=>'192.168.50.1/24','comment'=>'Red Staff/IPTV', 'interface'=>'bridge3_hs_staff','network'=>'192.168.50.0'))){
-        print_r("Se añade IP estatica a bridge3_hs_staff\n");
-    }else print_r("No se ha podido añadir IP estatica a bridge3_hs_staff\n");
-    
-    
+        print_r("--Se añade IP estatica a bridge3_hs_staff\n");
+    }else print_r("---ERROR: No se ha podido añadir IP estatica a bridge3_hs_staff\n");
+
    
 
     
-    print_r("-> Se añaden las Adress-list <-\n"); 
+    print_r("- ADDRESS-LIST -\n"); 
     
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'204.15.20.0/22','list'=>'FacebookIPs'))){
-        print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+        print_r("--Address list añadida\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'69.63.176.0/20','list'=>'FacebookIPs'))){
         print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'66.220.144.0/20','list'=>'FacebookIPs'))){
         print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'66.220.144.0/21','list'=>'FacebookIPs'))){
         print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'69.63.184.0/21','list'=>'FacebookIPs'))){
         print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'69.63.176.0/21','list'=>'FacebookIPs'))){
         print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'74.119.76.0/22','list'=>'FacebookIPs'))){
         print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'69.171.255.0/24','list'=>'FacebookIPs'))){
         print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'173.252.64.0/18','list'=>'FacebookIPs'))){
         print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'69.171.224.0/19','list'=>'FacebookIPs'))){
         print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'69.171.224.0/20','list'=>'FacebookIPs'))){
         print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'103.4.96.0/22','list'=>'FacebookIPs'))){
         print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'69.63.176.0/24','list'=>'FacebookIPs'))){
         print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'173.252.64.0/19','list'=>'FacebookIPs'))){
         print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'173.252.70.0/24','list'=>'FacebookIPs'))){
         print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'31.13.64.0/18','list'=>'FacebookIPs'))){
         print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'31.13.24.0/21','list'=>'FacebookIPs'))){
         print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'66.220.152.0/21','list'=>'FacebookIPs'))){
         print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'66.220.159.0/24','list'=>'FacebookIPs'))){
         print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'69.171.239.0/24','list'=>'FacebookIPs'))){
         print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'69.171.240.0/20','list'=>'FacebookIPs'))){
         print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'31.13.64.0/19','list'=>'FacebookIPs'))){
         print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'31.13.64.0/24','list'=>'FacebookIPs'))){
         print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'31.13.65.0/24','list'=>'FacebookIPs'))){
         print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'31.13.67.0/24','list'=>'FacebookIPs'))){
         print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'31.13.68.0/24','list'=>'FacebookIPs'))){
         print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'31.13.69.0/24','list'=>'FacebookIPs'))){
         print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'31.13.70.0/24','list'=>'FacebookIPs'))){
         print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'31.13.71.0/24','list'=>'FacebookIPs'))){
         print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'31.13.72.0/24','list'=>'FacebookIPs'))){
         print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'31.13.73.0/24','list'=>'FacebookIPs'))){
         print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'31.13.74.0/24','list'=>'FacebookIPs'))){
         print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'31.13.75.0/24','list'=>'FacebookIPs'))){
         print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'31.13.76.0/24','list'=>'FacebookIPs'))){
         print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'31.13.77.0/24','list'=>'FacebookIPs'))){
         print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'31.13.96.0/19','list'=>'FacebookIPs'))){
-        print_r("Address list añadida\n");
-    }else print_r("No se ha podido añadir la address list\n");
+        print_r("---ERROR: Address list añadida\n");
+    }else print_r("---ERROR: No se ha podido añadir la address list\n");
     if (enviaComando('/ip/firewall/address-list/add', array('address'=>'31.13.66.0/24','list'=>'FacebookIPs'))){
         print_r("Address list añadida\n");
     }else print_r("No se ha podido añadir la address list\n");
