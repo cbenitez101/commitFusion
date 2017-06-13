@@ -447,7 +447,10 @@ if (isLoggedIn()) {
 
             break;
         case 'facebook':
-            $result = $database->query('SELECT `idlocal`, `fbid`, `name`, `email`, `link`, `username` FROM `facebook`');
+            if ($_SESSION['cliente'] == 'admin') $result = $database->query('SELECT `idlocal`, `fbid`, `name`, `email`, `link`, `username` FROM `facebook`');
+            else $result = $database->query('SELECT `idlocal`, `fbid`, `name`, `email`, `link`, `username` FROM `facebook` WHERE idlocal="'.$_SESSION['local'].'"');
+            
+           
             $out = array();
             while ($aux = $result->fetch_assoc()) {
                 array_shift($aux);

@@ -41,7 +41,7 @@ $(document).ready(function(){
                 text:   '<i class="fa fa-file-pdf-o"></i> Descargar PDF',
                 titleAttr:  'PDF',
                 filename:   'facebookLogs',
-                className:  'btn btn-success',
+                className:  'btn btn-primary',
                 exportOptions:  {
                     columns:    [2,3]
                     
@@ -49,7 +49,7 @@ $(document).ready(function(){
             },
             {
                 extend:  'csvHtml5',
-                text:   '<i class="fa fa-file-excel-o"></i> Descargar CSV',
+                text:   '<i class="fa fa-file-text-o"></i> Descargar CSV',
                 titleAttr:  'CSV',
                 filename:   'facebookLogs',
                 exportOptions:  {
