@@ -70,7 +70,7 @@ if (isLoggedIn()) {
             if (isset($server)){
                 // Query para obtener tickets vendidos
                 // Cambio en query '2016' por date('Y')
-                $result = $database->query("SELECT Descripcion, ventashotspot.Precio,  COUNT(*) as Cuenta FROM `ventashotspot` INNER JOIN lotes ON lotes.id = ventashotspot.Id_Lote INNER JOIN perfiles ON perfiles.id = lotes.Id_perfil WHERE FechaVenta >= '".date('Y')."-".date('m')."-01 00:00:00'AND perfiles.ServerName = '$server' GROUP BY ventashotspot.Precio");
+                $result = $database->query("SELECT Descripcion, ventashotspot.Precio,  COUNT(*) as Cuenta FROM `ventashotspot` INNER JOIN lotes ON lotes.id = ventashotspot.Id_Lote INNER JOIN perfiles ON perfiles.id = lotes.Id_perfil WHERE FechaVenta ".((!empty($template_data[3]))?"between '".$template_data[3]."-01' AND '".$template_data[3]."-31'":">= '".date('Y')."-".date('m')."-01 00:00:00'")." AND perfiles.ServerName = '$server' GROUP BY ventashotspot.Precio");
                 if ($result->num_rows > 0) {
                     $out = array();
                     $prueba = array();
@@ -84,14 +84,14 @@ if (isLoggedIn()) {
                 }
                 include_header_content("datosgraf2 = ".json_encode($prueba, JSON_NUMERIC_CHECK));
                 //Formateo array intervalos para estadísticas por horas
-                $fechas = strtotime(date('Y').'-'.date('m').'-01 00:00:00');
+                $fechas = strtotime(((empty($template_data[3]))?date('Y').'-'.date('m'):$template_data[3]).'-01 00:00:00');
                 $franjas = array();
-                while ($fechas <= strtotime(date('Y-m-d H:00:00'))){
+                while ($fechas <= ((empty($template_data[3]))?strtotime(date('Y-m-d H:00:00')):strtotime(date('Y-m', strtotime('+1 month', strtotime($template_data[3].'-01')))."-01 00:00:00"))){
                     $franjas[date('Y-m-d H:00:00',$fechas)] = 0;
                     $fechas = strtotime ('+1 hour',$fechas);
                 }
                 //Query donde se obtienen usuarios, MAC de los dispositivos y conexiones realizadas
-                $result = $radius->query("SELECT username,callingstationid,acctsessiontime, acctstarttime, acctstoptime,acctinputoctets,acctoutputoctets FROM radacct WHERE username LIKE '$server\_%' AND (acctstarttime >= '".date('Y')."-".date('m')."-01 00:00:00' OR (acctstarttime < '".date('Y')."-".date('m')."-01 00:00:00' AND acctstoptime IS NULL))");
+                $result = $radius->query("SELECT username,callingstationid,acctsessiontime, acctstarttime, acctstoptime,acctinputoctets,acctoutputoctets FROM radacct WHERE username LIKE '$server\_%' AND (acctstarttime ".((!empty($template_data[3]))?"between '".$template_data[3]."-01' AND '".$template_data[3]."-31'":">= '".date('Y')."-".date('m')."-01 00:00:00'")." OR (acctstarttime ".((!empty($template_data[3]))? "between '".date('Y-m', strtotime('+1 month', strtotime($template_data[3].'-01')))."-01 00:00:00' AND '".date('Y-m', strtotime('+1 month', strtotime($template_data[3].'-31')))."-01 00:00:00'":"< '".date('Y').'-'.date('m')."-01 00:00:00'")." AND acctstoptime IS NULL))");
                 if ($result->num_rows > 0) {
                     $mac = array();
                     $tiempototal=0;
@@ -99,7 +99,7 @@ if (isLoggedIn()) {
                     $bytes_subida = 0;
                     while ($aux = $result->fetch_assoc()){
                         // Si tenemos una franja de un mes anterior, pero accstoptime es NULL la contaremos en la primera franja del mes actual
-                        if(strtotime($aux['acctstarttime']) < strtotime(date('Y').'-'.date('m').'-01 00:00:00')) $aux['acctstarttime'] = date('Y').'-'.date('m').'-01 00:00:00';
+                        if(strtotime($aux['acctstarttime']) < strtotime(((empty($template_data[3]))?date('Y').'-'.date('m'):$template_data[3]).'-01 00:00:00')) $aux['acctstarttime'] = ((empty($template_data[3]))?date('Y').'-'.date('m'):$template_data[3]).'-01 00:00:00';
                         $array_resultado[$aux['username']][$aux['callingstationid']][] = array('duracion'=> $aux['acctsessiontime'], 'inicio'=>$aux['acctstarttime'], 'fin'=>$aux['acctstoptime']);
                         $tiempototal += $aux['acctsessiontime'];
                         
@@ -112,18 +112,30 @@ if (isLoggedIn()) {
                         $bytes_descarga += $aux['acctinputoctets'];
                         $bytes_subida += $aux['acctoutputoctets'];
                     }
+                    $meses = $radius->query("SELECT acctstarttime FROM radacct WHERE username LIKE  '$server\_%' ORDER BY acctstarttime ASC LIMIT 1");
+                    if ($meses->num_rows > 0) {
+                        $mes = $meses->fetch_assoc();
+                        $meses = array();
+                        $fecha2 = strtotime($mes['acctstarttime']);
+                        while ($fecha2 <= strtotime(date('Y-m-d H:00:00'))) {
+                            $meses[]= array("fecha" => date('Y-m', $fecha2), "texto" => spanish(date('F', $fecha2)));
+                            $fecha2 = strtotime('+1 month', $fecha2);
+                        }
+                    }
                     $datosgraf3 = array();
                     foreach ($franjas as $key => $value) $datosgraf3[] = array(strtotime($key)*1000, $value);
                     include_header_content("datosgraf3 = ".json_encode($datosgraf3, JSON_NUMERIC_CHECK));
+                    if (!empty($template_data[3])) $smarty->assign("mes_selected", array_pop(explode("/", $_SERVER['REQUEST_URI'])));
+                    if (!empty($fecha2)) $smarty->assign("select_mes", $meses);
                     $smarty->assign("num_con", $result->num_rows);
-                    $smarty->assign("mes", spanish(date('F')));
+                    $smarty->assign("mes", spanish(date('F', ((empty($template_data[3]))?time():strtotime($template_data[3].'-01')))));
                     $smarty->assign("media_con",  number_format(round (($result->num_rows) / (count($array_resultado)), 2), 2, ",", "."));
                     $smarty->assign("media_sesion", secondsToTime(round($tiempototal/$result->num_rows, 0)));
                     $smarty->assign("bytes_descarga", bytes_to_size($bytes_descarga));
                     $smarty->assign("bytes_subida", bytes_to_size($bytes_subida));
                 }
                 /*METODO 2: Se utiliza query para simplificar el proceso de conteo de conexiones*/
-                $result = $radius->query("SELECT SUBSTRING( callingstationid, 1, 8 ) AS principiomac, COUNT( SUBSTRING( callingstationid, 1, 8 ) ) AS countF FROM radacct WHERE username LIKE  '$server\_%' AND acctstarttime >=  '".date('Y')."-".date('m')."-01 00:00:00' GROUP BY SUBSTRING( callingstationid, 1, 8 ) ");
+                $result = $radius->query("SELECT SUBSTRING( callingstationid, 1, 8 ) AS principiomac, COUNT( SUBSTRING( callingstationid, 1, 8 ) ) AS countF FROM radacct WHERE username LIKE  '$server\_%' AND acctstarttime ".((!empty($template_data[3]))?"between '".$template_data[3]."-01' AND '".$template_data[3]."-31'":">= '".date('Y')."-".date('m')."-01 00:00:00'")." GROUP BY SUBSTRING( callingstationid, 1, 8 ) ");
                 $mac=array();
                 if ($result->num_rows > 0) {
                     while ($aux = $result->fetch_assoc()){

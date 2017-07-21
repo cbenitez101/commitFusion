@@ -36,12 +36,12 @@ define(DOMAIN, 'http://'.$_SERVER['SERVER_NAME'].((strstr($_SERVER['SERVER_NAME'
 //define(DOMAIN, 'http://localhost:8888');
 
 define(__DBHOST__, 'localhost');
-define(__DBUSER__, 'plataforma');
-define(__DBPASS__, 'christo');
+define(__DBUSER__, 'platformuser');
+define(__DBPASS__, 'rfC79w?3');
 define(__DBNAME__, 'plataforma');
 
 define(__RAHOST__, 'localhost');
-define(__RAUSER__, 'plataforma');
-define(__RAPASS__, 'christo');
+define(__RAUSER__, 'radiususer');
+define(__RAPASS__, 'Pwp+*f2b');
 define(__RANAME__, 'radius');
 ?>

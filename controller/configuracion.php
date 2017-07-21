@@ -176,33 +176,33 @@ if (isLoggedIn()) {
         case 'hotspots':
             if ($_SESSION['cliente'] == 'admin') {
                 load_modul('clipboard');
-                $si = new mysqli('217.125.25.165', 'servibyte', 'sbyte_15_Mxz', 'simpleinvoices', 8092);
-                $result = $si->query("SELECT id, name FROM `si_customers`");
-                $siout = array();
-                while ($aux = $result->fetch_assoc()) $siout[] = $aux;
+                // $si = new mysqli('217.125.25.165', 'servibyte', 'sbyte_15_Mxz', 'simpleinvoices', 8092);
+                // $result = $si->query("SELECT id, name FROM `si_customers`");
+                // $siout = array();
+                // while ($aux = $result->fetch_assoc()) $siout[] = $aux;
                 $result = $database->query("SELECT hotspots.*, locales.nombre as 'Nombre Local' FROM hotspots INNER JOIN locales ON hotspots.Local = locales.id ORDER BY `hotspots`.`id` ASC");
                 $out = array();
                 while ($aux = $result->fetch_assoc()) $out[] = $aux;
                 $menu = array();
                 foreach ($out as $value) foreach ($value as $key => $item) {
                     $menu[]=$item;
-                    if ($key == 'si') {
-                        $found = false;
-                        foreach ($siout as $elem) {
-                            if ($elem['id'] == $item) {
-                                $menu[]=$elem['name'];    //añadir el nombre del cliente a la tabla
-                                $found = TRUE;
-                            }
-                        }
-                        if (!$found) $menu[]="";
-                    }
+                    // if ($key == 'si') {
+                    //     $found = false;
+                    //     foreach ($siout as $elem) {
+                    //         if ($elem['id'] == $item) {
+                    //             $menu[]=$elem['name'];    //añadir el nombre del cliente a la tabla
+                    //             $found = TRUE;
+                    //         }
+                    //     }
+                    //     if (!$found) $menu[]="";
+                    // }
                 }
                 $result = $database->query('SELECT locales.*, clientes.nombre as cnombre FROM locales LEFT JOIN clientes ON clientes.id = locales.cliente');
                 $locales = array(); 
                 while ($aux = $result->fetch_assoc()) $locales[] = array($aux['id'],$aux['cnombre'].'.'.$aux['nombre']);
-                $smarty->assign('si', $siout);
+                // $smarty->assign('si', $siout);
                 $smarty->assign('local', $locales);
-                $smarty->assign('cols', implode(', ', array_keys($out[0])).',NombreCliente');
+                $smarty->assign('cols', implode(', ', array_keys($out[0])));
                 $smarty->assign('hotspot', $menu);
                 break;
             } else {

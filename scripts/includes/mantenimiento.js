@@ -4,18 +4,25 @@ $(document).ready(function(){
     table = $('#table-search').DataTable({
         "preDrawCallback" : function() {
                 var api = this.api();
-                $('#table-search tbody td').click(function() {
-                    if (!$(this).hasClass('sorting_1')) {
-                        row = api.row($(this).parent());
-                        data = api.row($(this).parent()).data();
-                        $('.modal').modal();
-                    }
-                });
+                if ($('#modal_dispositivo').length !== 0) { // Solo entra aqui si existe el modal_dispositivo
+                    $('#table-search:not(.server) tbody td').click(function() {
+                        if (!$(this).hasClass('sorting_1')) {
+                            row = api.row($(this).parent());
+                            data = api.row($(this).parent()).data();
+                            //$('.modal').modal();
+                            if (!data[0].includes("span")) {
+                                //Condición para que sólo cargue cuando estamos en la lista de hotspot y no cuando hay un dispositivo
+                                window.location.href = "/mantenimiento/dispositivos/" + data[0];
+                            }
+                        }
+                    });
+                }
         },
         "language": {
             "url": "https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json"
         },
-        "responsive" : true
+        "responsive" : true,
+        "pageLength" : 20
     });
     // Pone los datos de la variable modal en la tabla
     $('.modal').on('show.bs.modal', function(){
@@ -39,14 +46,13 @@ $(document).ready(function(){
     $('.modal button.action').click(function(){
         if ($(this).text() == 'Guardar') {
             // Guardo los valores en dataok para actualizar la tabla
-            if ($('#modal_gastoid').val() !== "") {
-                $('.modal-body [id^="modal_gasto"]').each(function(elem) {
+            if ($('#modal_dispositivoid').val() !== "") {
+                $('.modal-body [id^="modal_dispositivo"]').each(function(elem) {
                     dataok.push($(this).val());
                 });
-                dataok[5] = data[5];
             }
             //console.log(dataok);
-            guardar_gasto(0);
+            guardar_dispositivo(0);
         } else if ($(this).text() == 'Eliminar') {
             if (($('#modal_gastoid').val()!== "")) {
                 //Si estamos creando no hay id asignado y no se llama a la función
@@ -56,8 +62,53 @@ $(document).ready(function(){
             window.open('/informepdf?id='+data[0]+'&modo='+$('#historico input[type="radio"]:checked').val(), '_blank','menubar=no,status=no,titlebar=no,toolbar=no,scrollbars=yes,location=no');
         }
     });
+    $('.checkhabilitado').change(function(){
+        habilitar_dispositivo($(this).attr('id').split('-').pop(), ($(this).prop('checked'))? 1 : 0);
+    });
 });
 var table;
 var data;
 var row;
 var dataok = [];
+function guardar_dispositivo(action) {
+    console.log()
+    var guardar = [];
+    $('input[id^="modal_dispositivo"]').each(function(){
+        guardar.push($(this).val());
+    });
+    $('select[id^="modal_dispositivo"]').each(function(){
+        guardar.push($(this).val());
+    });
+    console.log(guardar);
+    $.ajax({
+        url: '/guardar_dispositivo',
+        type: 'POST',
+        data: {id: guardar[0], descripcion: guardar[1], notas: guardar[2], hotspot: guardar[3], tipo: guardar[4], action: action}
+    }).done(function(){
+        if (action === 0) {
+            if (guardar[0] === '') {
+                window.location = document.URL;
+            } else {
+                row.data(dataok);
+                dataok = [];
+            }
+            mensajealert('ok');
+        } else {
+            row.remove().draw();
+            mensajealert('delete');
+        }
+    });
+}
+function habilitar_dispositivo(id, valor) {
+    $.ajax({
+        url: '/habilitar_dispositivo',
+        type: 'POST',
+        data: {id: id, estado: valor}
+    }).done(function(){
+        if (valor == 0) {
+            mensajealert('delete');
+        } else {
+            mensajealert('ok');
+        }
+    });
+}

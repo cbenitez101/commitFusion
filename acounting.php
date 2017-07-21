@@ -12,7 +12,7 @@ if (isset($_SERVER['SHELL']) || isset($_GET['check'])) {
     //Proceso de generar los informes de hotspot
     $elements = $database->query("SELECT * FROM hotspots WHERE Informe = 3");
     while ($lugar = $elements->fetch_assoc()) {
-        $result = $radius->query("SELECT username from radacct where username like '".$lugar['ServerName']."_%' and acctstarttime > '".  ((isset($_GET['check']))?date('Y-m'):date('Y-m', strtotime('-1 month')))."-01 00:00:00' group by username");
+        $result = $radius->query("SELECT username from radacct where username like '".$lugar['ServerName']."\_%' and acctstarttime > '".  ((isset($_GET['check']))?date('Y-m'):date('Y-m', strtotime('-1 month')))."-01 00:00:00' group by username");
         $users = array();
         while ($test = $result->fetch_assoc()) {
             $users[] = $test['username'];
@@ -35,7 +35,7 @@ if (isset($_SERVER['SHELL']) || isset($_GET['check'])) {
             if (!array_key_exists($aux2['Id_Lote'], $total)) $total[$aux2['Id_Lote']] = array('cantidad'=>0, 'usuario'=>array(), 'precio'=>0); 
             if (empty($aux2['anulacion_fecha'])) {
                 $total[$aux2['Id_Lote']]['cantidad']++;
-                $total[$aux2['Id_Lote']]['usuario'][]=substr($aux, 11);
+                $total[$aux2['Id_Lote']]['usuario'][]=substr(strstr($aux, "_"), 1);
                 $total[$aux2['Id_Lote']]['precio']=$aux2['Precio'];
             } else {
                 $total[$aux2['Id_Lote']]['usuario'][]=substr($aux, 11).' ANULADO';

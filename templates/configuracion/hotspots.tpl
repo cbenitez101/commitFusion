@@ -70,7 +70,7 @@
                                             <option value="3">Por Tickets</option>
 										</select>
 									</div>
-									<div class="form-group">
+									{*<div class="form-group">
 										<label>Cliente</label>
 										<select class="form-control" name="serversi" id="modal_serversi">
                                             <option value="">Cliente</option>
@@ -78,7 +78,7 @@
                                                 <option value="{$item['id']}">{$item['name']}</option>
                                             {/foreach}
 										</select>
-									</div>
+									</div>*}
 								</form>
 							</div>
 							<div class="modal-footer">

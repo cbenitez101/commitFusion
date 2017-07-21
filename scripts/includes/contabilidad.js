@@ -64,6 +64,9 @@ $(document).ready(function(){
     $('#estadistica_server').change(function(){
         window.location = window.location.href + '/' + $('#estadistica_server').val();
     });
+    $('#estadistica_mes').change(function(){
+        window.location = (window.location.href.split("/").pop().includes("-"))?window.location.href.split("/").slice(0, -1).join("/")+"/"+$('#estadistica_mes').val():window.location.href + '/' + $('#estadistica_mes').val();
+    });
 
     Highcharts.setOptions({
         lang: {

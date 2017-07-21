@@ -36,7 +36,7 @@ function getTemplateData($getparams) {
 
 function get_subdoamin() {
     global $database;
-    $subdomain = strstr($_SERVER['SERVER_NAME'], '.www.plataforma.openwebcanarias.es/', TRUE);   //se extrae la parte delante de subdomain si no hay .servinet se devuelve false
+    $subdomain = strstr($_SERVER['SERVER_NAME'], '.servibyte.net', TRUE);   //se extrae la parte delante de subdomain si no hay .servinet se devuelve false
     if (strpos($subdomain, '.')) {
         $cliente = strstr($subdomain, '.', TRUE);
         $local = substr($subdomain, strpos($subdomain, '.')+1);
@@ -489,7 +489,7 @@ function external_crea_ticket() {
             }  
         }    
         
-        echo (($_POST['password'] == 'usuario')?(($_POST['servername'] == "coronablanca")?"user=$usuario&full=corona.png&identificador=".$_POST['identificador']."&precio=".$_POST['precio']."&duracion=".$_POST['duracion']:"user=$usuario"):"user=$usuario&pass=$contrasena");
+        echo (($_POST['password'] == 'usuario')?(($_POST['servername'] == "coronablanca")?"user=$usuario&full=1&identificador=".$_POST['identificador']."&precio=".$_POST['precio']."&duracion=".$_POST['duracion']."&hotspot=coronablanca":"user=$usuario"):"user=$usuario&pass=$contrasena");
         die();
     }
 }
@@ -620,7 +620,7 @@ function external_informeventas(){
             if (count($suma)>0) {
                 $result = $database->query("SELECT * FROM `hotspots` WHERE ServerName = '".$_GET['hotspot']."'");
                 $hotspot = $result->fetch_assoc();
-                pdf($suma, $hotspot, TRUE, spanish(date('F', strtotime(((empty($_GET['fechaini']))?"now":$_GET['fechaini'])))),$_GET['modo'], TRUE);
+                pdf($suma, $hotspot, TRUE, ((!empty($_GET['fechaini']))? $_GET['fechaini'].((!empty($_GET['fechafin']))?" - ":""):"").((!empty($_GET['fechafin']))?$_GET['fechafin']:""),$_GET['modo'], TRUE);
             }
         }
     }
@@ -796,6 +796,76 @@ function external_guardar_bono(){
     }
 }
 
+function external_guardar_dispositivo() {
+    if (isset($_POST['descripcion']) && isset($_POST['notas']) && isset($_POST['hotspot']) && isset($_POST['tipo']) && isset($_POST['action'])) {
+        global $database;
+        if ($_POST['action'] == 1) {
+            if ($database->query("DELETE FROM `dispositivos` WHERE `id`=".$_POST['id'])) die();
+        } else {
+            if (empty($_POST['id'])) {
+                if ($database->query('INSERT INTO `dispositivos`(`id_hotspot`, `tipo`, `descripcion`, `notas`) VALUES ("'.$_POST['hotspot'].'","'.$_POST['tipo'].'","'.$_POST['descripcion'].'","'.$_POST['notas'].'")')) die();
+            } else {
+                if ($database->query('UPDATE `bonos` SET `id_hotspot`="'.$_POST['id_hotspot'].'",`cantidad`="'.$_POST['cantidad'].'",`tipo`="'.$_POST['tipo'].'" WHERE `id`='.$_POST['id'])) die();
+            }
+        }
+    }
+}
+
+function external_actualiza_dispositivos() {
+    //Se recepciona los datos
+    $input = file_get_contents('php://input');
+    // Se comprueba que tenga contenido
+    if(strlen($input) > 0) {
+        $json = json_decode($input, true);
+        //Se comprueba que sea un json
+        if (!is_null($json)) {
+            //Comrpuebo que el array tenga elementos
+            if ((count($json) > 0 ) ) {
+                global $database;
+                foreach ($json as $key => $value) {
+                    // se comprueba que 
+                    if (count($value) == 5) {
+                        $result = $database->query("SELECT `fecha`  FROM `syslog` WHERE `local` = '".$value['dispositivo']."' AND `dispositivo` = '".$value['local']."'");
+                        if ($result->num_rows > 0) {
+                            $fecha = $result->fetch_assoc();
+                            if (strtotime($fecha) < strtotime('-30 min')) external_telegram($value['local']." - ".$value['dispositivo']." => Online");
+                        } 
+                        $database->query("INSERT INTO `syslog`(`fecha`, `ip`, `local`, `dispositivo`, `info`) VALUES ('".$value['fecha']."','".$value['ip']."','".$value['local']."','".$value['dispositivo']."','".json_encode($value['info'])."') ON DUPLICATE KEY UPDATE fecha='".$value['fecha']."', info='".json_encode($value['info'])."'");
+                    }
+                }
+            }
+        }
+    }
+    die();
+}
+
+function external_habilitar_dispositivo() {
+    if (!empty($_POST['id']) && isset($_POST['estado'])) {
+        global $database;
+        if ($database->query("UPDATE `dispositivos` SET `habilitado`=".$_POST['estado']." WHERE `id`=".$_POST['id'])) die();
+    }
+}
+
+function external_standalone() {
+    global $database;
+    $result = $database->query("SELECT syslog.local, syslog.dispositivo, syslog.fecha, syslog.ip FROM syslog LEFT JOIN dispositivos ON dispositivos.descripcion = syslog.dispositivo WHERE (dispositivos.habilitado = 1 OR syslog.dispositivo = 'hotspot') AND syslog.fecha < '".date("Y-m-d H:i:s", strtotime("-30 min"))."'  GROUP BY  syslog.dispositivo");
+    $out = array();
+    if ($result->num_rows > 0) while ($aux = $result->fetch_assoc()) $out[] = $aux;
+    $echo = '<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta http-equiv="refresh" content="900"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content=""><meta name="author" content="Servibyte SCP"><title>Servibyte Platform</title><link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"><!-- MetisMenu CSS --><link href="/scripts/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet"><!-- Custom CSS --><link href="/scripts/dist/css/sb-admin-2.css" rel="stylesheet"><!-- Custom Fonts --><link href="/scripts/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"><!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries --><!-- WARNING: Respond.js does not work if you view the page via file:// --><!--[if lt IE 9]><script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script><script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script><![endif]--><link rel="stylesheet" type="text/css" media="all" href="/scripts/default.css"/><link rel="stylesheet" type="text/css" media="all" href="/scripts/datatable/zzz.responsive.dataTables.min.css"/><link rel="stylesheet" type="text/css" media="all" href="/scripts/datatable/jquery.dataTables.min.css"/><link rel="stylesheet" type="text/css" media="all" href="/scripts/includes/mantenimiento.css"/><script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script><script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script><!-- Metis Menu Plugin JavaScript --><script src="/scripts/bower_components/metisMenu/dist/metisMenu.min.js"></script><!-- Custom Theme JavaScript --><script src="/scripts/dist/js/sb-admin-2.js"></script><script type="text/javascript" src="/scripts/datatable/jquery.dataTables.min.js"></script><script type="text/javascript" src="/scripts/datatable/zzz.dataTables.responsive.min.js"></script><script type="text/javascript" src="/scripts/default.js"></script><script type="text/javascript" src="/scripts/includes/mantenimiento.js"></script></head><body><h1 class="page-header align_center"><img src="/images/logos/admin.png"></h1><div class="dataTable_wrapper row"><div class="col-md-12">';
+    if (count($out) > 0) {
+        $echo .= '<table border="0" class="tabledit standalone server hover" id="table-search" width="100%"><thead><tr><th>local</th><th>dispositivo</th><th>fecha</th><th>ip</th><th>notas</th></tr></thead><tbody>';
+        foreach ($out as $value) {
+            if (strtotime($value['fecha']) >= strtotime("-30 min")) external_telegram($value['local']." - ".$value['dispositivo']." => Offline");
+            $echo .= "<tr><td>".$value['local']."</td><td>".$value['dispositivo']."</td><td>".$value['fecha']."</td><td>".$value['ip']."</td><td>".strtotime($value['fecha'])."  -  ".strtotime("-20 min")." ".date("Y-m-d H:i:s")."</td></tr>";
+        }
+        $echo .= '</tbody></table>';
+    } else {
+        $echo .= '<h1 class="page-header align_center"><img src="/images/allok.jpg"></h1>';
+    }
+    echo $echo.'</div></div></div></div></body></html>';
+    die();
+}
+
 function external_script_hotspot() {
     if (strstr($_SERVER['HTTP_USER_AGENT'], 'Mikrotik') && (isset($_GET['id_hotspot'])) && (isset($_GET['hotspot_serial']))) {
         global $database;
@@ -814,12 +884,11 @@ function external_script_hotspot() {
             header("Pragma: no-cache");
             header("Expires: 0");
             echo '/user set admin name=administrador password="sb_A54\$x"
-/ip address add address=192.168.1.5/24 interface=ether1
+/ip dhcp-client add default-route-distance=0 dhcp-options=hostname,clientid disabled=no interface=ether1
 /ip dns
 print
 :if ( [get servers] = "" ) do={/ip dns set servers=8.8.8.8,8.8.4.4 allow-remote-requests=yes}
 /
-/ip route add dst-address=0.0.0.0/0 gateway=192.168.1.1
 /ip dhcp-client
 :if ([:len [find interface=ether2 ]] = 0 ) do={/ip dhcp-client add interface=ether2 disabled=no}
 /
@@ -863,15 +932,15 @@ print
 /ip dns static add name=hotspot.wifipremium.com address=172.21.0.1 ttl=5m
 /ip hotspot profile add dns-name=hotspot.wifipremium.com hotspot-address=172.21.0.1 name=hsprof1
 /ip dhcp-server add address-pool=hs-pool-14 authoritative=yes bootp-support=static disabled=no interface=bridge_hotspot lease-time=24h name=dhcp1
-/ip hotspot user add name='.$hotspot['ServerName'].'_SBYTE password=sbboscosos
+/ip hotspot user add name='.$hotspot['ServerName'].'_SBBOSCOSOS password=SBBOSCOSOS
 /ip firewall filter add action=passthrough chain=unused-hs-chain comment="place hotspot rules here" disabled=yes
 /ip firewall nat add action=passthrough chain=unused-hs-chain comment= "place hotspot rules here" disabled=yes
 :delay 1s;
 /ip firewall nat add action=masquerade chain=srcnat comment= "masquerade hotspot network" src-address=172.21.0.0/22
-/ip hotspot set hotspot1 name='.$hotspot['ServerName'].'
+/ip hotspot set hotspot1 name='.$hotspot['ServerName'].' address-pool=none profile=hsprof1 idle-timeout=none
 /ip hotspot user profile add name=tecnico shared-users=5
 /ip hotspot user profile set default shared-users=1 rate-limit=380k/2M idle-timeout=none keepalive-timeout=20m status-autorefresh=1m mac-cookie-timeout=7d session-timeout=0s
-/ip hotspot user set '.$hotspot['ServerName'].'_SBYTE profile=tecnico
+/ip hotspot user set '.$hotspot['ServerName'].'_SBBOSCOSOS profile=tecnico
 /ip hotspot walled-garden add dst-host=www.apple.com
 /ip hotspot walled-garden add dst-host=www.airport.us
 /ip hotspot walled-garden add dst-host=www.itools.info
@@ -978,7 +1047,7 @@ print
 /system script add name=testinternet owner=administrador policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive source=":global internetactivo;\r\    \n\r\    \nif (\$internetactivo!=0 && \$internetactivo!=1) do={\r\    \n    :set internetactivo 0;\r\    \n        :log error \"Comienza Test Internet\";\r\    \n        /file print file=\$myfile\r\    \n        /file set \$file contents=\"interneterror.html\";\r\    \n        /ip dns static enable [find comment~\"Capturador\"] \r\    \n\r\    \n}\r\    \n\r\    \n:local myfile \"hotspot/testinternet\";\r\    \n:local file (\$myfile);\r\    \n\r\    \n:local pingresultado [/ping 4.2.2.4 count=5];\r\    \n\r\    \n:if (\$pingresultado>0) do={\r\    \n    :if (\$internetactivo=0) do={\r\    \n        :log error \"Internet funcionando\";\r\    \n        :set internetactivo 1;\r\    \n        /file print file=\$myfile\r\    \n        /file set \$file contents=\"https://wifipremium.com/login.php\";\r\    \n        /ip dns static disable [find comment~\"Capturador\"] \r\    \n    }\r\    \n}\r\    \n\r\    \n:if (\$pingresultado=0) do={\r\    \n    :if (\$internetactivo=1) do={\r\    \n        :log error \"Internet caido\";\r\    \n        :set internetactivo 0;\r\    \n        /file print file=\$myfile\r\    \n        /file set \$file contents=\"interneterror.html\";\r\    \n        /ip dns static enable [find comment~\"Capturador\"] \r\    \n    }\r\    \n}"
 /system scheduler add name=testinternet interval=5s on-event=testinternet
 /ip dns static add name=exit.com address=172.21.0.1 ttl=1d
-/ip dns static add name=".*\\\..*" address=172.21.0.1 ttl=1d disabled=yes comment="Capturador DNS cuando no hay internet"
+/ip dns static add name="" regexp=".*\\\..*" address=172.21.0.1 ttl=1d disabled=yes comment="Capturador DNS cuando no hay internet"
 /system ntp client set enabled=yes primary-ntp=129.67.1.160 secondary-ntp=129.67.1.164
 /system clock set time-zone-name=Atlantic/Canary
 /interface pptp-client add connect-to=217.125.25.165 user='.$hotspot['ServerName'].' password="A54_sb\?8" profile=default-encryption disabled=no
@@ -990,6 +1059,18 @@ print
 /user group add name=tecnico policy=reboot,write,test,read,web
 /user add name=tecnico group=tecnico password=sbboscosos
 /tool fetch url="http://servibyte.net/ftp/sys-note.txt"
+/system script add name=Monitorizacion owner=administrador policy=\
+    ftp,reboot,read,write,policy,test,password,sniff,sensitive source=":log wa\
+    rning (\":'.$hotspot['ServerName'].'::hotspot::up:\" . [/system resource get uptime] . \";\
+    cpu-load:\" . [/system resource get cpu-load] . \";connected:\" . [/interf\
+    ace wireless registration-table print count-only])"
+/system scheduler add interval=15m name="Monitorizaci\F3n" on-event=Monitorizacion policy=\
+    ftp,reboot,read,write,policy,test,password,sniff,sensitive start-date=\
+    jul/01/2016 start-time=00:00:00
+/system logging action
+set 1 disk-lines-per-file=100
+add name=SBRemote remote=217.125.25.165 target=remote
+/system logging add action=SBRemote prefix=Monitor topics=warning,script
 /file remove flash/hotspot.rsc
 ';
         }
@@ -1354,9 +1435,7 @@ function cierreinforme($pdf, $total, $comision) {
  * $users => modo de informe. 0 => no salen relación de usuarios, 1 => usuarios anulados, 2 => todos los usuarios.
  */
 function pdf($in, $local, $print = false, $mes = FALSE, $users = FALSE, $informe=FALSE) {
-    //dump($local);
-    //echo $mes;
-    // dump($in);
+
     global $fulldomain;
     require getcwd().'/scripts/fpdf/fpdf.php';
     global $suma;
@@ -1540,5 +1619,22 @@ function historial($total, $hotspot) {
 /*--------------------------------------------------------------------------*
  *                                 END                                      *
  *--------------------------------------------------------------------------*/
+ 
+function external_telegram($mensaje= null) {
+    global $telegram;
+    if (($mensaje==null) && (!empty($_GET['mensaje']))) {
+        $mensaje = $_GET['mensaje'];
+    }
+    if ($mensaje != null) {
+        $response = $telegram->sendMessage([
+          'chat_id' => '15381028', 
+        //   'chat_id' => '-27075383', 
+          'text' => $mensaje
+        ]);
+    }
+    // $response = $telegram->getUpdates();
+    if (!empty($_GET['mensaje'])) die();
+}
+
 ?>
 

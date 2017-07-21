@@ -5,6 +5,10 @@ require_once __DIR__.'/functions.php';                      // Load GLOBAL funct
 require_once __DIR__.'/defines.php';                        // Load GLOBAL parameters
 //require_once __DIR__.'/../classes/class.phpmailer.php';     // Load Mailer class
 require_once (SMARTY_DIR . 'Smarty.class.php');             // Load Smarty
+require 'vendor/autoload.php';                              // Telegram API
+use Telegram\Bot\Api;
+global $telegram;
+$telegram = new Api('350404834:AAEQf-q52bLH6oEO3cNdeQlmZ6uqp1QXIp4');
 global $database;
 $database= new mysqli(__DBHOST__, __DBUSER__, __DBPASS__, __DBNAME__);
 $radius= new mysqli(__RAHOST__, __RAUSER__, __RAPASS__, __RANAME__);

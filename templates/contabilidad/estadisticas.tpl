@@ -1,15 +1,28 @@
 
 <div class="row">
-	<div class="col-lg-12">
+	<div class="col-lg-{if isset($select_mes)}8{else}12{/if}">
 		{if isset($mes)}
 			<h1 class="page-header">Estadísticas de {$mes}</h1>
 		{else}
 			<h1 class="page-header">Estadísticas</h1>
 		{/if}
 	</div>
-	<!-- /.col-lg-12 -->
+	<!-- /.col-lg-8 -->
+	{if isset($select_mes)}
+	<div class="col-md-4">
+		<form role="form">
+			<h1 class="page-header">
+					<select class="form-control" id="estadistica_mes" action"">
+						<option value="">Seleccione un Mes</option>
+						{foreach item=item from=$select_mes}
+							<option value="{$item.fecha}" {if $item.fecha == $mes_selected} selected{/if}>{$item.texto}</option>
+						{/foreach}
+					</select>
+			</h1>
+		</form>
+	</div>
+	{/if}
 </div>
-
 {if isset($servers)}
 	<div class="row">
 		<div class="col-md-offset-3 col-md-6">
