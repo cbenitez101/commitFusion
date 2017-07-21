@@ -299,7 +299,7 @@ function borrarticket(){
     });
 }
 function creatickets(){
-    ticket['identificador']=$('.modal_ticketid:visible').val();
+    ticket['identificador']=$('.modal_ticketid:visible').val().trim();
     //console.log('creando');
     //console.log(ticket);
     $.ajax({
