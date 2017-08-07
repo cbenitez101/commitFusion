@@ -489,7 +489,7 @@ function external_crea_ticket() {
             }  
         }    
         
-        echo (($_POST['password'] == 'usuario')?(($_POST['servername'] == "coronablanca")?"user=$usuario&full=1&identificador=".$_POST['identificador']."&precio=".$_POST['precio']."&duracion=".$_POST['duracion']."&hotspot=coronablanca":"user=$usuario"):"user=$usuario&pass=$contrasena");
+        echo (($_POST['password'] == 'usuario')?(($_POST['servername'] == "coronablanca")?"user=$usuario&full=1&identificador=".$_POST['identificador']."&precio=".$_POST['precio']."&duracion=".$_POST['duracion']."&hotspot=coronablanca":(($_POST['servername'] == "AquaparkLanzarote")?"user=$usuario&precio=".$_POST['precio']."&duracion=".$_POST['duracion']."&hotspot=AquaparkLanzarote":"user=$usuario")):"user=$usuario&pass=$contrasena");
         die();
     }
 }
@@ -828,7 +828,7 @@ function external_actualiza_dispositivos() {
                         $result = $database->query("SELECT `fecha`  FROM `syslog` WHERE `local` = '".$value['dispositivo']."' AND `dispositivo` = '".$value['local']."'");
                         if ($result->num_rows > 0) {
                             $fecha = $result->fetch_assoc();
-                            if (strtotime($fecha) < strtotime('-30 min')) external_telegram($value['local']." - ".$value['dispositivo']." => Online");
+                            if (strtotime($fecha) >= strtotime("-45 min")) external_telegram($value['local']." - ".$value['dispositivo']." => Online");
                         } 
                         $database->query("INSERT INTO `syslog`(`fecha`, `ip`, `local`, `dispositivo`, `info`) VALUES ('".$value['fecha']."','".$value['ip']."','".$value['local']."','".$value['dispositivo']."','".json_encode($value['info'])."') ON DUPLICATE KEY UPDATE fecha='".$value['fecha']."', info='".json_encode($value['info'])."'");
                     }
@@ -847,6 +847,7 @@ function external_habilitar_dispositivo() {
 }
 
 function external_standalone() {
+    if (isset($_POST)) file_put_contents('standalone', print_r($_POST, true));
     global $database;
     $result = $database->query("SELECT syslog.local, syslog.dispositivo, syslog.fecha, syslog.ip, dispositivos.notas FROM syslog LEFT JOIN dispositivos ON dispositivos.descripcion = syslog.dispositivo WHERE (dispositivos.habilitado = 1 OR syslog.dispositivo = 'hotspot') AND syslog.fecha < '".date("Y-m-d H:i:s", strtotime("-30 min"))."'  GROUP BY  syslog.dispositivo");
     $out = array();
