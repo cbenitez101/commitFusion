@@ -84,7 +84,7 @@ and open the template in the editor.
         <div class='data'>
             <?php 
     		//Si se pasa por parámetro una foto con nombre $hotspot, se buscará $hotspot.hotspot.es y si existe se utiliza como logo
-                $logo = ((file_exists(getcwd().'/../images/logos/'.$_GET['hotspot'].'.'.$_GET['hotspot'].'.png'))?'logos/'.$_GET['hotspot'].'.'.$_GET['hotspot']:"logo");
+                $logo = ((file_exists(getcwd().'/../images/logos/'.strtolower($_GET['hotspot']).'.'.strtolower($_GET['hotspot']).'.png'))?'logos/'.strtolower($_GET['hotspot']).'.'.strtolower($_GET['hotspot']):"logo");
             ?>
             <div class="logo<?php echo ((isset($_GET['full']))? '':'2')?>">
                  <img id="logo" src="../images/<?php echo $logo ?>.png">
@@ -105,6 +105,12 @@ and open the template in the editor.
                             <?php echo date("d-m-y") ?>
                         <?php endif; ?>
                     </p>
+                <?php else: ?>
+                    <?php if (!empty($_GET['fecha'])): ?>
+                        <p>
+                            <?php echo $_GET['fecha']; ?>
+                        </p>
+                    <?php endif; ?>
                 <?php endif; ?>
                 <?php if (!empty($_GET['precio'])): ?>
                     <p>

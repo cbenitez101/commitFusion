@@ -1,0 +1,19 @@
+Array
+(
+    [lotesid] => 70
+    [precio] => 2.00
+    [password] => usuario
+    [traficodescarga] => 0
+    [wisprBandwidthMaxUp] => 0
+    [wisprBandwidthMaxDown] => 0
+    [expiration] => 0000-00-00
+    [loginTime] => 
+    [simultaneousUse] => 0
+    [idleTimeout] => 0
+    [acctInterimInterval] => 0
+    [modoconsumo] => One-All-Session
+    [movilidad] => Called_Station-Id
+    [duracion] => 14400
+    [servername] => AquaparkLanzarote
+    [identificador] => 123123
+)
