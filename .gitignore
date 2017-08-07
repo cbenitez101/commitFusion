@@ -5,6 +5,8 @@ templates_c/*
 *.pdf
 /.idea
 /templates_c/
+/templates_c
+templates_c
 @eaDir
 @eaDir/
 /@eaDir/
