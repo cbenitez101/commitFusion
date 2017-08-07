@@ -846,7 +846,6 @@ function external_habilitar_dispositivo() {
 }
 
 function external_standalone() {
-    if (isset($_POST)) file_put_contents('standalone', print_r($_POST, true));
     global $database;
     $result = $database->query("SELECT syslog.local, syslog.dispositivo, syslog.fecha, syslog.ip, dispositivos.notas FROM syslog LEFT JOIN dispositivos ON dispositivos.descripcion = syslog.dispositivo WHERE (dispositivos.habilitado = 1 OR syslog.dispositivo = 'hotspot') AND syslog.fecha < '".date("Y-m-d H:i:s", strtotime("-30 min"))."'  GROUP BY  syslog.dispositivo");
     $out = array();
