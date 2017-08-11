@@ -277,6 +277,6 @@
 		{/if}
 	</div>
 	<div class="ticket-crear">
-	    <button style="visibility: hidden;" class="btnPrint" data-url="/scripts/imprimeticket.php?user={$out['info']['username']}&hotspot=coronablanca&identificador={$out['plataforma']['identificador']}&precio={$out['plataforma']['Precio']}&duracion={$out['plataforma']['Duracion']}&fecha={$out['plataforma']['FechaVenta']|date_format: '%d-%m-%y'}&full=1"/>
+	    <button style="visibility: hidden;" class="btnPrint" data-url="/scripts/imprimeticket.php?user={$out['info']['username']}&hotspot={$out['plataforma']['ServerName']}&precio={$out['plataforma']['Precio']}&duracion={$out['plataforma']['Duracion']}&fecha={$out['plataforma']['FechaVenta']|date_format: '%d-%m-%y'}{if $out['plataforma']['ServerName'] == 'coronablanca'}&identificador={$out['plataforma']['identificador']}&full=1{/if}"/>
 	</div>
 {/if}
