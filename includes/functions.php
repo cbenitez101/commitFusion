@@ -488,7 +488,7 @@ function external_crea_ticket() {
                 }   
             }  
         }    
-        echo (($_POST['password'] == 'usuario')?(($_POST['servername'] == "coronablanca")?"user=$usuario&full=1&identificador=".$_POST['identificador']."&precio=".$_POST['precio']."&duracion=".$_POST['duracion']."&hotspot=coronablanca":(($_POST['servername'] == "AquaparkLanzarote&fecha=".date("d-m-y"))?"user=$usuario&precio=".$_POST['precio']."&duracion=".$_POST['duracion']."&hotspot=AquaparkLanzarote&fecha":"user=$usuario")):"user=$usuario&pass=$contrasena");
+        echo (($_POST['password'] == 'usuario')?(($_POST['servername'] == "coronablanca")?"user=$usuario&full=1&identificador=".$_POST['identificador']."&precio=".$_POST['precio']."&duracion=".$_POST['duracion']."&hotspot=coronablanca":(($_POST['servername'] == "AquaparkLanzarote")?"user=$usuario&precio=".$_POST['precio']."&duracion=".$_POST['duracion']."&hotspot=AquaparkLanzarote&fecha=".date("d-m-y"):"user=$usuario")):"user=$usuario&pass=$contrasena");
         die();
     }
 }
