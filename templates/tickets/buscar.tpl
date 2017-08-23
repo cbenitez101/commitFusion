@@ -277,6 +277,6 @@
 		{/if}
 	</div>
 	<div class="ticket-crear">
-	    <button style="visibility: hidden;" class="btnPrint" data-url="/scripts/imprimeticket.php?user={$out['info']['username']}&hotspot={$out['plataforma']['ServerName']}&precio={$out['plataforma']['Precio']}&duracion={$out['plataforma']['Duracion']}&fecha={$out['plataforma']['FechaVenta']|date_format: '%d-%m-%y'}{if $out['plataforma']['ServerName'] == 'coronablanca'}&identificador={$out['plataforma']['identificador']}&full=1{/if}"/>
+	    <button style="visibility: hidden;" class="btnPrint" data-url="/scripts/imprimeticket.php?user={$out['info']['username']}&hotspot={$out['plataforma']['ServerName']}{if $opciones[0]['BoolPrecio'] > 0}&precio={$out['plataforma']['Precio']}{/if}{if $opciones[0]['BoolDuracion'] > 0}&duracion={$out['plataforma']['Duracion']}{/if}{if $opciones[0]['BoolFecha'] > 0}&fecha={$out['plataforma']['FechaVenta']|date_format: '%d-%m-%y'}{/if}{if $opciones[0]['BoolIdentificador'] > 0}&identificador={$out['plataforma']['identificador']}{/if}&full={$opciones[0]['BoolFull']}"/>
 	</div>
 {/if}

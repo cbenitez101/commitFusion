@@ -17,7 +17,7 @@ if (isLoggedIn()) {
                 while ($aux = $result->fetch_assoc()) {
                     $ticket = array();
                     foreach ($aux as  $key => $value) {
-                        if (($key == 'Precio') || ($key == 'Duracion') || ($key == 'Movilidad') || ($key == 'ServerName') || ($key == 'ModoConsumo') || ($key == 'Acct-Interim-Interval') || ($key == 'Idle-Timeout') || ($key == 'Simultaneous-Use') || ($key == 'Login-Time') || ($key == 'Expiration') || ($key == 'WISPr-Bandwidth-Max-Down') || ($key == 'WISPr-Bandwidth-Max-Up') || ($key == 'TraficoDescarga') || ($key == 'lotesid')  || ($key == 'Password') ) {
+                        if (($key == 'Precio') || ($key == 'Duracion') || ($key == 'Movilidad') || ($key == 'ServerName') || ($key == 'ModoConsumo') || ($key == 'Acct-Interim-Interval') || ($key == 'Idle-Timeout') || ($key == 'Simultaneous-Use') || ($key == 'Login-Time') || ($key == 'Expiration') || ($key == 'WISPr-Bandwidth-Max-Down') || ($key == 'WISPr-Bandwidth-Max-Up') || ($key == 'TraficoDescarga') || ($key == 'lotesid')  || ($key == 'Password')  || ($key == 'BoolFull') || ($key == 'BoolFecha') || ($key == 'BoolPrecio') || ($key == 'BoolDuracion') || ($key == 'BoolIdentificador') || ($key == 'BoolLogo')) {
                             $ticket[$key] = $value;
                         }
                         if ($key == 'Duracion') {
@@ -193,7 +193,7 @@ if (isLoggedIn()) {
                 while ($aux = $result->fetch_assoc()) {
                     $ticket = array();
                     foreach ($aux as  $key => $value) {
-                        if (($key == 'Precio') || ($key == 'Duracion') || ($key == 'Movilidad') || ($key == 'ServerName') || ($key == 'ModoConsumo') || ($key == 'Acct-Interim-Interval') || ($key == 'Idle-Timeout') || ($key == 'Simultaneous-Use') || ($key == 'Login-Time') || ($key == 'Expiration') || ($key == 'WISPr-Bandwidth-Max-Down') || ($key == 'WISPr-Bandwidth-Max-Up') || ($key == 'TraficoDescarga') || ($key == 'lotesid')  || ($key == 'Password') ) {
+                        if (($key == 'Precio') || ($key == 'Duracion') || ($key == 'Movilidad') || ($key == 'ServerName') || ($key == 'ModoConsumo') || ($key == 'Acct-Interim-Interval') || ($key == 'Idle-Timeout') || ($key == 'Simultaneous-Use') || ($key == 'Login-Time') || ($key == 'Expiration') || ($key == 'WISPr-Bandwidth-Max-Down') || ($key == 'WISPr-Bandwidth-Max-Up') || ($key == 'TraficoDescarga') || ($key == 'lotesid')  || ($key == 'Password')  || ($key == 'BoolFull') || ($key == 'BoolFecha') || ($key == 'BoolPrecio') || ($key == 'BoolDuracion') || ($key == 'BoolIdentificador') || ($key == 'BoolLogo') ) {
                             $ticket[$key] = $value;
                         }
                         if ($key == 'Duracion') {
@@ -413,6 +413,15 @@ if (isLoggedIn()) {
                 }
                 $smarty->assign('estado', (($cancelado)?"CANCELADO":$estado));
                 $smarty->assign('out', $out);
+                
+                $out2 = array();
+                $result = $database->query("SELECT * FROM `hotspots` WHERE ServerName  = '".split("_", $template_data[2])[0]."'");
+                while($aux = $result->fetch_assoc()) $out2[] = $aux;
+                $smarty->assign('opciones', $out2);
+                file_put_contents('ZZZ', print_r($out2, true));
+                
+                
+                
             } else {
                 if ($_SESSION['cliente'] == 'admin') {
                     $result = $database->query("SELECT distinct(perfiles.ServerName) FROM `ventashotspot` INNER JOIN lotes ON ventashotspot.Id_lote = lotes.id INNER JOIN perfiles ON lotes.Id_perfil = perfiles.id");
@@ -420,6 +429,11 @@ if (isLoggedIn()) {
                     $smarty->assign('servers', $out);
 		        }
                 $smarty->assign('busqueda', true);
+                
+                
+                
+                
+                
             } 
             break;
         case 'resultado':

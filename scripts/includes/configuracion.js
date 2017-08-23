@@ -26,6 +26,11 @@ $(document).ready(function(){
                 null,
                 null,
                 null,
+                null,
+                null,
+                null,
+                null,
+                null,
                 {   
                     "defaultContent":""
                 }
@@ -153,6 +158,7 @@ $(document).ready(function(){
     
     // Pone los datos de la variable modal en la tabla
     $('.modal').on('show.bs.modal', function(){
+        // console.log(data);
         if (data != null) {
             var i = 0;
             $('#button-copy').hide();
@@ -224,7 +230,29 @@ check-for-updates once\r\n\
                             break;
                     }
                 } else if (i == 6) {
-                    if (data[i] !== "") $(this).val(data[i]);
+                    // if (data[i] !== "") $(this).val(data[i]);
+                }else if(i == 13){   
+                     if (data[i] == 1) $(this).prop('checked', true);
+                    // if (data[i] == 1) $('#modal_serverfull1').prop('checked', true);
+                    // else $('#modal_serverfull2').prop('checked', true);
+                }else if( i == 8 ){
+                    // console.log($(this).prop('checked'));
+                    // console.log(this);
+                    // console.log(data[i]);
+                   if (data[i] == 1) $(this).prop('checked', true);
+                    // console.log($(this).prop('checked'));
+                }else if( i==9  ){   
+                   if (data[i] == 1) $(this).prop('checked', true);
+                }else if( i==10  ){   
+                   if (data[i] == 1) $(this).prop('checked', true);
+                }else if( i==11 ){   
+                   if (data[i] == 1) $(this).prop('checked', true);
+                }else if( i==12 ){   
+                   if (data[i] == 1) $(this).prop('checked', true);
+                }else if( i==7){   
+                     if (data[i] == 1) $('#modal_serverhsfull1').prop('checked', true);
+                    else $('#modal_serverhsfull2').prop('checked', true);
+                //   if (data[i] == 1) $(this).prop('checked', true);
                 } else if (i < 6) {
                     $(this).val(data[i]);
                 }
@@ -306,6 +334,7 @@ check-for-updates once\r\n\
         $('#localimagen').html('');
         //$('#button-copy').attr('data-clipboard-text',"");
         $("#button-copy").hide();
+        $("[id^='modal_serverhs']").prop('checked', false);
     });
     // Acciones de los botones
     $('.modal button.action').click(function(e){
@@ -314,12 +343,31 @@ check-for-updates once\r\n\
             // Guardo los valores en dataok para actualizar la tabla
             if ($('#modal_hotspot').length !== 0) { // Solo entra aqui si existe el modal_hotspot
                 if ($('#modal_serverid').val() !== "") {
+                    // $('.modal-body [id^="modal_server"]').each(function(elem) {
+                    //     dataok.push($(this).val());
+                    // });
+                    // dataok[5] = data[5];
                     $('.modal-body [id^="modal_server"]').each(function(elem) {
-                        dataok.push($(this).val());
+                        if ($(this).attr('id') !== 'modal_serverhsfull1' && $(this).attr('id') !== 'modal_serverhsfull2' &&  $(this).attr('id') !== 'modal_serverhsfecha' &&  $(this).attr('id') !== 'modal_serverhsprecio' &&  $(this).attr('id') !== 'modal_serverhsduracion' &&  $(this).attr('id') !== 'modal_serverhsidentificador' &&  $(this).attr('id') !== 'modal_serverhslogo' && $(this).attr('id') !== 'modal_serverhspass'  ) {
+                            dataok.push($(this).val());
+                        }
                     });
                     dataok[5] = data[5];
+                    dataok[6] = data[6];
+                      $('.modal-body [id^="modal_serverhs"]').each(function(elem) {
+                        if ($(this).attr('id') === 'modal_serverhsfull1' && $(this).prop('checked')) {
+                            dataok.push( "1" );
+                        }else if($(this).attr('id') === 'modal_serverhsfull2' && $(this).prop('checked')){
+                            dataok.push( "0" );
+                        }
+                        else if($(this).attr('id') !== 'modal_serverhsfull1' && $(this).attr('id') !== 'modal_serverhsfull2' && $(this).prop('checked'))  {dataok.push( "1");
+                       } else if ($(this).attr('id') !== 'modal_serverhsfull1' && $(this).attr('id') !== 'modal_serverhsfull2'){
+                           dataok.push( "0");
+                           
+                       } 
+                    });
                 }
-                //console.log(dataok);
+           
                 guardar_hotspot(0);
             } 
             if ($('#modal_perfil').length !== 0) {
@@ -574,16 +622,27 @@ var clipboard;
 function guardar_hotspot(action) {
     var guardar = [];
     $('input[id^="modal_server"]').each(function(){
-        guardar.push($(this).val());
+        if ($(this).attr('id') === 'modal_serverhsfull1' && $(this).prop('checked')) {
+            guardar.push( 1 );
+        }else if($(this).attr('id') === 'modal_serverhsfull2' && $(this).prop('checked')){
+            guardar.push( 0 );
+        
+        } else if( $(this).attr('id') === 'modal_serverhsfecha' || $(this).attr('id') === 'modal_serverhsprecio' || $(this).attr('id') === 'modal_serverhsduracion' || $(this).attr('id') === 'modal_serverhsidentificador' || $(this).attr('id') == 'modal_serverhslogo'  ){
+            guardar.push( (($(this).prop('checked'))?1:0) );
+        } else if ($(this).attr('name') !== 'modal_serverfull') guardar.push( $(this).val());
     });
+    
     $('select[id^="modal_server"]').each(function(){
         guardar.push($(this).val());
     });
+
+                
+    // console.log(guardar);
     if (guardar.length > 0) {
         $.ajax({
             url: '/guardar_hotspot',
             type: 'POST',
-            data: {id: guardar[0], name: guardar[1], number: guardar[2], status: guardar[3].toUpperCase(), local: guardar[4], informe: guardar[5], si: guardar[6], action: action}
+            data: {id: guardar[0], name: guardar[1], number: guardar[2], full: guardar[3], fecha: guardar[4], precio: guardar[5], duracion: guardar[6], identificador: guardar[7], logo: guardar[8],  status: guardar[9].toUpperCase(), local: guardar[10], informe: guardar[11], action: action}
         }).done(function(){
             if (action === 0) {
                 if (guardar[0] === '') {
@@ -591,8 +650,6 @@ function guardar_hotspot(action) {
                 } else {
                     var aux = row.data();
                     dataok[3] = dataok[3].toUpperCase();
-                    dataok[7] = aux[7];
-                    dataok[8] = aux[8];
                     row.data(dataok);
                     dataok = [];
                 }

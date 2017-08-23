@@ -386,8 +386,10 @@ function external_quitar_dash() {
 }
 function external_guardar_hotspot(){
     //global $fulldomain;
-    //file_put_contents('hotspots', print_r($_POST, true));
-    if ((!empty($_POST['name'])) && (!empty($_POST['status'])) && (!empty($_POST['local'])) && (!empty($_POST['informe']))) {
+    
+    // dump($_POST, true);
+    if ((!empty($_POST['name'])) && (!empty($_POST['status'])) && (!empty($_POST['local'])) ) {
+        file_put_contents('hotspots', print_r($_POST, true));
         global $database;
         global $radius;
         if ($_POST['action'] == 1) {
@@ -402,8 +404,10 @@ function external_guardar_hotspot(){
             } else {
                 $temporal = $database->query('SELECT * FROM hotspots WHERE id = "'.$_POST['id'].'"');
                 $aux = $temporal->fetch_assoc();
-                if ($database->query('UPDATE `hotspots` SET `ServerName`="'.$_POST['name'].'",`SerialNumber`='.((empty($_POST['number']))?"NULL":'"'.$_POST['number'].'"').',`Status`="'.$_POST['status'].'",`Local`="'.$_POST['local'].'",`Informe`="'.$_POST['informe'].'",`si`='.(($_POST['si']=='Cliente')?"NULL":(($_POST['si']==0)?'NULL':'"'.$_POST['si'].'"')).' WHERE id="'.$_POST['id'].'"')) {
-                    if ($radius->query('UPDATE `radgroupcheck` SET `groupname` = "'.$_POST['local'].'", `value`= "'.$_POST['name'].'" WHERE groupname="'.$aux['Local'].'" AND value = "'.$aux['ServerName'].'"')) die();
+                if ($database->query('UPDATE `hotspots` SET `ServerName`="'.$_POST['name'].'",`SerialNumber`='.((empty($_POST['number']))?"NULL":'"'.$_POST['number'].'"').',`Status`="'.$_POST['status'].'",`Local`="'.$_POST['local'].'",`Informe`="'.$_POST['informe'].'", `BoolFull`= "'.$_POST['full'].'", `BoolFecha` = "'.$_POST['fecha'].'", `BoolPrecio` = "'.$_POST['precio'].'" , `BoolDuracion` = "'.$_POST['duracion'].'", `BoolIdentificador` = "'.$_POST['identificador'].'", `BoolLogo` = "'.$_POST['logo'].'" WHERE id="'.$_POST['id'].'"')) {
+                    if ($radius->query('UPDATE `radgroupcheck` SET `groupname` = "'.$_POST['local'].'", `value`= "'.$_POST['name'].'"  WHERE groupname="'.$aux['Local'].'" AND value = "'.$aux['ServerName'].'"')) die();
+                    
+                    file_put_contents('ZZ', print_r('UPDATE `radgroupcheck` SET `groupname` = "'.$_POST['local'].'", `value`= "'.$_POST['name'].'" WHERE groupname="'.$aux['Local'].'" AND value = "'.$aux['ServerName'].'"', true));
                 }
             }
                 
@@ -445,7 +449,7 @@ function external_guardar_lote() {
 function external_crea_ticket() {
     global $fulldomain;
 //    file_put_contents($fulldomain.'/crearticket', print_r($_POST, TRUE));
-    if (isset($_POST['movilidad']) && isset($_POST['servername']) && isset($_POST['modoconsumo']) && isset($_POST['acctInterimInterval']) && isset($_POST['idleTimeout']) && isset($_POST['simultaneousUse']) && isset($_POST['loginTime']) && isset($_POST['expiration']) && isset($_POST['wisprBandwidthMaxDown']) && isset($_POST['wisprBandwidthMaxUp']) && isset($_POST['traficodescarga']) && isset($_POST['duracion']) && isset($_POST['lotesid']) && isset($_POST['precio']) && isset($_POST['identificador']) && isset($_POST['password'])) {        //Devolver usuario y contraseña de la siguente forma: user=$usuario&pass=$contrasena
+    if (isset($_POST['movilidad']) && isset($_POST['servername']) && isset($_POST['modoconsumo']) && isset($_POST['acctInterimInterval']) && isset($_POST['idleTimeout']) && isset($_POST['simultaneousUse']) && isset($_POST['loginTime']) && isset($_POST['expiration']) && isset($_POST['wisprBandwidthMaxDown']) && isset($_POST['wisprBandwidthMaxUp']) && isset($_POST['traficodescarga']) && isset($_POST['duracion']) && isset($_POST['lotesid']) && isset($_POST['precio']) && isset($_POST['identificador']) && isset($_POST['password'])  && isset($_POST['boolfull'])&& isset($_POST['boolfecha']) && isset($_POST['boolprecio']) && isset($_POST['boolduracion']) && isset($_POST['boolidentificador']) && isset($_POST['boollogo'])) {        //Devolver usuario y contraseña de la siguente forma: user=$usuario&pass=$contrasena
         global $radius;
         global $database;
         
@@ -488,7 +492,13 @@ function external_crea_ticket() {
                 }   
             }  
         }    
-        echo (($_POST['password'] == 'usuario')?(($_POST['servername'] == "coronablanca")?"user=$usuario&full=1&identificador=".$_POST['identificador']."&precio=".$_POST['precio']."&duracion=".$_POST['duracion']."&hotspot=coronablanca":(($_POST['servername'] == "AquaparkLanzarote")?"user=$usuario&precio=".$_POST['precio']."&duracion=".$_POST['duracion']."&hotspot=AquaparkLanzarote&fecha=".date("d-m-y"):"user=$usuario")):"user=$usuario&pass=$contrasena");
+        
+
+            
+        echo "user=$usuario".(($_POST['boolfull'] ==1)?"&full=".$_POST['boolfull']:"").(($_POST['boolfecha'] > 0)?"&fecha=".date("d-m-y"):"").(($_POST['boolprecio'] > 0)?"&precio=".$_POST['precio']:"").(($_POST['boolduracion'] > 0)?"&duracion=".$_POST['duracion']:"").(($_POST['boolidentificador'] > 0)?"&identificador=".$_POST['identificador']:"").(($_POST['boollogo'] > 0)?"&logo=".$_POST['logo']:"").(($_POST['password'] == 'usuario')?"":"&pass=$contrasena")."&hotspot=".$_POST['servername'];
+       
+
+        // echo (($_POST['password'] == 'usuario')?(($_POST['servername'] == "coronablanca")?"user=$usuario&full=1&identificador=".$_POST['identificador']."&precio=".$_POST['precio']."&duracion=".$_POST['duracion']."&hotspot=coronablanca":(($_POST['servername'] == "AquaparkLanzarote")?"user=$usuario&precio=".$_POST['precio']."&duracion=".$_POST['duracion']."&hotspot=AquaparkLanzarote&fecha=".date("d-m-y"):"user=$usuario")):"user=$usuario&pass=$contrasena");
         die();
     }
 }

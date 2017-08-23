@@ -70,6 +70,61 @@
                                             <option value="3">Por Tickets</option>
 										</select>
 									</div>
+									
+									
+									<label>Opciones de presentación:</label><br>
+									
+									<div class="row">
+										<div class="col-md-3">
+												
+											<div class="form-group">
+												<input type="radio" id="modal_serverhsfull1" name="modal_serverfull" value="folio"> Folio</br>
+												<input type="radio" id="modal_serverhsfull2" name="modal_serverfull" value="ticket"> Ticket
+											</div>
+										</div>
+										
+										<div class="col-md-3">
+											<div class="form-group">
+												 <input type="checkbox" id="modal_serverhsfecha" name="modal_servehsfecha"> Fecha<br>
+											</div>
+										</div>
+										
+										<div class="col-md-3">
+											<div class="form-group">
+												 <input type="checkbox" id="modal_serverhsprecio" name="modal_servehsprecio"> Precio<br>
+											</div>
+										</div>
+										
+										<div class="col-md-3">
+											<div class="form-group">
+												<input type="checkbox" id="modal_serverhsduracion" name="modal_servehsduracion"> Duración<br>
+											</div>
+										</div>
+										<div class="col-md-3">
+											<div class="form-group">
+											 	<input type="checkbox" id="modal_serverhsidentificador" name="modal_servehsidentificador">Identificador<br>
+											</div>
+											
+										</div>
+										
+										<div class="col-md-3">
+											<div class="form-group">
+												<input type="checkbox" id="modal_serverhslogo" name="modal_servehslogo" > Logo<br>
+											</div>
+										</div>
+									</div>
+									
+									
+									<div class="row">
+										
+									
+										
+										
+									</div>
+										
+									
+								
+									
 									{*<div class="form-group">
 										<label>Cliente</label>
 										<select class="form-control" name="serversi" id="modal_serversi">
