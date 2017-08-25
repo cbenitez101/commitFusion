@@ -12,12 +12,12 @@ if (isLoggedIn()) {
                 // como[] se pone el ServerName.
                 $result = $database->query("select hotspots.*, perfiles.*, lotes.*, lotes.id as lotesid from locales left join clientes on locales.cliente = clientes.id left join hotspots on hotspots.Local = locales.id
     right join perfiles on hotspots.id = perfiles.Id_hotspot left join lotes on lotes.Id_perfil = perfiles.Id
-    where hotspots.Status = 'ONLINE' AND perfiles.Descripcion NOT LIKE '%PAYPAL'");
+    where hotspots.Status = 'ONLINE' AND perfiles.Descripcion NOT LIKE '%PAYPAL' ORDER BY hotspots.ServerName ASC ");
                 $tickets = array();
                 while ($aux = $result->fetch_assoc()) {
                     $ticket = array();
                     foreach ($aux as  $key => $value) {
-                        if (($key == 'Precio') || ($key == 'Duracion') || ($key == 'Movilidad') || ($key == 'ServerName') || ($key == 'ModoConsumo') || ($key == 'Acct-Interim-Interval') || ($key == 'Idle-Timeout') || ($key == 'Simultaneous-Use') || ($key == 'Login-Time') || ($key == 'Expiration') || ($key == 'WISPr-Bandwidth-Max-Down') || ($key == 'WISPr-Bandwidth-Max-Up') || ($key == 'TraficoDescarga') || ($key == 'lotesid')  || ($key == 'Password')  || ($key == 'BoolFull') || ($key == 'BoolFecha') || ($key == 'BoolPrecio') || ($key == 'BoolDuracion') || ($key == 'BoolIdentificador') || ($key == 'BoolLogo')) {
+                        if (($key == 'Precio') || ($key == 'Duracion') || ($key == 'Movilidad') || ($key == 'ServerName') || ($key == 'ModoConsumo') || ($key == 'Acct-Interim-Interval') || ($key == 'Idle-Timeout') || ($key == 'Simultaneous-Use') || ($key == 'Login-Time') || ($key == 'Expiration') || ($key == 'WISPr-Bandwidth-Max-Down') || ($key == 'WISPr-Bandwidth-Max-Up') || ($key == 'TraficoDescarga') || ($key == 'lotesid')  || ($key == 'Password')  || ($key == 'BoolFull') || ($key == 'BoolFecha') || ($key == 'BoolPrecio') || ($key == 'BoolDuracion') || ($key == 'BoolIdentificador') || ($key == 'BoolLogo') || ($key == 'userformat') ) {
                             $ticket[$key] = $value;
                         }
                         if ($key == 'Duracion') {
@@ -188,12 +188,12 @@ if (isLoggedIn()) {
             } else {
                 $result = $database->query("select hotspots.*, perfiles.*, lotes.*, lotes.id as lotesid from locales left join clientes on locales.cliente = clientes.id left join hotspots on hotspots.Local = locales.id
     right join perfiles on hotspots.id = perfiles.Id_hotspot left join lotes on lotes.Id_perfil = perfiles.Id
-    where clientes.nombre = '".$_SESSION['cliente']."' and locales.nombre = '".(empty($_SESSION['local'])? 'Ofi-Hotspot' : $_SESSION['local'] )."' and hotspots.Status = 'ONLINE'");
+    where clientes.nombre = '".$_SESSION['cliente']."' and locales.nombre = '".(empty($_SESSION['local'])? 'Ofi-Hotspot' : $_SESSION['local'] )."' and hotspots.Status = 'ONLINE' ORDER BY hotspots.ServerName ASC");
                 $tickets = array();
                 while ($aux = $result->fetch_assoc()) {
                     $ticket = array();
                     foreach ($aux as  $key => $value) {
-                        if (($key == 'Precio') || ($key == 'Duracion') || ($key == 'Movilidad') || ($key == 'ServerName') || ($key == 'ModoConsumo') || ($key == 'Acct-Interim-Interval') || ($key == 'Idle-Timeout') || ($key == 'Simultaneous-Use') || ($key == 'Login-Time') || ($key == 'Expiration') || ($key == 'WISPr-Bandwidth-Max-Down') || ($key == 'WISPr-Bandwidth-Max-Up') || ($key == 'TraficoDescarga') || ($key == 'lotesid')  || ($key == 'Password')  || ($key == 'BoolFull') || ($key == 'BoolFecha') || ($key == 'BoolPrecio') || ($key == 'BoolDuracion') || ($key == 'BoolIdentificador') || ($key == 'BoolLogo') ) {
+                        if (($key == 'Precio') || ($key == 'Duracion') || ($key == 'Movilidad') || ($key == 'ServerName') || ($key == 'ModoConsumo') || ($key == 'Acct-Interim-Interval') || ($key == 'Idle-Timeout') || ($key == 'Simultaneous-Use') || ($key == 'Login-Time') || ($key == 'Expiration') || ($key == 'WISPr-Bandwidth-Max-Down') || ($key == 'WISPr-Bandwidth-Max-Up') || ($key == 'TraficoDescarga') || ($key == 'lotesid')  || ($key == 'Password')  || ($key == 'BoolFull') || ($key == 'BoolFecha') || ($key == 'BoolPrecio') || ($key == 'BoolDuracion') || ($key == 'BoolIdentificador') || ($key == 'BoolLogo') || ($key == 'userformat')  ) {
                             $ticket[$key] = $value;
                         }
                         if ($key == 'Duracion') {
@@ -418,21 +418,15 @@ if (isLoggedIn()) {
                 $result = $database->query("SELECT * FROM `hotspots` WHERE ServerName  = '".split("_", $template_data[2])[0]."'");
                 while($aux = $result->fetch_assoc()) $out2[] = $aux;
                 $smarty->assign('opciones', $out2);
-                file_put_contents('ZZZ', print_r($out2, true));
-                
-                
+                // file_put_contents('ZZZ', print_r($out2, true));
                 
             } else {
                 if ($_SESSION['cliente'] == 'admin') {
-                    $result = $database->query("SELECT distinct(perfiles.ServerName) FROM `ventashotspot` INNER JOIN lotes ON ventashotspot.Id_lote = lotes.id INNER JOIN perfiles ON lotes.Id_perfil = perfiles.id");
+                    $result = $database->query("SELECT distinct(perfiles.ServerName) FROM `ventashotspot` INNER JOIN lotes ON ventashotspot.Id_lote = lotes.id INNER JOIN perfiles ON lotes.Id_perfil = perfiles.id ORDER BY ServerName ASC");
                     while($aux = $result->fetch_assoc()) $out[] = $aux['ServerName'];
                     $smarty->assign('servers', $out);
 		        }
                 $smarty->assign('busqueda', true);
-                
-                
-                
-                
                 
             } 
             break;

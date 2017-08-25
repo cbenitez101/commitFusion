@@ -16,6 +16,7 @@ and open the template in the editor.
 /*button:disabled {background-color: grey}*/
 .tabledit tbody tr {
     cursor: pointer;
+   
 }
 h4 {
     color: #4F7327 !important;
@@ -37,3 +38,6 @@ h4 {
 .dt-button > span {
     font-size: 14px;
 }
+/*body {*/
+/*     -webkit-print-color-adjust:exact;*/
+/*}*/

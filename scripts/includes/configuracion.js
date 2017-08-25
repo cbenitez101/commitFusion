@@ -259,6 +259,7 @@ check-for-updates once\r\n\
                 i++;
             });
             $('.modal-body [id^="modal_perfil"]').each(function(elem) {
+                // console.log($(this).attr("class").split(" ")[1].split("-")[1]);
                 $(this).val(data[$(this).attr("class").split(" ")[1].split("-")[1]]);
             });
             $('.modal-body [id^="modal_lote"]').each(function(elem) {
@@ -315,6 +316,16 @@ check-for-updates once\r\n\
             $('#tabholder').addClass('disableed');
             $('.modal:not("#modal_borrar, #modal_borrar_dash") .btn-danger').addClass('displaynone');
         }
+        
+        
+        
+        
+         $('.tooltip-demo').tooltip({
+            selector: "[data-toggle=tooltip]",
+            container: "body"
+        });
+        
+        
     });
     // Resetea los campos del formulario
     $('.modal').on('hidden.bs.modal', function(){
@@ -335,6 +346,9 @@ check-for-updates once\r\n\
         //$('#button-copy').attr('data-clipboard-text',"");
         $("#button-copy").hide();
         $("[id^='modal_serverhs']").prop('checked', false);
+        $('#modal_perfilformato').css('border', '');
+        $('#modal_perfilpassword').css('border', '');
+        $('[id*="modal_perfil"]').val("");
     });
     // Acciones de los botones
     $('.modal button.action').click(function(e){
@@ -371,12 +385,45 @@ check-for-updates once\r\n\
                 guardar_hotspot(0);
             } 
             if ($('#modal_perfil').length !== 0) {
+                $('#modal_perfilformato').css('border', '');
+                $('#modal_perfilpassword').css('border', '');
                  if ($('#modal_perfilid').val() !== "") {
-                    for (var i = 0; i < 16 ; i++) {
-                        dataok.push($('.perfil-' + i).val());
+                    var valido = true;
+                    var error1 = false;
+                    var error2 = false;
+                    for (var i = 0; i < 17 ; i++) {
+                        console.log(i);
+                        if(i == 15){
+                            jQuery.each($('.perfil-' + i).val().split(""), function(i, v){
+                                if ($.inArray(v, formatstring) == -1) {
+                                    valido = false;
+                                    error1 = true;
+                                }
+                            });
+                            dataok.push($('.perfil-' + i).val());
+                        }else if(i == 16){
+                            if($('.perfil-' + i).val() !== 'usuario'){
+                                jQuery.each($('.perfil-' + i).val().split(""), function(i, v){
+                                    if ($.inArray(v, formatstring) == -1 && $('.perfil-' + i).val() !== 'usuario') {
+                                        valido = false;
+                                        error2 = true;
+                                    }
+                                });
+                            }
+                            dataok.push($('.perfil-' + i).val());
+                        }else dataok.push($('.perfil-' + i).val());
                     }
                 }
-                guardar_perfil(0);
+                if (!valido){
+                    e.stopPropagation();
+                    if (error1) $('#modal_perfilformato').css('border', '1px solid red');
+                    if (error2) $('#modal_perfilpassword').css('border', '1px solid red');
+                    dataok=[];
+                }else {
+                    $('#modal_perfilformato').css('border', '');
+                    $('#modal_perfilpassword').css('border', '');
+                    guardar_perfil(0);
+                }
             }
             if ($('#modal_lote').length !== 0) { // Solo entra aqui si existe el modal_lote
                 if ($('#modal_loteid').val() !== "") {
@@ -421,7 +468,7 @@ check-for-updates once\r\n\
                         dataok.push($(this).val());
                     });
                 }
-                console.log(dataok);
+                // console.log(dataok);
                 guardar_local(0);
             } 
         } else if ($(this).text() == 'Eliminar') {
@@ -619,6 +666,7 @@ var checkout;
 var api1;
 var files;
 var clipboard;
+var formatstring = ['T', 'A', 'M', 'm', 'N', 'b', 'B', 'V', 'v', 'C', 'c'];
 function guardar_hotspot(action) {
     var guardar = [];
     $('input[id^="modal_server"]').each(function(){
@@ -663,8 +711,9 @@ function guardar_hotspot(action) {
 }
 function guardar_perfil(action) {
     var guardar = {};
+
     $('[id^="modal_perfil"]').each(function(){
-        guardar["per_"+$(this).attr("class").split(" ")[1].split("-")[1]] = $(this).val();
+         guardar["per_"+$(this).attr("class").split(" ")[1].split("-")[1]] = $(this).val();
     });
     guardar['action'] = action;
     $.ajax({
@@ -685,6 +734,8 @@ function guardar_perfil(action) {
             mensajealert('delete');
         }
     });
+  
+        
 }
 function guardar_lote(action) {
     var guardar = [];
@@ -732,6 +783,8 @@ function guardar_usuario(action) {
     $('select[id^="modal_usuario"]').each(function(){
         guardar.push($(this).val());
     });
+    
+    
     if (guardar.length > 0) {
         $.ajax({
             url: '/guardar_usuario',
@@ -816,7 +869,7 @@ function guardar_cliente(action) {
 function guardar_logo(guardar){
     var data = new FormData();
     $.each(files, function(key, value){
-        console.log(value);
+        // console.log(value);
         if (key !== 'logo') {
             data.append(key, value);
         }
@@ -824,7 +877,7 @@ function guardar_logo(guardar){
     //data.append('nombre', guardar [1]);
     data.append('nombre', guardar.length > 3 ? guardar[4] : guardar [1]);
     if (guardar.length > 3) data.append('local', guardar[1]);
-    console.log(data);
+    // console.log(data);
     $.ajax({
         url: '/upload_logo',
         type: 'POST',

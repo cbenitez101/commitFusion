@@ -161,18 +161,16 @@
         										<label>TraficoDescarga</label>
         										<input class="form-control perfil-14" name="traficodescarga" id="modal_perfiltraficodescarga">
         									</div>
-        									<div class="form-group">
-        										<label>Contraseña</label>
-        										<input class="form-control perfil-15" name="password" id="modal_perfilpassword">
-        									</div>
+    									    <div class="tooltip-demo form-group">
+    									        <label>Formato Usuario</label>
+                                                <input class="form-control perfil-15" name="formato" id="modal_perfilformato" data-toggle="tooltip" data-placement="left" title="'T': Todos, 'A': Alfabeto, 'M': Mayúsculas, 'm': Minusculas, 'N': Números, 'b': minúsculas y números, 'B': Mayúsculas y números, 'V': Vocales mayúsculas, 'v': Vocales minúsculas, 'C': Consonantes mayúsculas, 'c': consonantes minúsculas. Si se deja en blanco se generará con un formato predefinido por el sistema.">
+                                            
+                                            	<label>Formato Contraseña</label>
+        										<input class="form-control perfil-16" name="password" id="modal_perfilpassword" data-toggle="tooltip" data-placement="left" title="'T': Todos, 'A': Alfabeto, 'M': Mayúsculas, 'm': Minusculas, 'N': Números, 'b': minúsculas y números, 'B': Mayúsculas y números, 'V': Vocales mayúsculas, 'v': Vocales minúsculas, 'C': Consonantes mayúsculas, 'c': consonantes minúsculas. 'Usuario': utiliza el nombre de usuario como password. Si se deja en blanco se generará con un formato predefinido por el sistema.">
+                                            
+                                            </div>
     							        </div>
-    							    </div>
-    									
-        									
-        									
-        									
-        									
-        									
+    							    </div>			
 								</form>
 
 							</div>

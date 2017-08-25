@@ -3,6 +3,7 @@ if (isLoggedIn()) {
     load_modul('datatable');
     // load_modul('bsdatepicker');
     load_modul('bootstrap-datepicker');
+    load_modul('tooltipster');
     $smarty->assign('page', $template_data[1]);
     switch ($template_data[1]) {
         case 'usuarios':

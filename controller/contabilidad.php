@@ -55,7 +55,7 @@ if (isLoggedIn()) {
                 }else{
                     // Si no tenemos /hotspot en la url, se muestra formulario para selección del hotspot
                     /* AÑADIR ID A LA QUERY SIGUIENTE. ¿DE DONDE SACA Id_hotspot?? */
-                    $result = $database->query("SELECT ServerName FROM hotspots");
+                    $result = $database->query("SELECT ServerName FROM hotspots ORDER BY ServerName ASC");
                     if ($result->num_rows > 0) {
                         $out = array();
                         while ($aux = $result->fetch_assoc()) $out[] = array("server"=> $aux['ServerName'], "id" => $aux['Id_hotspot']);

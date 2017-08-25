@@ -76,6 +76,7 @@ and open the template in the editor.
 	            text-align: center;
 	        }
 	      
+	      
 	        
 	        </style>
     </head>
