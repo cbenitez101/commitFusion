@@ -406,8 +406,6 @@ function external_guardar_hotspot(){
                 $aux = $temporal->fetch_assoc();
                 if ($database->query('UPDATE `hotspots` SET `ServerName`="'.$_POST['name'].'",`SerialNumber`='.((empty($_POST['number']))?"NULL":'"'.$_POST['number'].'"').',`Status`="'.$_POST['status'].'",`Local`="'.$_POST['local'].'",`Informe`="'.$_POST['informe'].'", `BoolFull`= "'.$_POST['full'].'", `BoolFecha` = "'.$_POST['fecha'].'", `BoolPrecio` = "'.$_POST['precio'].'" , `BoolDuracion` = "'.$_POST['duracion'].'", `BoolIdentificador` = "'.$_POST['identificador'].'", `BoolLogo` = "'.$_POST['logo'].'" WHERE id="'.$_POST['id'].'"')) {
                     if ($radius->query('UPDATE `radgroupcheck` SET `groupname` = "'.$_POST['local'].'", `value`= "'.$_POST['name'].'"  WHERE groupname="'.$aux['Local'].'" AND value = "'.$aux['ServerName'].'"')) die();
-                    
-                    // file_put_contents('ZZ', print_r('UPDATE `radgroupcheck` SET `groupname` = "'.$_POST['local'].'", `value`= "'.$_POST['name'].'" WHERE groupname="'.$aux['Local'].'" AND value = "'.$aux['ServerName'].'"', true));
                 }
             }
                 
@@ -448,11 +446,9 @@ function external_guardar_lote() {
 }
 function external_crea_ticket() {
     global $fulldomain;
-//    file_put_contents($fulldomain.'/crearticket', print_r($_POST, TRUE));
     if (isset($_POST['movilidad']) && isset($_POST['servername']) && isset($_POST['modoconsumo']) && isset($_POST['acctInterimInterval']) && isset($_POST['idleTimeout']) && isset($_POST['simultaneousUse']) && isset($_POST['loginTime']) && isset($_POST['expiration']) && isset($_POST['wisprBandwidthMaxDown']) && isset($_POST['wisprBandwidthMaxUp']) && isset($_POST['traficodescarga']) && isset($_POST['duracion']) && isset($_POST['lotesid']) && isset($_POST['precio']) && isset($_POST['identificador']) && isset($_POST['password'])  && isset($_POST['boolfull'])&& isset($_POST['boolfecha']) && isset($_POST['boolprecio']) && isset($_POST['boolduracion']) && isset($_POST['boolidentificador']) && isset($_POST['boollogo']) && isset($_POST['userformat'])) {        //Devolver usuario y contraseña de la siguente forma: user=$usuario&pass=$contrasena
         global $radius;
         global $database;
-        
         $exists = false;
         while (!$exists) {
         //     file_put_contents('ZPrueba', print_r($_POST['userformat'], true));

@@ -418,8 +418,6 @@ if (isLoggedIn()) {
                 $result = $database->query("SELECT * FROM `hotspots` WHERE ServerName  = '".split("_", $template_data[2])[0]."'");
                 while($aux = $result->fetch_assoc()) $out2[] = $aux;
                 $smarty->assign('opciones', $out2);
-                // file_put_contents('ZZZ', print_r($out2, true));
-                
             } else {
                 if ($_SESSION['cliente'] == 'admin') {
                     $result = $database->query("SELECT distinct(perfiles.ServerName) FROM `ventashotspot` INNER JOIN lotes ON ventashotspot.Id_lote = lotes.id INNER JOIN perfiles ON lotes.Id_perfil = perfiles.id ORDER BY ServerName ASC");

@@ -392,7 +392,6 @@ check-for-updates once\r\n\
                     var error1 = false;
                     var error2 = false;
                     for (var i = 0; i < 17 ; i++) {
-                        console.log(i);
                         if(i == 15){
                             jQuery.each($('.perfil-' + i).val().split(""), function(i, v){
                                 if ($.inArray(v, formatstring) == -1) {

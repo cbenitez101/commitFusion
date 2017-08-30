@@ -76,8 +76,6 @@ and open the template in the editor.
 	            text-align: center;
 	        }
 	      
-	      
-	        
 	        </style>
     </head>
     <body>    
@@ -138,7 +136,7 @@ and open the template in the editor.
                     <div class="grid_1">&nbsp; </div>
                     <div class="grid_5"> 
                         <ol>
-                            <li><strong>¿Puedo coneectarme con más de un dispositivo a la vez? </strong>Si, hay un límite de x dispositivos por sesión. No, para poder conectar otro dispositivo primero tiene que cerrar la sesión en el que está en uso. Para saber como desconectar consulte el punto 6.</li>
+                            <li><strong>¿Puedo coneectarme con más de un dispositivo a la vez? </strong>Si, hay un límite de x dispositivos por sesión. Si quiere conectar mas dispositivos, primero tiene que cerrar la sesión en uno que esté en uso. Para saber como desconectar consulte el punto 6.</li>
                             <li><strong>¿Hay limitaciones de tráfico, velocidad o aplicaciones? </strong>Los límites están establecidos en la velocidad de descarga y de subida. No hay límites en la cantidad de tráfico ni en aplicaciones.</li>
                             <li><strong>¿Formas de pago?</strong>Se puede pagar en mostrador del establecimiento en efectivo o tarjeta, o mediante la plataforma de pago paypal en el portal de la red wifi (donde se pide el código de conexión).</li>
                             <li><strong>¿Seguridad de los datos?</strong>Todas las redes están protegidas para que los usuarios no se vean entre sí. Los datos de conexión del dispositivo serán registrados acorde con la Ley Orgánica de Protección de Datos (LOPD).</li>
@@ -155,7 +153,7 @@ and open the template in the editor.
                     </div> 
                     <div class="grid_5"> 
                         <ol>
-                            <li><strong>Can I connect more than one device at the same time? </strong>Yes, there is a limit of x devices per session. No, if you want to connect another device must first log out wich is in use. To know how to disconnect, see point 6.</li>
+                            <li><strong>Can I connect more than one device at the same time? </strong>Yes, there is a limit of x devices per session. If you want to connect more than x device first must log out one in use. To know how to disconnect, see point 6.</li>
                             <li><strong>Are there limitations of traffic, speed or applications? </strong>The limits are set at download and upload speed. There is no limitation about the traffic amount or kind of applications.</li>
                             <li><strong>Payment?</strong>You can pay cash or credit card at info establishment's desk, or by paypal payment at wireless wabsite platform (where connection code is required).</li>
                             <li><strong>Data security?</strong>All networks are protected that users can not see each other. The connection data device will be recorded according to Spanish Data Protection Law (LOPD).</li>

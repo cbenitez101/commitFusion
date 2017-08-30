@@ -3,24 +3,44 @@
 require_once('scripts/routeros-api/routeros_api.class.php');
 
 
-// $ip = '192.168.45.62';   // 941
+$ip = '192.168.45.142';   // 941
 // $ip = '192.168.45.94';   // 951
 // $ip = '192.168.45.75';   // 952
-$ip = '192.168.45.69';   // 2011
+// $ip = '192.168.45.69';   // 2011
 
 $user = 'admin';
 $pass = '';
 $API = new RouterosAPI();
 $API->debug = false;
+$server = 'AlegriaVivir';
+$hotspotserial = '6CBA051DB8AF';
 if ($API->connect($ip, $user, $pass)) {
     print_r("Conexión establecida.\n");
-    // // /* RESET CONFIG */
-    // // print_r("-> Reset Config <-\n");
-    // // if (enviaComando('/system/reset-configuration',array('no-defaults'=>'yes','skip-backup'=>'yes', 'run-after-reset'=>'inicio.rsc'))){
-    // //     print_r("Se ha ejecutado con éxito\n");
-    // // }else{
-    // //     print_r("ERROR: No se ha podido ejecutar el comando\n");
-    // // }
+    // /* RESET CONFIG */
+    // print_r("-> Reset Config <-\n");
+    // if (enviaComando('/system/reset-configuration',array('no-defaults'=>'yes','skip-backup'=>'yes', 'run-after-reset'=>'inicio.rsc'))){
+    //     print_r("Se ha ejecutado con éxito\n");
+    // }else{
+    //     print_r("ERROR: No se ha podido ejecutar el comando\n");
+    // }
+    
+    // $res = $API->comm('/user/set/admin', array('name'=>'administrador'));
+    // print_r($res);
+    // echo gettype($res);
+    
+    
+    print_r("Cambio de usuario.\n");
+    if (enviaComando('/user/set/admin',array('name'=>'administrador'))){
+        print_r("Se ha ejecutado con éxito\n\n");
+        if (enviaComando('/user/set/administrador',array('password'=>'sb_A54$x'))){
+            print_r("Se ha ejecutado con éxito\n\n");
+        }else{
+            print_r("ERROR: No se ha podido cambiar el usuario\n");
+        }
+    }else{
+        print_r("ERROR: No se ha podido cambiar el usuario\n");
+    }
+    
     /* PONER SERVIDORES GOOGLE */
     print_r("- GOOGLE SERVERS -\n\n");
     $API->write('/ip/dns/print');
@@ -35,7 +55,7 @@ if ($API->connect($ip, $user, $pass)) {
     
     /* SYSTEM IDENTITY */
     print_r("- SYSTEM IDENTITY -\n\n");
-    if (enviaComando('/system/identity/set', array("name"=>'Christo_API'))){
+    if (enviaComando('/system/identity/set', array("name"=>$server))){
         print_r("--Se ha ejecutado con éxito\n\n");
     } else {
         print_r("---ERROR: No se ha podido establecerSYSTEM IDENTITY\n\n");
@@ -56,6 +76,12 @@ if ($API->connect($ip, $user, $pass)) {
         print_r("---ERROR: No se ha podido establecer ZONA HORARIA\n\n");
     }
     
+    print_r("- VPN -\n\n");
+    if (enviaComando('/interface/pptp-client/add', array("name"=>'Servibyte', "connect-to" => "217.125.25.165", "user"=>$server, "password"=>"A54_sb?8", "disabled"=>"no"))){
+        print_r("--Se ha establecido la conexion a la VPN\n\n");
+    } else {
+        print_r("---ERROR: No se ha podido establecer la conexion VPN\n\n");
+    }
   
     
     /* CREACION DE BRIDGES */
@@ -84,13 +110,13 @@ if ($API->connect($ip, $user, $pass)) {
                 $READ = $API->read();
                 if(count($READ) > 0){
                     if (!array_key_exists('!trap', $READ)) {
-                        if(enviaComando('/interface/wireless/security-profiles/add', array('authentication-types'=>'wpa-psk,wpa2-psk', 'eap-methods'=>"", 'management-protection'=>'allowed', 'mode'=>'dynamic-keys', 'name'=>'profile_staff', 'supplicant-identity'=>'', 'wpa-pre-shared-key'=>'API_sb_staff', 'wpa2-pre-shared-key'=>'API_sb_staff'))){
+                        if(enviaComando('/interface/wireless/security-profiles/add', array('authentication-types'=>'wpa-psk,wpa2-psk', 'eap-methods'=>"", 'management-protection'=>'allowed', 'mode'=>'dynamic-keys', 'name'=>'profile_staff', 'supplicant-identity'=>'', 'wpa-pre-shared-key'=>$server.'_sb_staff', 'wpa2-pre-shared-key'=>$server.'_sb_staff'))){
                             foreach ($READ as $key => $value) {
-                                if (enviaComando('/interface/wireless/set', array("numbers"=> $key,"disabled"=>"no", "mode"=>"ap-bridge", "band"=>((strstr($value['band'],'2ghz'))?"2ghz-b/g/n":"5ghz-a/n/ac"), "channel-width"=>"20mhz", "frequency"=>((strstr($value['band'],'2ghz'))?2437:5240), "wireless-protocol"=>"802.11", "default-forwarding"=>"no", "ssid"=>"MIKROTIKAPI","radio-name"=>"MIKROTIKAPI", "name"=>((strstr($value['band'],'2ghz'))?'wireless2':'wireless5')))){
+                                if (enviaComando('/interface/wireless/set', array("numbers"=> $key,"disabled"=>"no", "mode"=>"ap-bridge", "band"=>((strstr($value['band'],'2ghz'))?"2ghz-b/g/n":"5ghz-a/n/ac"), "channel-width"=>"20mhz", "frequency"=>((strstr($value['band'],'2ghz'))?2437:5240), "wireless-protocol"=>"802.11", "default-forwarding"=>"no", "ssid"=>$server,"radio-name"=>$server, "name"=>((strstr($value['band'],'2ghz'))?'wireless2':'wireless5')))){
                                     if (enviaComando('/ip/neighbor/discovery/set', array('numbers'=>((strstr($value['band'],'2ghz'))?'wireless2':'wireless5'),'discover'=>'no'))){
                                         if (enviaComando('/interface/bridge/port/add', array("bridge"=> "bridge1_hs_clientes1","interface"=>((strstr($value['band'],'2ghz'))?'wireless2':'wireless5')))) {
-                                            if (enviaComando('/interface/wireless/add', array("disabled"=>'yes', "keepalive-frames"=>"disabled", "master-interface"=>((strstr($value['band'],'2ghz'))?'wireless2':'wireless5'), "multicast-buffering"=>"disabled", "name"=>"MIKROTIKAPI_Staff_".((strstr($value['band'],'2ghz'))?"2":"5"), "ssid"=>"MIKROTIKAPI_Staff", "wds-cost-range"=>0, "wds-default-cost"=>0, "wps-mode"=>"disabled", "mac-address"=>"0".$key.substr($value['mac-address'], 2),'security-profile'=>'profile_staff'))) {
-                                                if (enviaComando('/interface/bridge/port/add', array("bridge"=> "bridge3_hs_staff","interface"=>"MIKROTIKAPI_Staff_".((strstr($value['band'],'2ghz'))?"2":"5")))) {
+                                            if (enviaComando('/interface/wireless/add', array("disabled"=>'yes', "keepalive-frames"=>"disabled", "master-interface"=>((strstr($value['band'],'2ghz'))?'wireless2':'wireless5'), "multicast-buffering"=>"disabled", "name"=>$server."_Staff_".((strstr($value['band'],'2ghz'))?"2":"5"), "ssid"=>$server."_Staff", "wds-cost-range"=>0, "wds-default-cost"=>0, "wps-mode"=>"disabled", "mac-address"=>"0".$key.substr($value['mac-address'], 2),'security-profile'=>'profile_staff'))) {
+                                                if (enviaComando('/interface/bridge/port/add', array("bridge"=> "bridge3_hs_staff","interface"=>$server."_Staff_".((strstr($value['band'],'2ghz'))?"2":"5")))) {
                                                     print_r("--Se ha completado la config del Wireless\n");
                                                 }else print_r("---ERROR: No se ha podido ejecutar el comando\n");
                                             }else print_r("---ERROR: No se ha podido ejecutar el comando\n");
@@ -166,7 +192,7 @@ if ($API->connect($ip, $user, $pass)) {
                                         else print_r("---ERROR: No se ha podido deshabilitar el interface de admin\n");
                                         
                                         if (enviaComando('/interface/bridge/port/add', array('bridge'=>'bridge_trunk','interface'=>'ether4'))){
-                                            print_r("---ERROR: Se añade ether4 a bridge_trunk\n");
+                                            print_r("--Se añade ether4 a bridge_trunk\n");
                                             
                                             /* Dependiendo del modelo con el que estemos operando realizamos */ 
                                             if (strstr($READ[0]['model'],'951') > -1 || strstr($READ[0]['model'],'952') > -1){
@@ -330,7 +356,7 @@ if ($API->connect($ip, $user, $pass)) {
     }else print_r("---ERROR: Filter NO añadido\n\n");
     
     print_r("- SCRIPT MONITORIZACION -\n\n");
-    if(enviaComando('/system/script/add', array('name'=>'Monitorizacion', 'owner'=>"administrador",'policy'=>' ftp,reboot,read,write,policy,test,password,sniff,sensitive', 'source'=>":log warning (\":API::Air1::up:\" .[/system resource get uptime] . \";cpu-load:\" . [/system resource get cpu-load] . \";connected:\" . [/interface wireless registration-table print count-only])"))){
+    if(enviaComando('/system/script/add', array('name'=>'Monitorizacion', 'owner'=>"administrador",'policy'=>' ftp,reboot,read,write,policy,test,password,sniff,sensitive', 'source'=>":log warning (\":".$server."::Hotspot::up:\" .[/system resource get uptime] . \";cpu-load:\" . [/system resource get cpu-load] . \";connected:\" . [/interface wireless registration-table print count-only])"))){
         print_r("--Script Monitorizacion añadido\n\n");
         if(enviaComando('/system/scheduler/add', array('interval'=>'15m', 'name'=>"Monitorizacion",'on-event'=>'Monitorizacion', 'policy'=>'ftp,reboot,read,write,policy,test,password,sniff,sensitive', 'start-date'=>'jul/01/2016', 'start-time'=>'00:00:00'))){
             print_r("--SCHEDULER añadido\n\n");
@@ -379,10 +405,10 @@ if ($API->connect($ip, $user, $pass)) {
                                 print_r("--Se añade perfil hsprof1 al hotspot\n");
                             }else print_r("---ERROR: no se ha podido añadir el perfil de hotspot hsprof1\n");
                             
-                            if(enviaComando('/ip/hotspot/add', array('disabled'=>'no', 'idle-timeout'=>'none','interface'=>'bridge1_hs_clientes1','name'=>'API', 'profile'=>'hsprof1'))){
+                            if(enviaComando('/ip/hotspot/add', array('disabled'=>'no', 'idle-timeout'=>'none','interface'=>'bridge1_hs_clientes1','name'=>$server, 'profile'=>'hsprof1'))){
                                 print_r("--Se añade hotspot API\n");
                                 print_r("-> IP bindings <-\n");  
-                                if(enviaComando('/ip/hotspot/ip-binding/add', array('address'=>'172.21.9.171','mac-address'=>'04:18:D6:84:83:1A','server'=>'API', 'to-address'=>'172.21.9.171','type'=>'bypassed'))){
+                                if(enviaComando('/ip/hotspot/ip-binding/add', array('address'=>'172.21.9.171','mac-address'=>'04:18:D6:84:83:1A','server'=>$server, 'to-address'=>'172.21.9.171','type'=>'bypassed'))){
                                     print_r("--Se añade IP Binding del Hotspot\n");
                                 }else print_r("---ERROR: no se ha podido añadir IP Binding del Hotspot\n");
                             
@@ -789,17 +815,22 @@ if ($API->connect($ip, $user, $pass)) {
     /*MOVER A PARTE DE HOTSPOT*/
     //Ponerlo dentro de if anidado de esta parte
     print_r("- Se añaden usuarios para el hotspot -\n\n"); 
-    if(enviaComando('/ip/hotspot/user/add', array('name'=>'API_SBBOSCOSOS','password'=>'SBBOSCOSOS','profile'=>'tecnico', 'server'=>'API'))){
+    
+     if(enviaComando('/ip/hotspot/user/add', array('name'=>$server.'_SBBOSCOSOS','password'=>'SBBOSCOSOS'))){
         print_r("--Se ha añadido el usuario SBBOSCOSOS\n");
     }else print_r("---ERROR: No se ha añadir el usuario SBBOSCOSOS\n");
     
-    if(enviaComando('/ip/hotspot/user/add', array('name'=>'API_AKR_HAB612','password'=>'AKR_HAB612', 'server'=>'API'))){
-         print_r("--Se ha añadido el usuario API_AKR_HAB612\n");
-    }else print_r("---ERROR: No se ha añadir el usuario API_AKR_HAB612\n");
+    if(enviaComando('/ip/hotspot/user/add', array('name'=>$server.'_SBBOSCOSOS','password'=>'SBBOSCOSOS','profile'=>'tecnico', 'server'=>$server))){
+        print_r("--Se ha añadido el usuario SBBOSCOSOS\n");
+    }else print_r("---ERROR: No se ha añadir el usuario SBBOSCOSOS\n");
     
-    if(enviaComando('/ip/hotspot/user/add', array('name'=>'API_URK0GONZALEZ','password'=>'URK0GONZALEZ','profile'=>'uprof1', 'server'=>'API'))){
-         print_r("--Se ha añadido el usuario API_URK0GONZALEZ\n\n");
-    }else print_r("---ERROR: No se ha añadir el usuario API_URK0GONZALEZ\n\n");
+    // if(enviaComando('/ip/hotspot/user/add', array('name'=>'API_AKR_HAB612','password'=>'AKR_HAB612', 'server'=>'API'))){
+    //      print_r("--Se ha añadido el usuario API_AKR_HAB612\n");
+    // }else print_r("---ERROR: No se ha añadir el usuario API_AKR_HAB612\n");
+    
+    // if(enviaComando('/ip/hotspot/user/add', array('name'=>'API_URK0GONZALEZ','password'=>'URK0GONZALEZ','profile'=>'uprof1', 'server'=>'API'))){
+    //      print_r("--Se ha añadido el usuario API_URK0GONZALEZ\n\n");
+    // }else print_r("---ERROR: No se ha añadir el usuario API_URK0GONZALEZ\n\n");
     
 
     print_r("- WALLED GARDEN -\n\n"); 
@@ -883,9 +914,9 @@ if ($API->connect($ip, $user, $pass)) {
         print_r("--Fetch de interneterror.html\n");
     }else print_r("---ERROR: No se ha podido hacer fetch de interneterror.html\n");
     
-     if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/GETSERIALNAME-login.html","dst-path"=>"hotspot/login.html"))){
+     if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/".$hotspotserial."-login.html","dst-path"=>"hotspot/login.html"))){
         print_r("--Fetch de GETSERIALNAME-login.html\n");
-    }else print_r("---ERROR: No se ha podido hacer fetch de GETSERIALNAME-login.html\n");
+    }else print_r("---ERROR: No se ha podido hacer fetch de $hotspotserial-login.html\n");
     
     if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/logoservibyte.png","dst-path"=>"hotspot/logoservibyte.png"))){
         print_r("--Fetch de logoservibyte.png\n");
@@ -1007,29 +1038,29 @@ if ($API->connect($ip, $user, $pass)) {
         }else print_r("---ERROR: no se ha podido añadir script hotspot\n");
     }else print_r("---ERROR: no se ha podido añadir script hotspot\n\n");
     
-    print_r("- SCRIPT AP10 -\n\n"); 
-    if(enviaComando('/system/script/add', array("name"=> "AP10", "owner"=> "administrador", "policy"=>"ftp,reboot,read,write,policy,test,password,sniff,sensitive", "source"=>":if ([/ip neighbor get [find identity=\"AP-10\"]] != \"no such item\") do={:log warning (\":coronablanca::AP-10:: up:00:00:00cpu-load:0\")}"))){
-        print_r("--Script AP10 añadido\n");
-        if(enviaComando('/system/scheduler/add', array("disabled"=> "yes",'interval'=>'14m59s', 'name'=>'AP10', 'on-event'=>'AP10', 'policy'=>'ftp,reboot,read,write,policy,test,password,sniff,sensitive', 'start-date'=>'jul/26/2016', 'start-time'=>'21:44:20'))){
-            print_r("--Script AP10 scheduled\n\n");
-        }else print_r("--Script AP10 scheduled\n");
-    }else print_r("---ERROR: no se ha podido añadir script Ap10\n\n");
+    // print_r("- SCRIPT AP10 -\n\n"); 
+    // if(enviaComando('/system/script/add', array("name"=> "AP10", "owner"=> "administrador", "policy"=>"ftp,reboot,read,write,policy,test,password,sniff,sensitive", "source"=>":if ([/ip neighbor get [find identity=\"AP-10\"]] != \"no such item\") do={:log warning (\":coronablanca::AP-10:: up:00:00:00cpu-load:0\")}"))){
+    //     print_r("--Script AP10 añadido\n");
+    //     if(enviaComando('/system/scheduler/add', array("disabled"=> "yes",'interval'=>'14m59s', 'name'=>'AP10', 'on-event'=>'AP10', 'policy'=>'ftp,reboot,read,write,policy,test,password,sniff,sensitive', 'start-date'=>'jul/26/2016', 'start-time'=>'21:44:20'))){
+    //         print_r("--Script AP10 scheduled\n\n");
+    //     }else print_r("--Script AP10 scheduled\n");
+    // }else print_r("---ERROR: no se ha podido añadir script Ap10\n\n");
     
-    print_r("- SCRIPT AP11 -\n\n");
-    if(enviaComando('/system/script/add', array("name"=> "AP11", "owner"=> "administrador", "policy"=>"ftp,reboot,read,write,policy,test,password,sniff,sensitive", "source"=>":if ([/ip neighbor get [find identity=\"AP-11\"]] != \"no such item\") do={:log warning (\":coronablanca::AP-11:: up:00:00:00cpu-load:0\")}"))){
-        print_r("--Script AP11 añadido\n");
-        if(enviaComando('/system/scheduler/add', array("disabled"=> "yes",'interval'=>'14m58s', 'name'=>'AP11', 'on-event'=>'AP11', 'policy'=>'ftp,reboot,read,write,policy,test,password,sniff,sensitive', 'start-date'=>'jul/26/2016', 'start-time'=>'21:44:20'))){
-            print_r("--Script AP11 scheduled\n\n");
-        }else print_r("--Script AP11 scheduled\n\n");
-    }else print_r("---ERROR: no se ha podido añadir script Ap11\n\n");
+    // print_r("- SCRIPT AP11 -\n\n");
+    // if(enviaComando('/system/script/add', array("name"=> "AP11", "owner"=> "administrador", "policy"=>"ftp,reboot,read,write,policy,test,password,sniff,sensitive", "source"=>":if ([/ip neighbor get [find identity=\"AP-11\"]] != \"no such item\") do={:log warning (\":coronablanca::AP-11:: up:00:00:00cpu-load:0\")}"))){
+    //     print_r("--Script AP11 añadido\n");
+    //     if(enviaComando('/system/scheduler/add', array("disabled"=> "yes",'interval'=>'14m58s', 'name'=>'AP11', 'on-event'=>'AP11', 'policy'=>'ftp,reboot,read,write,policy,test,password,sniff,sensitive', 'start-date'=>'jul/26/2016', 'start-time'=>'21:44:20'))){
+    //         print_r("--Script AP11 scheduled\n\n");
+    //     }else print_r("--Script AP11 scheduled\n\n");
+    // }else print_r("---ERROR: no se ha podido añadir script Ap11\n\n");
     
-    print_r("- SCRIPT AP12 -\n\n");
-    if(enviaComando('/system/script/add', array("name"=> "AP12", "owner"=> "administrador", "policy"=>"ftp,reboot,read,write,policy,test,password,sniff,sensitive", "source"=>":if ([/ip neighbor get [find identity=\"AP-12\"]] != \"no such item\") do={:log warning (\":coronablanca::AP-12:: up:00:00:00cpu-load:0\")}"))){
-        print_r("Script AP12 añadido\n");
-        if(enviaComando('/system/scheduler/add', array("disabled"=> "yes", 'interval'=>'14m57s', 'name'=>'AP12', 'on-event'=>'AP12', 'policy'=>'ftp,reboot,read,write,policy,test,password,sniff,sensitive', 'start-date'=>'jul/26/2016', 'start-time'=>'21:44:20'))){
-            print_r("--Script AP12 scheduled\n\n");
-        }else print_r("--Script AP12 scheduled\n\n");
-    }else print_r("---ERROR: no se ha podido añadir script Ap12\n\n");
+    // print_r("- SCRIPT AP12 -\n\n");
+    // if(enviaComando('/system/script/add', array("name"=> "AP12", "owner"=> "administrador", "policy"=>"ftp,reboot,read,write,policy,test,password,sniff,sensitive", "source"=>":if ([/ip neighbor get [find identity=\"AP-12\"]] != \"no such item\") do={:log warning (\":coronablanca::AP-12:: up:00:00:00cpu-load:0\")}"))){
+    //     print_r("Script AP12 añadido\n");
+    //     if(enviaComando('/system/scheduler/add', array("disabled"=> "yes", 'interval'=>'14m57s', 'name'=>'AP12', 'on-event'=>'AP12', 'policy'=>'ftp,reboot,read,write,policy,test,password,sniff,sensitive', 'start-date'=>'jul/26/2016', 'start-time'=>'21:44:20'))){
+    //         print_r("--Script AP12 scheduled\n\n");
+    //     }else print_r("--Script AP12 scheduled\n\n");
+    // }else print_r("---ERROR: no se ha podido añadir script Ap12\n\n");
     
     print_r("- SCRIPT delete_user_test -\n\n");
     if(enviaComando('/system/script/add', array("name"=> "delete_user_test", "owner"=> "administrador", "policy"=>"ftp,reboot,read,write,policy,test,password,sniff,sensitive", "source"=>":local usertoremove \"VEQODE68\";:local banuser \"noname\";:local banuseridle 00:00:00;:local banusermac \"00:00:00:00:00:00\";:local banuserip \"0.0.0.0\"; :foreach i in [/ip hotspot active find where user~\$usertoremove] do={ :local idle [/ip hotspot active get \$i idle-time]; :if (\$idle>=\$banuseridle) do={:set banuser \$i;:set banuseridle \$idle;:set banusermac [/ip hotspot active get \$i mac-address];:set banuserip [/ip hotspot active get \$i address];}}:if (\$banuser != \"noname\") do={:log warning (\"Usuario \".\$usertoremove.\" con Sesion ID: \".\$banuser.\" y Idle-Time: \".\$banuseridle.\" ha sido banneado\");:log warning (\"MAC: \".\$banusermac);:log warning (\"IP: \".\$banuserip); #:ip hotspot active remove \$banuser;}"))){
@@ -1057,13 +1088,14 @@ function enviaComando($comando, $opciones){
     print_r("Intento 1: \n");
     $res = $API->comm($comando, $opciones);
     // COMPROBAR POR QUE A VECES DEVUELVE ARRAYS Y OTRAS STRINGS
-    if (!empty($res) && gettype($res) == 'Array' && array_key_exists ('!trap',$res)){
+    if (!empty($res) && (gettype($res) == 'array') && (array_key_exists ('!trap',$res))){
         print_r("ERROR: Ha ocurrido un problema, volviendo a intentar...\n");
         sleep(1);
         print_r("Intento 2: \n");
         $res = $API->comm($comando, $opciones);
-        if (!empty($res) && gettype($res) == 'Array' && array_key_exists ('!trap',$res)){
+        if (!empty($res) && (gettype($res) == 'array') && (array_key_exists ('!trap',$res))){
             print_r("ERROR: No se ha podido realizar la operación.\n\n");
+            file_put_contents("error", "Error: ".$comando." => ".print_r($opciones, true)."\r\n".print_r($res, true)."\r\n", FILE_APPEND);
             return false;
         } else return true;
     } else return true;  
