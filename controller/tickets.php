@@ -450,7 +450,7 @@ if (isLoggedIn()) {
             } else {
                 $smarty->assign('empty', true);
             }
-            $smarty->assign('pagina', $_GET['pagina']);
+            // $smarty->assign('pagina', $_GET['pagina']);
             break;
         case 'facebook':
             if ($_SESSION['cliente'] == 'admin') $result = $database->query('SELECT `idlocal`, `fbid`, `name`, `email`, `link`, `username` FROM `facebook`');

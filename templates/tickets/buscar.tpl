@@ -5,7 +5,7 @@
 		</div>
 		<!-- /.col-lg-12 -->
 	</div>
-	<input type="hidden" name="{$pagina}" id="pagina">
+	<input type="hidden" name="{$page}" id="pagina">
 	<div class="row">
 		<div class="col-md-6 col-md-offset-3">
 			<div class="panel panel-default">
@@ -29,7 +29,7 @@
 									<input class="form-control" type="text" name="identificador"
 									       placeholder="Identificador">
 								</div>
-								<input type="hidden" name="pagina" id="pagina" value="buscar">
+								<!--<input type="hidden" name="pagina" id="pagina" value="buscar">-->
 								{if isset($servers)}
 									<div class="form-group input-group">
 										<span class="input-group-addon"><i class="fa fa-hdd-o"></i> </span>
