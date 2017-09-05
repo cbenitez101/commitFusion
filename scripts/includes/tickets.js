@@ -16,6 +16,8 @@ $(document).ready(function(){
     });
     // Manejador de la tabla, se le pone que al hacer lick en una fila llame al modal y guarda los datos de la tabla
     // en data.
+    var pagina = (($('#pagina').attr('name') === undefined)?'':$('#pagina').attr('name'));
+    console.log(pagina);
     table = $('#table-search').DataTable({
         "preDrawCallback" : function() {
             if (!$('table').hasClass('tickettable') && !$('table').hasClass('fbtable')) {
@@ -40,9 +42,9 @@ $(document).ready(function(){
                 extend: 'pdfHtml5',
                 text:   '<i class="fa fa-file-pdf-o"></i> Descargar PDF',
                 titleAttr:  'PDF',
-                filename:   'facebookLogs',
+                filename:   pagina,
                 exportOptions:  {
-                    columns:    [2,3]
+                    columns:   ((pagina === 'facebook')?[2,3]:'')
                     
                 }
             },
@@ -50,18 +52,18 @@ $(document).ready(function(){
                 extend:  'csvHtml5',
                 text:   '<i class="fa fa-file-text-o"></i> Descargar CSV',
                 titleAttr:  'CSV',
-                filename:   'facebookLogs',
+                filename:   pagina,
                 exportOptions:  {
-                    columns:    [2,3]
+                    columns:    ((pagina === 'facebook')?[2,3]:'')
                 }
             },
              {
                 extend:  'excelHtml5',
                 text:   '<i class="fa fa-file-excel-o"></i> Descargar Excel',
                 titleAttr:  'Excel',
-                filename:   'facebookLogs',
+                filename:   pagina,
                 exportOptions:  {
-                    columns:    [2,3]
+                    columns:    ((pagina === 'facebook')?[2,3]:'')
                 }
             },
         ]
@@ -300,7 +302,7 @@ function borrarticket(){
 function creatickets(){
     ticket['identificador']=$('.modal_ticketid:visible').val().trim();
     //console.log('creando');
-    //console.log(ticket);
+    // console.log(ticket);
     $.ajax({
         url: "/crea_ticket",
         method: "POST",

@@ -7,6 +7,7 @@
 <div class="row">
 	<div class="col-md-12">
 		<div class="panel panel-default">
+			<input type="hidden" name="{$pagina}" id="pagina">
 			<div class="panel-body">
 				{if isset($empty)}
 					<div class="row">

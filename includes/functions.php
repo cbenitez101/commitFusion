@@ -398,7 +398,7 @@ function external_guardar_hotspot(){
             }
         } else {
             if (empty($_POST['id'])){
-                $database->query('INSERT INTO `hotspots`(`ServerName`, `SerialNumber`, `Status`, `Local`, `Informe`,`si`) VALUES ("'.$_POST['name'].'",'.((empty($_POST['number']))?"NULL":'"'.$_POST['number'].'"').',"'.$_POST['status'].'","'.$_POST['local'].'","'.$_POST['informe'].'",'.((empty($_POST['si']))?'NULL':(($_POST['si']==0)?'NULL':'"'.$_POST['si'].'"')).')');
+                $database->query('INSERT INTO `hotspots`(`ServerName`, `SerialNumber`, `Status`, `Local`, `Informe`) VALUES ("'.$_POST['name'].'",'.((empty($_POST['number']))?"NULL":'"'.$_POST['number'].'"').',"'.$_POST['status'].'","'.$_POST['local'].'","'.$_POST['informe'].'")');
                 $radius->query('INSERT INTO `radgroupcheck`(`groupname`, `attribute`, `op`, `value`) VALUES ("'.$_POST['name'].'","Called-Station-Id","==","'.$_POST['name'].'")');
                 $radius->query("INSERT INTO `radius`.`radgroupreply` (`groupname`, `attribute`, `op`, `value`) VALUES ('".$_POST['name']."', 'Acct-Interim-Interval', ':=', '600')");
             } else {
@@ -819,33 +819,111 @@ function external_guardar_dispositivo() {
     }
 }
 
+
+
 function external_actualiza_dispositivos() {
     //Se recepciona los datos
     $input = file_get_contents('php://input');
+    file_put_contents('Y', print_r(json_decode($input), true), FILE_APPEND);
+                
     // Se comprueba que tenga contenido
     if(strlen($input) > 0) {
         $json = json_decode($input, true);
         //Se comprueba que sea un json
         if (!is_null($json)) {
             //Comrpuebo que el array tenga elementos
-            if ((count($json) > 0 ) ) {
-                global $database;
-                foreach ($json as $key => $value) {
-                    // se comprueba que 
-                    if (count($value) == 5) {
-                        $result = $database->query("SELECT `fecha`  FROM `syslog` WHERE `local` = '".$value['dispositivo']."' AND `dispositivo` = '".$value['local']."'");
-                        if ($result->num_rows > 0) {
-                            $fecha = $result->fetch_assoc();
-                            if (strtotime($fecha) >= strtotime("-45 min")) external_telegram($value['local']." - ".$value['dispositivo']." => Online");
-                        } 
-                        $database->query("INSERT INTO `syslog`(`fecha`, `ip`, `local`, `dispositivo`, `info`) VALUES ('".$value['fecha']."','".$value['ip']."','".$value['local']."','".$value['dispositivo']."','".json_encode($value['info'])."') ON DUPLICATE KEY UPDATE fecha='".$value['fecha']."', info='".json_encode($value['info'])."'");
-                    }
+            if ((count($json) > 0 )) {
+                // global $database;
+                // $result = $database->query("SELECT `fecha`, `local`, `dispositivo` FROM `syslog` WHERE fecha < '".date("Y-m-d H:i:s", strtotime("-30 min"))."'");
+                // $result2 = $database->query("SELECT `fecha`, `local`, `dispositivo` FROM `syslog` WHERE fecha < '".date("Y-m-d H:i:s", strtotime("-15 min"))."'");
+                // $result->fetch_assoc();
+                
+               
+                // if ($result->num_rows > 0 && $result2->num_rows > 0){
+                //     while ($aux = $result->fetch_assoc()) $out[] = $aux; 
+                //     while ($aux2 = $result2->fetch_assoc()) $out2[] = $aux2; 
+                //     foreach ($out as $index => $value) {
+                //         // if ($value['fecha'] < date("Y-m-d H:i:s", strtotime("-30 min"))) unset($out[$index]);
+                        
+                //     }
+                // }
+                //  file_put_contents('Z1',print_r($out, true), FILE_APPEND);
+                 
+                
+                $out2 = json_decode($input);
+                foreach ($out2 as $index2 => $value2) {
+                     
+                    if ($value2['fecha'] < date("Y-m-d H:i:s", strtotime("-30 min"))) unset($out2[$index2]);
+                        
                 }
+                
+                $out3 = json_decode($input);
+                foreach ($out3 as $index3 => $value3) {
+                     
+                    if ($value3['fecha'] < date("Y-m-d H:i:s", strtotime("-15 min"))) unset($out3[$index3]);
+                        
+                }
+                
+                
+                
+                file_put_contents('ZZ2',print_r($out2, true), FILE_APPEND);
+                file_put_contents('ZZ3',print_r($out3, true), FILE_APPEND);
+                
+                
+                // global $database;
+                // foreach ($json as $key => $value) {
+                //     // se comprueba que se pasan el numero de elementos necesarios
+                //     if (count($value) == 5) {
+                //         $result = $database->query("SELECT `fecha`  FROM `syslog` WHERE `local` = '".$value['dispositivo']."' AND `dispositivo` = '".$value['local']."'");
+                //         if ($result->num_rows > 0) {
+                //             $fecha = $result->fetch_assoc();
+                //             // if (strtotime($fecha) >= strtotime("-45 min")) external_telegram($value['local']." - ".$value['dispositivo']." => Online");
+                //             if (strtotime($fecha) >= strtotime("-45 min")) external_telegram($value['local']." - ".$value['dispositivo']." => Online");   
+                //         } 
+                //         $database->query("INSERT INTO `syslog`(`fecha`, `ip`, `local`, `dispositivo`, `info`) VALUES ('".$value['fecha']."','".$value['ip']."','".$value['local']."','".$value['dispositivo']."','".json_encode($value['info'])."') ON DUPLICATE KEY UPDATE fecha='".$value['fecha']."', info='".json_encode($value['info'])."'");
+                //     }
+                // }
             }
         }
     }
     die();
 }
+
+
+
+// function external_actualiza_dispositivos() {
+//     //Se recepciona los datos
+//     $input = file_get_contents('php://input');
+//     // Se comprueba que tenga contenido
+//     if(strlen($input) > 0) {
+//         $json = json_decode($input, true);
+//         //Se comprueba que sea un json
+//         if (!is_null($json)) {
+//             //Comrpuebo que el array tenga elementos
+//             if ((count($json) > 0 ) ) {
+//                 global $database;
+//                 $result = $database->query("SELECT `fecha`, `local`, `dispositivo` FROM `syslog`");
+//                 $result->fetch_assoc();
+               
+                
+//                 global $database;
+//                 foreach ($json as $key => $value) {
+//                     // se comprueba que se pasan el numero de elementos necesarios
+//                     if (count($value) == 5) {
+//                         $result = $database->query("SELECT `fecha`  FROM `syslog` WHERE `local` = '".$value['dispositivo']."' AND `dispositivo` = '".$value['local']."'");
+//                         if ($result->num_rows > 0) {
+//                             $fecha = $result->fetch_assoc();
+//                             // if (strtotime($fecha) >= strtotime("-45 min")) external_telegram($value['local']." - ".$value['dispositivo']." => Online");
+//                             if (strtotime($fecha) >= strtotime("-45 min")) external_telegram($value['local']." - ".$value['dispositivo']." => Online");   
+//                         } 
+//                         $database->query("INSERT INTO `syslog`(`fecha`, `ip`, `local`, `dispositivo`, `info`) VALUES ('".$value['fecha']."','".$value['ip']."','".$value['local']."','".$value['dispositivo']."','".json_encode($value['info'])."') ON DUPLICATE KEY UPDATE fecha='".$value['fecha']."', info='".json_encode($value['info'])."'");
+//                     }
+//                 }
+//             }
+//         }
+//     }
+//     die();
+// }
 
 function external_habilitar_dispositivo() {
     if (!empty($_POST['id']) && isset($_POST['estado'])) {

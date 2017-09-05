@@ -10,6 +10,7 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="panel panel-default">
+            <input type="hidden" name="{$page}" id="pagina">
             <div class="panel-body">
                 <div class="dataTable_wrapper">
 	                {html_table cols=$cols  table_attr='border="0" class="tabledit fbtable hover" id="table-search"

@@ -7,6 +7,7 @@
 <div class="row">
 	<div class="col-md-12">
 		<div class="panel panel-default">
+			<input type="hidden" name="{$page}" id="pagina">
 			<!-- /.panel-heading -->
 			<div class="panel-body">
 				<div class="dataTable_wrapper row">

@@ -5,6 +5,7 @@
 		</div>
 		<!-- /.col-lg-12 -->
 	</div>
+	<input type="hidden" name="{$pagina}" id="pagina">
 	<div class="row">
 		<div class="col-md-6 col-md-offset-3">
 			<div class="panel panel-default">
@@ -28,6 +29,7 @@
 									<input class="form-control" type="text" name="identificador"
 									       placeholder="Identificador">
 								</div>
+								<input type="hidden" name="pagina" id="pagina" value="busqueda">
 								{if isset($servers)}
 									<div class="form-group input-group">
 										<span class="input-group-addon"><i class="fa fa-hdd-o"></i> </span>
@@ -48,6 +50,7 @@
 		</div>
 	</div>
 {else}
+<input type="hidden" name="busqueda" id="pagina">
 	<div class="row">
 		<div class="col-lg-12">
 			<h1 class="page-header">Información del Ticket</h1>
