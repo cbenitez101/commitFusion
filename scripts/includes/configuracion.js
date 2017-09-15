@@ -375,13 +375,13 @@ check-for-updates once\r\n\
                             dataok.push( "0" );
                         }
                         else if($(this).attr('id') !== 'modal_serverhsfull1' && $(this).attr('id') !== 'modal_serverhsfull2' && $(this).prop('checked'))  {dataok.push( "1");
-                       } else if ($(this).attr('id') !== 'modal_serverhsfull1' && $(this).attr('id') !== 'modal_serverhsfull2'){
+                        } else if ($(this).attr('id') !== 'modal_serverhsfull1' && $(this).attr('id') !== 'modal_serverhsfull2'){
                            dataok.push( "0");
                            
                        } 
                     });
                 }
-           
+            
                 guardar_hotspot(0);
             } 
             if ($('#modal_perfil').length !== 0) {
@@ -684,7 +684,8 @@ function guardar_hotspot(action) {
     });
 
                 
-    // console.log(guardar);
+    console.log(guardar);
+    console.log(dataok);
     if (guardar.length > 0) {
         $.ajax({
             url: '/guardar_hotspot',

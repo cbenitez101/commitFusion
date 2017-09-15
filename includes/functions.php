@@ -385,11 +385,7 @@ function external_quitar_dash() {
     }
 }
 function external_guardar_hotspot(){
-    //global $fulldomain;
-    
-    // dump($_POST, true);
     if ((!empty($_POST['name'])) && (!empty($_POST['status'])) && (!empty($_POST['local'])) ) {
-        file_put_contents('hotspots', print_r($_POST, true));
         global $database;
         global $radius;
         if ($_POST['action'] == 1) {
@@ -398,9 +394,13 @@ function external_guardar_hotspot(){
             }
         } else {
             if (empty($_POST['id'])){
-                $database->query('INSERT INTO `hotspots`(`ServerName`, `SerialNumber`, `Status`, `Local`, `Informe`) VALUES ("'.$_POST['name'].'",'.((empty($_POST['number']))?"NULL":'"'.$_POST['number'].'"').',"'.$_POST['status'].'","'.$_POST['local'].'","'.$_POST['informe'].'")');
-                $radius->query('INSERT INTO `radgroupcheck`(`groupname`, `attribute`, `op`, `value`) VALUES ("'.$_POST['name'].'","Called-Station-Id","==","'.$_POST['name'].'")');
-                $radius->query("INSERT INTO `radius`.`radgroupreply` (`groupname`, `attribute`, `op`, `value`) VALUES ('".$_POST['name']."', 'Acct-Interim-Interval', ':=', '600')");
+                if ($database->query('INSERT INTO `hotspots`(`ServerName`, `SerialNumber`, `Status`, `Local`, `Informe`, `BoolFull`, `BoolFecha`, `BoolPrecio`, `BoolDuracion`, `BoolIdentificador`, `BoolLogo`) VALUES ("'.$_POST['name'].'",'.((empty($_POST['number']))?"NULL":'"'.$_POST['number'].'"').',"'.$_POST['status'].'","'.$_POST['local'].'","'.$_POST['informe'].'","'.$_POST['full'].'", "'.$_POST['fecha'].'","'.$_POST['precio'].'","'.$_POST['duracion'].'","'.$_POST['identificador'].'","'.$_POST['logo'].'"  )')){
+                    if( $radius->query('INSERT INTO `radgroupcheck`(`groupname`, `attribute`, `op`, `value`) VALUES ("'.$_POST['name'].'","Called-Station-Id","==","'.$_POST['name'].'")')){
+                        if( $radius->query("INSERT INTO `radius`.`radgroupreply` (`groupname`, `attribute`, `op`, `value`) VALUES ('".$_POST['name']."', 'Acct-Interim-Interval', ':=', '600')")) die();
+                    }
+                }
+               
+               
             } else {
                 $temporal = $database->query('SELECT * FROM hotspots WHERE id = "'.$_POST['id'].'"');
                 $aux = $temporal->fetch_assoc();
@@ -821,68 +821,83 @@ function external_guardar_dispositivo() {
 
 
 
+// Se me ocurre meter el dispositivo que pongamos en estado offline en un array, y en cuanto lo pongamos online
+// sacarlo del mismo. 
 function external_actualiza_dispositivos() {
     //Se recepciona los datos
     $input = file_get_contents('php://input');
-    file_put_contents('Y', print_r(json_decode($input), true), FILE_APPEND);
-                
+    
     // Se comprueba que tenga contenido
     if(strlen($input) > 0) {
+        
         $json = json_decode($input, true);
+        file_put_contents('ztelegram_input', print_r($json, true));
         //Se comprueba que sea un json
         if (!is_null($json)) {
             //Comrpuebo que el array tenga elementos
-            if ((count($json) > 0 )) {
-                // global $database;
-                // $result = $database->query("SELECT `fecha`, `local`, `dispositivo` FROM `syslog` WHERE fecha < '".date("Y-m-d H:i:s", strtotime("-30 min"))."'");
-                // $result2 = $database->query("SELECT `fecha`, `local`, `dispositivo` FROM `syslog` WHERE fecha < '".date("Y-m-d H:i:s", strtotime("-15 min"))."'");
-                // $result->fetch_assoc();
+            if ((count($json) > 0 ) ) {
+                global $database;
                 
-               
-                // if ($result->num_rows > 0 && $result2->num_rows > 0){
-                //     while ($aux = $result->fetch_assoc()) $out[] = $aux; 
-                //     while ($aux2 = $result2->fetch_assoc()) $out2[] = $aux2; 
-                //     foreach ($out as $index => $value) {
-                //         // if ($value['fecha'] < date("Y-m-d H:i:s", strtotime("-30 min"))) unset($out[$index]);
-                        
-                //     }
-                // }
-                //  file_put_contents('Z1',print_r($out, true), FILE_APPEND);
-                 
+                $result = $database->query("SELECT syslog.id, syslog.local, syslog.dispositivo, syslog.fecha FROM syslog LEFT JOIN dispositivos ON dispositivos.descripcion = syslog.dispositivo WHERE ((dispositivos.habilitado = 1) OR (syslog.dispositivo = 'hotspot')) ");
                 
-                $out2 = json_decode($input);
-                foreach ($out2 as $index2 => $value2) {
-                     
-                    if ($value2['fecha'] < date("Y-m-d H:i:s", strtotime("-30 min"))) unset($out2[$index2]);
+                if ($result->num_rows > 0) while ($aux = $result->fetch_assoc()) $out[] = $aux;
+                
+                // file_put_contents('ZZ', print_r($out, true));
+                $online = array();
+                foreach ($json as $key => $value) {
+                    // se comprueba que se pasan el numero de elementos necesarios
+                    if (count($value) == 5) {
                         
+                         
+                        foreach ($out as $key2 => $value2) {
+                            if (($value2['dispositivo'] == $value['dispositivo']) && ($value2['local'] == $value['local'])) {
+                                unset($out[$key2]);
+                                if (((isset($online[$value2['local'].'_'.$value2['dispositivo']])) && (strtotime($online[$value2['local'].'_'.$value2['dispositivo']]['fecha']) >= strtotime($value['fecha']))) || (!isset($online[$value2['local'].'_'.$value2['dispositivo']]))){
+                                    $online[$value2['local'].'_'.$value2['dispositivo']]['disp'] = $value['local']." - ".$value['dispositivo']; 
+                                    $online[$value2['local'].'_'.$value2['dispositivo']]['fecha'] = $value['fecha'];
+                                }
+                                
+                                
+                                // PONER ONLINE si tiene mas de 45 min desde la caida
+                                // if ((strtotime($value['fecha']) >= strtotime("-45 min")) && (strtotime($value['fecha']) < strtotime("-30 min"))) { // Poner valor de out? 
+                                
+                               
+                                   
+                                    
+                                   
+                                    // Otra opcion es que segun pongamos offline, lo metamos en un array. En caso que entremos en esta condicion, solo poner online si esta metido en el mismo y luego eliminarlo. En caso contrario no se pone online.
+                                //     file_put_contents('ZONLINE', print_r($value2['local']." - ".$value2['dispositivo']." => Online Desarrollo", true), FILE_APPEND);
+                                    
+                                //     // external_telegram($value['local']." - ".$value['dispositivo']." => Online Desarrollo");
+                                   
+                                   
+                                // }
+                            }
+                            
+                        }
+                        file_put_contents('ZZZ', print_r($out, true));
+                       
+                        $database->query("INSERT INTO `syslog`(`fecha`, `ip`, `local`, `dispositivo`, `info`) VALUES ('".$value['fecha']."','".$value['ip']."','".$value['local']."','".$value['dispositivo']."','".json_encode($value['info'])."') ON DUPLICATE KEY UPDATE fecha='".$value['fecha']."', info='".json_encode($value['info'])."'");  
+                    }
                 }
-                
-                $out3 = json_decode($input);
-                foreach ($out3 as $index3 => $value3) {
-                     
-                    if ($value3['fecha'] < date("Y-m-d H:i:s", strtotime("-15 min"))) unset($out3[$index3]);
-                        
+                foreach ($online as $value) {
+                    if ((strtotime($value['fecha']) >= strtotime("-45 min")) && (strtotime($value['fecha']) < strtotime("-30 min"))) {
+                        file_put_contents('ZONLINE', print_r($value2['local']." - ".$value2['dispositivo']." => Online Desarrollo", true), FILE_APPEND);
+                                    
+                        // external_telegram($value['local']." - ".$value['dispositivo']." => Online Desarrollo");
+                    }
                 }
-                
-                
-                
-                file_put_contents('ZZ2',print_r($out2, true), FILE_APPEND);
-                file_put_contents('ZZ3',print_r($out3, true), FILE_APPEND);
-                
-                
-                // global $database;
-                // foreach ($json as $key => $value) {
-                //     // se comprueba que se pasan el numero de elementos necesarios
-                //     if (count($value) == 5) {
-                //         $result = $database->query("SELECT `fecha`  FROM `syslog` WHERE `local` = '".$value['dispositivo']."' AND `dispositivo` = '".$value['local']."'");
-                //         if ($result->num_rows > 0) {
-                //             $fecha = $result->fetch_assoc();
-                //             // if (strtotime($fecha) >= strtotime("-45 min")) external_telegram($value['local']." - ".$value['dispositivo']." => Online");
-                //             if (strtotime($fecha) >= strtotime("-45 min")) external_telegram($value['local']." - ".$value['dispositivo']." => Online");   
-                //         } 
-                //         $database->query("INSERT INTO `syslog`(`fecha`, `ip`, `local`, `dispositivo`, `info`) VALUES ('".$value['fecha']."','".$value['ip']."','".$value['local']."','".$value['dispositivo']."','".json_encode($value['info'])."') ON DUPLICATE KEY UPDATE fecha='".$value['fecha']."', info='".json_encode($value['info'])."'");
-                //     }
-                // }
+                file_put_contents('ZARRAYONLINE', print_r($online, true));
+                if (count($out) > 0){
+                    foreach ($out as $value3) {
+                        if (strtotime($value3['fecha']) >= strtotime("-45 min")) {
+                            // external_telegram($value3['local']." - ".$value3['dispositivo']." => Offline Desarrollo");
+                            // $offline[$value3['local']." - ".$value3['dispositivo']] = 
+                            file_put_contents('ZOFFLINE', print_r($value3['local']." - ".$value3['dispositivo']." => Offline Desarrollo", true));
+                           
+                        }
+                    }
+                }
             }
         }
     }
@@ -897,24 +912,26 @@ function external_actualiza_dispositivos() {
 //     // Se comprueba que tenga contenido
 //     if(strlen($input) > 0) {
 //         $json = json_decode($input, true);
+//         //  file_put_contents('ZZ', print_r($json, true));
 //         //Se comprueba que sea un json
 //         if (!is_null($json)) {
 //             //Comrpuebo que el array tenga elementos
 //             if ((count($json) > 0 ) ) {
 //                 global $database;
-//                 $result = $database->query("SELECT `fecha`, `local`, `dispositivo` FROM `syslog`");
-//                 $result->fetch_assoc();
-               
-                
-//                 global $database;
 //                 foreach ($json as $key => $value) {
 //                     // se comprueba que se pasan el numero de elementos necesarios
 //                     if (count($value) == 5) {
-//                         $result = $database->query("SELECT `fecha`  FROM `syslog` WHERE `local` = '".$value['dispositivo']."' AND `dispositivo` = '".$value['local']."'");
+                        
+                        
+                        
+//                         $result = $database->query("SELECT `fecha`  FROM `syslog` WHERE `local` = '".$value['local']."' AND `dispositivo` = '".$value['dispositivo']."'");
 //                         if ($result->num_rows > 0) {
 //                             $fecha = $result->fetch_assoc();
-//                             // if (strtotime($fecha) >= strtotime("-45 min")) external_telegram($value['local']." - ".$value['dispositivo']." => Online");
-//                             if (strtotime($fecha) >= strtotime("-45 min")) external_telegram($value['local']." - ".$value['dispositivo']." => Online");   
+//                             if (strtotime($fecha) >= strtotime("-45 min")) {
+//                                 external_telegram($value['local']." - ".$value['dispositivo']." => Online Desarrollo");
+//                                 // file_put_contents('ZZ2', print_r($value['local']." - ".$value['dispositivo']." => Online Desarrollo", true));
+//                             }
+                            
 //                         } 
 //                         $database->query("INSERT INTO `syslog`(`fecha`, `ip`, `local`, `dispositivo`, `info`) VALUES ('".$value['fecha']."','".$value['ip']."','".$value['local']."','".$value['dispositivo']."','".json_encode($value['info'])."') ON DUPLICATE KEY UPDATE fecha='".$value['fecha']."', info='".json_encode($value['info'])."'");
 //                     }
@@ -937,11 +954,11 @@ function external_standalone() {
     $result = $database->query("SELECT syslog.local, syslog.dispositivo, syslog.fecha, syslog.ip, dispositivos.notas FROM syslog LEFT JOIN dispositivos ON dispositivos.descripcion = syslog.dispositivo WHERE (dispositivos.habilitado = 1 OR syslog.dispositivo = 'hotspot') AND syslog.fecha < '".date("Y-m-d H:i:s", strtotime("-30 min"))."'  GROUP BY  syslog.dispositivo");
     $out = array();
     if ($result->num_rows > 0) while ($aux = $result->fetch_assoc()) $out[] = $aux;
-    $echo = '<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta http-equiv="refresh" content="900"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content=""><meta name="author" content="Servibyte SCP"><title>Servibyte Platform</title><link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"><!-- MetisMenu CSS --><link href="/scripts/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet"><!-- Custom CSS --><link href="/scripts/dist/css/sb-admin-2.css" rel="stylesheet"><!-- Custom Fonts --><link href="/scripts/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"><!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries --><!-- WARNING: Respond.js does not work if you view the page via file:// --><!--[if lt IE 9]><script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script><script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script><![endif]--><link rel="stylesheet" type="text/css" media="all" href="/scripts/default.css"/><link rel="stylesheet" type="text/css" media="all" href="/scripts/datatable/zzz.responsive.dataTables.min.css"/><link rel="stylesheet" type="text/css" media="all" href="/scripts/datatable/jquery.dataTables.min.css"/><link rel="stylesheet" type="text/css" media="all" href="/scripts/includes/mantenimiento.css"/><script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script><script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script><!-- Metis Menu Plugin JavaScript --><script src="/scripts/bower_components/metisMenu/dist/metisMenu.min.js"></script><!-- Custom Theme JavaScript --><script src="/scripts/dist/js/sb-admin-2.js"></script><script type="text/javascript" src="/scripts/datatable/jquery.dataTables.min.js"></script><script type="text/javascript" src="/scripts/datatable/zzz.dataTables.responsive.min.js"></script><script type="text/javascript" src="/scripts/default.js"></script><script type="text/javascript" src="/scripts/includes/mantenimiento.js"></script></head><body><h1 class="page-header align_center"><img src="/images/logos/admin.png"></h1><div class="dataTable_wrapper row"><div class="col-md-12">';
+    $echo = '<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta http-equiv="refresh" content="900"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content=""><meta name="author" content="Servibyte SCP"><title>Servibyte Platform</title><link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"><!-- MetisMenu CSS --><link href="/scripts/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet"><!-- Custom CSS --><link href="/scripts/dist/css/sb-admin-2.css" rel="stylesheet"><!-- Custom Fonts --><link href="/scripts/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"><!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries --><!-- WARNING: Respond.js does not work if you view the page via file:// --><!--[if lt IE 9]><script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script><script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script><![endif]--><link rel="stylesheet" type="text/css" media="all" href="/scripts/default.css"/><link rel="stylesheet" type="text/css" media="all" href="/scripts/datatable/zzz.responsive.dataTables.min.css"/><link rel="stylesheet" type="text/css" media="all" href="/scripts/datatable/jquery.dataTables.min.css"/><link rel="stylesheet" type="text/css" media="all" href="/scripts/includes/mantenimiento.css"/><script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script><script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script><!-- Metis Menu Plugin JavaScript --><script src="/scripts/45bower_components/metisMenu/dist/metisMenu.min.js"></script><!-- Custom Theme JavaScript --><script src="/scripts/dist/js/sb-admin-2.js"></script><script type="text/javascript" src="/scripts/datatable/jquery.dataTables.min.js"></script><script type="text/javascript" src="/scripts/datatable/zzz.dataTables.responsive.min.js"></script><script type="text/javascript" src="/scripts/default.js"></script><script type="text/javascript" src="/scripts/includes/mantenimiento.js"></script></head><body><h1 class="page-header align_center"><img src="/images/logos/admin.png"></h1><div class="dataTable_wrapper row"><div class="col-md-12">';
     if (count($out) > 0) {
         $echo .= '<table border="0" class="tabledit standalone server hover" id="table-search" width="100%"><thead><tr><th>local</th><th>dispositivo</th><th>fecha</th><th>ip</th><th>notas</th></tr></thead><tbody>';
         foreach ($out as $value) {
-            if (strtotime($value['fecha']) >= strtotime("-45 min")) external_telegram($value['local']." - ".$value['dispositivo']." => Offline");
+            // if (strtotime($value['fecha']) >= strtotime("-45 min")) external_telegram($value['local']." - ".$value['dispositivo']." => Offline Desarrollo");
             $echo .= "<tr><td>".$value['local']."</td><td>".$value['dispositivo']."</td><td>".$value['fecha']."</td><td>".$value['ip']."</td><td>".strtotime($value['notas'])."</td></tr>";
         }
         $echo .= '</tbody></table>';
@@ -1713,14 +1730,14 @@ function external_telegram($mensaje= null) {
     }
     if ($mensaje != null) {
         $response = $telegram->sendMessage([
-          'chat_id' => '15381028', 
+        //   'chat_id' => '15381028', 
         //   'chat_id' => '-27075383', 
+          'chat_id' => '-165881030', 
           'text' => $mensaje
         ]);
     }
     // $response = $telegram->getUpdates();
-    if (!empty($_GET['mensaje'])) die();
+    if (!empty($_GET['mensaje'])) die(); 
 }
 
 ?>
-
