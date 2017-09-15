@@ -5,8 +5,8 @@ require_once('scripts/routeros-api/routeros_api.class.php');
 $user = 'admin';
 $pass = '';
 $server = 'Transvimar';
-$id_server=56;
-$ip = '192.168.65.65';   // 941
+$id_server=58;
+$ip = '192.168.45.113';   // 941
 // $ip = '192.168.45.94';   // 951
 // $ip = '192.168.45.75';   // 952
 // $ip = '192.168.45.69';   // 2011

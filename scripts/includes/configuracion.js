@@ -368,7 +368,7 @@ check-for-updates once\r\n\
                     });
                     dataok[5] = data[5];
                     dataok[6] = data[6];
-                      $('.modal-body [id^="modal_serverhs"]').each(function(elem) {
+                    $('.modal-body [id^="modal_serverhs"]').each(function(elem) {
                         if ($(this).attr('id') === 'modal_serverhsfull1' && $(this).prop('checked')) {
                             dataok.push( "1" );
                         }else if($(this).attr('id') === 'modal_serverhsfull2' && $(this).prop('checked')){
@@ -387,33 +387,35 @@ check-for-updates once\r\n\
             if ($('#modal_perfil').length !== 0) {
                 $('#modal_perfilformato').css('border', '');
                 $('#modal_perfilpassword').css('border', '');
-                 if ($('#modal_perfilid').val() !== "") {
-                    var valido = true;
-                    var error1 = false;
-                    var error2 = false;
-                    for (var i = 0; i < 17 ; i++) {
-                        if(i == 15){
+
+                var valido = true;
+                var error1 = false;
+                var error2 = false;
+                for (var i = 0; i < 17 ; i++) {
+                    if(i == 15){
+                        jQuery.each($('.perfil-' + i).val().split(""), function(i, v){
+                            if ($.inArray(v, formatstring) == -1) {
+                                valido = false;
+                                error1 = true;
+                            }
+                        });
+                        if($('#modal_perfilid').val() !== "") dataok.push($('.perfil-' + i).val());
+                        
+                    }else if(i == 16){
+                        if($('.perfil-' + i).val() !== 'usuario'){
                             jQuery.each($('.perfil-' + i).val().split(""), function(i, v){
-                                if ($.inArray(v, formatstring) == -1) {
+                                if ($.inArray(v, formatstring) == -1 && $('.perfil-' + i).val() !== 'usuario') {
                                     valido = false;
-                                    error1 = true;
+                                    error2 = true;
                                 }
                             });
-                            dataok.push($('.perfil-' + i).val());
-                        }else if(i == 16){
-                            if($('.perfil-' + i).val() !== 'usuario'){
-                                jQuery.each($('.perfil-' + i).val().split(""), function(i, v){
-                                    if ($.inArray(v, formatstring) == -1 && $('.perfil-' + i).val() !== 'usuario') {
-                                        valido = false;
-                                        error2 = true;
-                                    }
-                                });
-                            }
-                            dataok.push($('.perfil-' + i).val());
-                        }else dataok.push($('.perfil-' + i).val());
-                    }
+                        }
+                        if($('#modal_perfilid').val() !== "") dataok.push($('.perfil-' + i).val());
+                    }else  if($('#modal_perfilid').val() !== "") dataok.push($('.perfil-' + i).val());
                 }
+
                 if (!valido){
+                    console.log('no valid');
                     e.stopPropagation();
                     if (error1) $('#modal_perfilformato').css('border', '1px solid red');
                     if (error2) $('#modal_perfilpassword').css('border', '1px solid red');
@@ -479,6 +481,7 @@ check-for-updates once\r\n\
             } else if ($('#modal_perfil').length !== 0) {
                 if (($('#modal_perfilid').val()!== "")) {
                     //Si estamos creando no hay id asignado y no se llama a la función
+                    
                     guardar_perfil(1);
                 }
             } else if ($('#modal_lote').length !== 0) {
@@ -716,6 +719,7 @@ function guardar_perfil(action) {
          guardar["per_"+$(this).attr("class").split(" ")[1].split("-")[1]] = $(this).val();
     });
     guardar['action'] = action;
+    console.log(guardar);
     $.ajax({
         url: '/guardar_perfil',
         type: 'POST',
