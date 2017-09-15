@@ -684,8 +684,8 @@ function guardar_hotspot(action) {
     });
 
                 
-    console.log(guardar);
-    console.log(dataok);
+    // console.log(guardar);
+    // console.log(dataok);
     if (guardar.length > 0) {
         $.ajax({
             url: '/guardar_hotspot',

@@ -823,117 +823,93 @@ function external_guardar_dispositivo() {
 
 // Se me ocurre meter el dispositivo que pongamos en estado offline en un array, y en cuanto lo pongamos online
 // sacarlo del mismo. 
-function external_actualiza_dispositivos() {
-    //Se recepciona los datos
-    $input = file_get_contents('php://input');
-    
-    // Se comprueba que tenga contenido
-    if(strlen($input) > 0) {
-        
-        $json = json_decode($input, true);
-        file_put_contents('ztelegram_input', print_r($json, true));
-        //Se comprueba que sea un json
-        if (!is_null($json)) {
-            //Comrpuebo que el array tenga elementos
-            if ((count($json) > 0 ) ) {
-                global $database;
-                
-                $result = $database->query("SELECT syslog.id, syslog.local, syslog.dispositivo, syslog.fecha FROM syslog LEFT JOIN dispositivos ON dispositivos.descripcion = syslog.dispositivo WHERE ((dispositivos.habilitado = 1) OR (syslog.dispositivo = 'hotspot')) ");
-                
-                if ($result->num_rows > 0) while ($aux = $result->fetch_assoc()) $out[] = $aux;
-                
-                // file_put_contents('ZZ', print_r($out, true));
-                $online = array();
-                foreach ($json as $key => $value) {
-                    // se comprueba que se pasan el numero de elementos necesarios
-                    if (count($value) == 5) {
-                        
-                         
-                        foreach ($out as $key2 => $value2) {
-                            if (($value2['dispositivo'] == $value['dispositivo']) && ($value2['local'] == $value['local'])) {
-                                unset($out[$key2]);
-                                if (((isset($online[$value2['local'].'_'.$value2['dispositivo']])) && (strtotime($online[$value2['local'].'_'.$value2['dispositivo']]['fecha']) >= strtotime($value['fecha']))) || (!isset($online[$value2['local'].'_'.$value2['dispositivo']]))){
-                                    $online[$value2['local'].'_'.$value2['dispositivo']]['disp'] = $value['local']." - ".$value['dispositivo']; 
-                                    $online[$value2['local'].'_'.$value2['dispositivo']]['fecha'] = $value['fecha'];
-                                }
-                                
-                                
-                                // PONER ONLINE si tiene mas de 45 min desde la caida
-                                // if ((strtotime($value['fecha']) >= strtotime("-45 min")) && (strtotime($value['fecha']) < strtotime("-30 min"))) { // Poner valor de out? 
-                                
-                               
-                                   
-                                    
-                                   
-                                    // Otra opcion es que segun pongamos offline, lo metamos en un array. En caso que entremos en esta condicion, solo poner online si esta metido en el mismo y luego eliminarlo. En caso contrario no se pone online.
-                                //     file_put_contents('ZONLINE', print_r($value2['local']." - ".$value2['dispositivo']." => Online Desarrollo", true), FILE_APPEND);
-                                    
-                                //     // external_telegram($value['local']." - ".$value['dispositivo']." => Online Desarrollo");
-                                   
-                                   
-                                // }
-                            }
-                            
-                        }
-                        file_put_contents('ZZZ', print_r($out, true));
-                       
-                        $database->query("INSERT INTO `syslog`(`fecha`, `ip`, `local`, `dispositivo`, `info`) VALUES ('".$value['fecha']."','".$value['ip']."','".$value['local']."','".$value['dispositivo']."','".json_encode($value['info'])."') ON DUPLICATE KEY UPDATE fecha='".$value['fecha']."', info='".json_encode($value['info'])."'");  
-                    }
-                }
-                foreach ($online as $value) {
-                    if ((strtotime($value['fecha']) >= strtotime("-45 min")) && (strtotime($value['fecha']) < strtotime("-30 min"))) {
-                        file_put_contents('ZONLINE', print_r($value2['local']." - ".$value2['dispositivo']." => Online Desarrollo", true), FILE_APPEND);
-                                    
-                        // external_telegram($value['local']." - ".$value['dispositivo']." => Online Desarrollo");
-                    }
-                }
-                file_put_contents('ZARRAYONLINE', print_r($online, true));
-                if (count($out) > 0){
-                    foreach ($out as $value3) {
-                        if (strtotime($value3['fecha']) >= strtotime("-45 min")) {
-                            // external_telegram($value3['local']." - ".$value3['dispositivo']." => Offline Desarrollo");
-                            // $offline[$value3['local']." - ".$value3['dispositivo']] = 
-                            file_put_contents('ZOFFLINE', print_r($value3['local']." - ".$value3['dispositivo']." => Offline Desarrollo", true));
-                           
-                        }
-                    }
-                }
-            }
-        }
-    }
-    die();
-}
-
-
-
 // function external_actualiza_dispositivos() {
 //     //Se recepciona los datos
 //     $input = file_get_contents('php://input');
+    
 //     // Se comprueba que tenga contenido
 //     if(strlen($input) > 0) {
+//         // $json = json_decode('', true);
 //         $json = json_decode($input, true);
-//         //  file_put_contents('ZZ', print_r($json, true));
+//         file_put_contents('ztelegram_input', print_r($input, true));
 //         //Se comprueba que sea un json
 //         if (!is_null($json)) {
 //             //Comrpuebo que el array tenga elementos
 //             if ((count($json) > 0 ) ) {
 //                 global $database;
+//                 $result = $database->query("SELECT syslog.id, syslog.local, syslog.dispositivo, syslog.fecha FROM syslog LEFT JOIN dispositivos ON dispositivos.descripcion = syslog.dispositivo WHERE ((dispositivos.habilitado = 1) OR (syslog.dispositivo = 'hotspot')) ");
+                
+//                 if ($result->num_rows > 0) while ($aux = $result->fetch_assoc()) $out[] = $aux;
+                
+//                 // file_put_contents('ZZ', print_r($out, true));
+//                 $online = array();
 //                 foreach ($json as $key => $value) {
 //                     // se comprueba que se pasan el numero de elementos necesarios
 //                     if (count($value) == 5) {
                         
-                        
-                        
-//                         $result = $database->query("SELECT `fecha`  FROM `syslog` WHERE `local` = '".$value['local']."' AND `dispositivo` = '".$value['dispositivo']."'");
-//                         if ($result->num_rows > 0) {
-//                             $fecha = $result->fetch_assoc();
-//                             if (strtotime($fecha) >= strtotime("-45 min")) {
-//                                 external_telegram($value['local']." - ".$value['dispositivo']." => Online Desarrollo");
-//                                 // file_put_contents('ZZ2', print_r($value['local']." - ".$value['dispositivo']." => Online Desarrollo", true));
+                         
+//                         foreach ($out as $key2 => $value2) {
+//                             if (($value2['dispositivo'] == $value['dispositivo']) && ($value2['local'] == $value['local'])) {
+//                                 unset($out[$key2]);
+//                               // if ((!isset($online[$value2['local'].'_'.$value2['dispositivo']])) || ((isset($online[$value2['local'].'_'.$value2['dispositivo']])) && (strtotime($online[$value2['local'].'_'.$value2['dispositivo']]['fecha']) <= //strtotime($value['fecha'])))  ){
+//                                 //    $online[$value2['local'].'_'.$value2['dispositivo']]['disp'] = $value['local']." - ".$value['dispositivo']; 
+//                                 //    $online[$value2['local'].'_'.$value2['dispositivo']]['fecha'] = $value['fecha'];
+//                               // }
+                                
+                              
+                                
+//                                 // PONER ONLINE si tiene mas de 45 min desde la caida
+//                                 // if ((strtotime($value['fecha']) >= strtotime("-45 min")) && (strtotime($value['fecha']) < strtotime("-30 min"))) { // Poner valor de out? 
+                                
+                               
+                                   
+                                    
+                                   
+//                                     // Otra opcion es que segun pongamos offline, lo metamos en un array. En caso que entremos en esta condicion, solo poner online si esta metido en el mismo y luego eliminarlo. En caso contrario no se pone online.
+//                                 //     file_put_contents('ZONLINE', print_r($value2['local']." - ".$value2['dispositivo']." => Online Desarrollo", true), FILE_APPEND);
+                                    
+//                                 //     // external_telegram($value['local']." - ".$value['dispositivo']." => Online Desarrollo");
+                                   
+                                   
+//                                 // }
 //                             }
                             
-//                         } 
-//                         $database->query("INSERT INTO `syslog`(`fecha`, `ip`, `local`, `dispositivo`, `info`) VALUES ('".$value['fecha']."','".$value['ip']."','".$value['local']."','".$value['dispositivo']."','".json_encode($value['info'])."') ON DUPLICATE KEY UPDATE fecha='".$value['fecha']."', info='".json_encode($value['info'])."'");
+                            
+//                         }
+                        
+//                         if ( !isset($online[$value['local'].'_'.$value['dispositivo']]) ){
+                            
+//                             $online[$value['local'].'_'.$value['dispositivo']]['disp'] = $value['local']." - ".$value['dispositivo']; 
+//                             $online[$value['local'].'_'.$value['dispositivo']]['fecha'] = $value['fecha'];
+                            
+//                         } else if ( isset($online[$value['local'].'_'.$value['dispositivo']]) && strtotime($online[$value['local'].'_'.$value['dispositivo']]['fecha']) <= strtotime($value['fecha']) ){
+                            
+//                             $online[$value['local'].'_'.$value['dispositivo']]['disp'] = $value['local']." - ".$value['dispositivo']; 
+//                             $online[$value['local'].'_'.$value['dispositivo']]['fecha'] = $value['fecha'];
+                            
+//                         }
+                        
+//                         file_put_contents('ZZZ', print_r($out, true));
+                       
+//                         $database->query("INSERT INTO `syslog`(`fecha`, `ip`, `local`, `dispositivo`, `info`) VALUES ('".$value['fecha']."','".$value['ip']."','".$value['local']."','".$value['dispositivo']."','".json_encode($value['info'])."') ON DUPLICATE KEY UPDATE fecha='".$value['fecha']."', info='".json_encode($value['info'])."'");  
+//                     }
+//                 }
+//                 foreach ($online as $value) {
+//                     if ((strtotime($value['fecha']) >= strtotime("-45 min")) && (strtotime($value['fecha']) < strtotime("-30 min"))) {
+//                         file_put_contents('ZONLINE', print_r($value2['local']." - ".$value2['dispositivo']." => Online Desarrollo\n", true), FILE_APPEND);
+                                    
+//                         // external_telegram($value['local']." - ".$value['dispositivo']." => Online Desarrollo");
+//                     }
+//                 }
+//                 file_put_contents('ZARRAYONLINE', print_r($online, true));
+//                 if (count($out) > 0){
+//                     foreach ($out as $value3) {
+//                         if (strtotime($value3['fecha']) >= strtotime("-45 min")) {
+//                             // external_telegram($value3['local']." - ".$value3['dispositivo']." => Offline Desarrollo");
+//                             // $offline[$value3['local']." - ".$value3['dispositivo']] = 
+//                             file_put_contents('ZOFFLINE', print_r($value3['local']." - ".$value3['dispositivo']." => Offline Desarrollo", true));
+                           
+//                         }
 //                     }
 //                 }
 //             }
@@ -941,6 +917,44 @@ function external_actualiza_dispositivos() {
 //     }
 //     die();
 // }
+
+
+
+function external_actualiza_dispositivos() {
+    //Se recepciona los datos
+    $input = file_get_contents('php://input');
+    // Se comprueba que tenga contenido
+    if(strlen($input) > 0) {
+        $json = json_decode($input, true);
+        //  file_put_contents('ZZ', print_r($json, true));
+        //Se comprueba que sea un json
+        if (!is_null($json)) {
+            //Comrpuebo que el array tenga elementos
+            if ((count($json) > 0 ) ) {
+                global $database;
+                foreach ($json as $key => $value) {
+                    // se comprueba que se pasan el numero de elementos necesarios
+                    if (count($value) == 5) {
+                        
+                        
+                        
+                        $result = $database->query("SELECT `fecha`  FROM `syslog` WHERE `local` = '".$value['local']."' AND `dispositivo` = '".$value['dispositivo']."'");
+                        if ($result->num_rows > 0) {
+                            $fecha = $result->fetch_assoc();
+                            if (strtotime($fecha) >= strtotime("-45 min")) {
+                                external_telegram($value['local']." - ".$value['dispositivo']." => Online Desarrollo");
+                                // file_put_contents('ZZ2', print_r($value['local']." - ".$value['dispositivo']." => Online Desarrollo", true));
+                            }
+                            
+                        } 
+                        $database->query("INSERT INTO `syslog`(`fecha`, `ip`, `local`, `dispositivo`, `info`) VALUES ('".$value['fecha']."','".$value['ip']."','".$value['local']."','".$value['dispositivo']."','".json_encode($value['info'])."') ON DUPLICATE KEY UPDATE fecha='".$value['fecha']."', info='".json_encode($value['info'])."'");
+                    }
+                }
+            }
+        }
+    }
+    die();
+}
 
 function external_habilitar_dispositivo() {
     if (!empty($_POST['id']) && isset($_POST['estado'])) {
@@ -958,7 +972,7 @@ function external_standalone() {
     if (count($out) > 0) {
         $echo .= '<table border="0" class="tabledit standalone server hover" id="table-search" width="100%"><thead><tr><th>local</th><th>dispositivo</th><th>fecha</th><th>ip</th><th>notas</th></tr></thead><tbody>';
         foreach ($out as $value) {
-            // if (strtotime($value['fecha']) >= strtotime("-45 min")) external_telegram($value['local']." - ".$value['dispositivo']." => Offline Desarrollo");
+            if (strtotime($value['fecha']) >= strtotime("-45 min")) external_telegram($value['local']." - ".$value['dispositivo']." => Offline Desarrollo");
             $echo .= "<tr><td>".$value['local']."</td><td>".$value['dispositivo']."</td><td>".$value['fecha']."</td><td>".$value['ip']."</td><td>".strtotime($value['notas'])."</td></tr>";
         }
         $echo .= '</tbody></table>';
