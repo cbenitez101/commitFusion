@@ -415,7 +415,6 @@ check-for-updates once\r\n\
                 }
 
                 if (!valido){
-                    console.log('no valid');
                     e.stopPropagation();
                     if (error1) $('#modal_perfilformato').css('border', '1px solid red');
                     if (error2) $('#modal_perfilpassword').css('border', '1px solid red');
@@ -719,7 +718,6 @@ function guardar_perfil(action) {
          guardar["per_"+$(this).attr("class").split(" ")[1].split("-")[1]] = $(this).val();
     });
     guardar['action'] = action;
-    console.log(guardar);
     $.ajax({
         url: '/guardar_perfil',
         type: 'POST',
