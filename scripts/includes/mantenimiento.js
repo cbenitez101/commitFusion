@@ -4,15 +4,17 @@ $(document).ready(function(){
     table = $('#table-search').DataTable({
         "preDrawCallback" : function() {
                 var api = this.api();
-                if ($('#modal_dispositivo').length !== 0) { // Solo entra aqui si existe el modal_dispositivo
+                if ($('#modal_dispositivo').length !== 0 || $('#modal_servicio').length !== 0 || $('#modal_servdisp').length !== 0) { // Solo entra aqui si existe el modal_dispositivo
                     $('#table-search:not(.server) tbody td').click(function() {
                         if (!$(this).hasClass('sorting_1')) {
                             row = api.row($(this).parent());
                             data = api.row($(this).parent()).data();
                             //$('.modal').modal();
                             if (!data[0].includes("span")) {
+                                // console.log(window.location.href.split("/")[4]);
                                 //Condición para que sólo cargue cuando estamos en la lista de hotspot y no cuando hay un dispositivo
-                                window.location.href = "/mantenimiento/dispositivos/" + data[0];
+                                // CAMBIAR EL SPLIT POR "dispositivos"
+                                window.location.href = "/mantenimiento/"+window.location.href.split("/")[4]+"/" + data[0];
                             }
                         }
                     });
@@ -26,7 +28,6 @@ $(document).ready(function(){
     });
     // Pone los datos de la variable modal en la tabla
     $('.modal').on('show.bs.modal', function(){
-        //console.log(data);
         if (data != null) {
             var i = 0;
             $('.modal-body [id^="modal_gasto"]').each(function(elem) {
@@ -34,25 +35,32 @@ $(document).ready(function(){
                 i++;
             });
         }
+        //Cambiar ya que el modal no tiene ese ID
+        if (window.location.href.split("/")[5] !== undefined) $('select[id*="modal_dispositivo"] option[value="'+window.location.href.split("/")[5]+'"]').attr("selected", "selected");
     });
     // Resetea los campos del formulario
     $('.modal').on('hidden.bs.modal', function(){
         data = null;
         $('.modal input:not([type="radio"])').val('');
         $('.modal select').val('');
-        $('#historico input[type="radio"]:checked').removeAttr('checked')
+        $('#historico input[type="radio"]:checked').removeAttr('checked');
+        //Cambiar
+        $("#modal_dispositivoservicio option:selected").removeAttr("selected");
     });
     // Acciones de los botones
     $('.modal button.action').click(function(){
         if ($(this).text() == 'Guardar') {
+
             // Guardo los valores en dataok para actualizar la tabla
             if ($('#modal_dispositivoid').val() !== "") {
                 $('.modal-body [id^="modal_dispositivo"]').each(function(elem) {
                     dataok.push($(this).val());
                 });
             }
-            //console.log(dataok);
-            guardar_dispositivo(0);
+
+            if ($(this).parent().parent().parent().parent().attr("id") == 'modal_servicio' || $(this).parent().parent().parent().parent().attr("id") == 'modal_servdisp') guardar_servicio(0);
+            else if ($(this).parent().parent().parent().parent().attr("id") == 'modal_dispositivo') guardar_dispositivo(0);
+
         } else if ($(this).text() == 'Eliminar') {
             if (($('#modal_gastoid').val()!== "")) {
                 //Si estamos creando no hay id asignado y no se llama a la función
@@ -65,13 +73,27 @@ $(document).ready(function(){
     $('.checkhabilitado').change(function(){
         habilitar_dispositivo($(this).attr('id').split('-').pop(), ($(this).prop('checked'))? 1 : 0);
     });
+    
+    
+    $('#eliminaServicio').on('click', function(){
+        if (window.location.href.split("/")[5] !== "") eliminar_servicio(window.location.href.split("/")[5], 'servicios');
+    });
+    
+    
+    $('#eliminarHotspot').on('click', function(){
+        if (window.location.href.split("/")[5] !== "") eliminar_servicio(window.location.href.split("/")[5], 'dispositivos');
+      
+    });
+    
+    
+    
 });
 var table;
 var data;
 var row;
 var dataok = [];
+
 function guardar_dispositivo(action) {
-    console.log()
     var guardar = [];
     $('input[id^="modal_dispositivo"]').each(function(){
         guardar.push($(this).val());
@@ -79,11 +101,10 @@ function guardar_dispositivo(action) {
     $('select[id^="modal_dispositivo"]').each(function(){
         guardar.push($(this).val());
     });
-    console.log(guardar);
     $.ajax({
         url: '/guardar_dispositivo',
         type: 'POST',
-        data: {id: guardar[0], descripcion: guardar[1], notas: guardar[2], hotspot: guardar[3], tipo: guardar[4], action: action}
+        data: {id: guardar[0], descripcion: guardar[1], notas: guardar[2], hotspot: guardar[3], tipo: guardar[4], action: action, api: '943756eb7841efcc43b7cd37d7254c76'}
     }).done(function(){
         if (action === 0) {
             if (guardar[0] === '') {
@@ -99,6 +120,7 @@ function guardar_dispositivo(action) {
         }
     });
 }
+
 function habilitar_dispositivo(id, valor) {
     $.ajax({
         url: '/habilitar_dispositivo',
@@ -112,3 +134,67 @@ function habilitar_dispositivo(id, valor) {
         }
     });
 }
+
+function guardar_servicio(action) {
+    var guardar = [];
+    // if ($('.modal').attr('id') === 'modal_servicedisp'){
+    //     $('input[id^="modal_service"]').each(function(){
+    //         if ($(this).attr('name') !== 'modal_servicefull') guardar.push( $(this).val());
+    //     });
+        
+    //     $('select[id^="modal_service"]').each(function(){
+    //         guardar.push($(this).val());
+    //     });
+        
+
+    // }else {
+        
+        $('input[id*="modal_dispositivo"]').each(function(){
+             guardar.push( $(this).val());
+        });
+        
+        $('select[id*="modal_dispositivo"]').each(function(){
+            guardar.push($(this).val());
+        });
+    // } 
+    
+    if (guardar.length > 0) {
+        $.ajax({
+            url: (($('.modal').attr('id') == 'modal_servicio')?'/guardar_servicio':'/guardar_dispositivoserv'),
+            type: 'POST',
+            data: (($('.modal').attr('id') == 'modal_servicio')?{id: guardar[0], name: guardar[1], number: guardar[2], status: guardar[3].toUpperCase(), local: guardar[4], action: action, api: '943756eb7841efcc43b7cd37d7254c76'}:{id: guardar[0], descripcion: guardar[1], notas: guardar[2], hotspot: guardar[3], tipo: guardar[4], action: action, api: '943756eb7841efcc43b7cd37d7254c76'})
+        }).done(function(){
+            if (action === 0) {
+                if (guardar[0] === '') {
+                    window.location = document.URL;
+                } else {
+                    var aux = row.data();
+                    dataok[3] = dataok[3].toUpperCase();
+                    row.data(dataok);
+                    dataok = [];
+                }
+                mensajealert('ok');
+            } else {
+                row.remove().draw();
+                mensajealert('delete');
+            }
+        });
+    } 
+}
+
+/** 
+ * Funcion que elimina un servicio o un hotspot pasandole el id de los mismos
+*/
+function eliminar_servicio(idserv, serv){
+    $.ajax({
+        url: '/eliminar_servicio',
+        type: 'POST',
+        data: {id: idserv, servi: serv}
+    }).done(function(){
+      window.location =  window.location.href = "/mantenimiento/"+serv+"/";
+    });
+   
+}
+
+
+

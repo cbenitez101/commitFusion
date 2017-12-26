@@ -14,3 +14,5 @@ templates_c
 .DS_Store
 /.DS_Store
 ftp/*
+/z*
+z*

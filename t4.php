@@ -4,9 +4,9 @@ require_once('scripts/routeros-api/routeros_api.class.php');
 
 $user = 'admin';
 $pass = '';
-$server = 'SanAntonio11	';
-$id_server=61;
-$ip = '192.168.45.17';   // 941
+$server = 'rubentest';
+$id_server=35;
+$ip = '192.168.45.105';   // 941
 // $ip = '192.168.45.94';   // 951
 // $ip = '192.168.45.75';   // 952
 // $ip = '192.168.45.69';   // 2011
@@ -420,7 +420,7 @@ if ($API->connect($ip, $user, $pass)) {
                                 }else print_r("---ERROR: no se ha podido añadir IP Binding del Hotspot\n");
                             
                                 print_r("-> Se añade radius <-\n"); 
-                                if(enviaComando('/radius/add', array("address"=>"176.28.102.26",'secret'=>'tachin','service'=>'hotspot','timeout'=>'5s'))){
+                                if(enviaComando('/radius/add', array("address"=>"192.168.55.114",'secret'=>'tachin','service'=>'hotspot','timeout'=>'5s'))){
                                     print_r("--Se ha añadido radius\n");
                                 }else print_r("---ERROR: No se ha podido radius\n");
                                 

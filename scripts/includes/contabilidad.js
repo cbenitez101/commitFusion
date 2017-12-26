@@ -22,7 +22,6 @@ $(document).ready(function(){
     });
     // Pone los datos de la variable modal en la tabla
     $('.modal').on('show.bs.modal', function(){
-        //console.log(data);
         if (data != null) {
             var i = 0;
             $('.modal-body [id^="modal_gasto"]').each(function(elem) {
@@ -48,7 +47,6 @@ $(document).ready(function(){
                 });
                 dataok[5] = data[5];
             }
-            //console.log(dataok);
             guardar_gasto(0);
         } else if ($(this).text() == 'Eliminar') {
             if (($('#modal_gastoid').val()!== "")) {
@@ -301,7 +299,6 @@ function guardar_gasto(action) {
     $('[id^="modal_gasto"] select').each(function(){
         guardar.push($(this).val());
     });
-    //console.log(guardar);
     $.ajax({
         url: '/guardar_gasto',
         type: 'POST',

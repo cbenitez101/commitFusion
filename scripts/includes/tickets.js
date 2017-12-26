@@ -380,7 +380,7 @@ function guardar_bono(action) {
     $('select[id^="modal_bono"]').each(function(){
         guardar.push($(this).val());
     });
-    console.log(guardar);
+    // console.log(guardar);
     if (guardar.length > 0) {
         $.ajax({
             url: '/guardar_bono',

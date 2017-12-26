@@ -1,7 +1,8 @@
 <div class="row">
 	<div class="col-lg-12">
-		<h1 class="page-header">Dispositivos{if isset($server)} de {$server}{/if}</h1>
+		<h1 class="page-header">Dispositivos{if isset($server)} de {$server} {else}{/if}</h1>
 	</div>
+	
 	<!-- /.col-lg-12 -->
 </div>
 <div class="row">
@@ -14,20 +15,31 @@
 			<div class="panel-body">
 				<div class="dataTable_wrapper row">
 					<div class="col-md-12">
+						
 						{if isset($server)}
-							{html_table cols=$cols  table_attr='border="0" class="tabledit dispositivotable server hover"
-						id="table-search" width="100%"' loop=$dispositivos}
+							{html_table cols=$cols  table_attr='border="0" class="tabledit dispositivotable server hover" id="table-search" width="100%"' loop=$dispositivos}
 						{else}
-							{html_table cols=$cols  table_attr='border="0" class="tabledit dispositivotable hover"
-						id="table-search" width="100%"' loop=$dispositivos}
+							<!-- Si no hay dispositivos activos no mostramos la tabl -->
+							 {if !$noactivos}
+								{html_table cols=$cols  table_attr='border="0" class="tabledit dispositivotable hover" id="table-search" width="100%"' loop=$dispositivos}
+							 {/if}
 						{/if}
 					</div>
 				</div>
 				{if $smarty.session.cliente == 'admin'}	
 				<div class="row">
-					<div class="col-md-1 col-md-offset-11">
+					
+					 {if $noactivos}
+					 	<div class="col-md-2">
+							<button type="button" id="eliminarHotspot" class="btn btn-danger" >Eliminar Hotspot</button>
+						</div>
+						<div class="col-md-2 col-md-offset-8">
+							
+					{else}
+						<div class="col-md-2 col-md-offset-10">
+					{/if}
 						<button type="button" class="btn btn-success" data-toggle="modal" data-target=".modal">
-							Crear
+							Crear Dispositivo
 						</button>
 					</div>
 				</div>
@@ -73,7 +85,7 @@
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-								<button type="button" class="btn btn-danger action" data-dismiss="modal">Eliminar</button>
+								<!--<button type="button" class="btn btn-danger action" data-dismiss="modal">Eliminar</button>-->
 								<button type="button" class="btn btn-primary action" data-dismiss="modal">Guardar</button>
 							</div>
 						</div><!-- /.modal-content -->

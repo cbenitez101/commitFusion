@@ -15,7 +15,7 @@ function getTemplateData($getparams) {
         $params_parts = explode('/', $getparams['q']);
         foreach ($params_parts as $key => $value) if (!empty($value)) $get_values[$key] = $params_parts[$key];
         if(isset($get_values[0])){
-            define(COUNTRY, $get_values[0]);
+            // define(COUNTRY, $get_values[0]);
             if (!in_array($get_values[0], $pages)) {    //If no page is found, try to find
                 if (function_exists('external_'.$get_values[0])) {   //a function or error
                     array_shift($_GET);
@@ -383,6 +383,10 @@ function external_quitar_dash() {
         }  
     }
 }
+
+/**
+ * guardar_hotspot y guardar_servicio se podrían juntar¿?
+*/
 function external_guardar_hotspot(){
     if ((!empty($_POST['name'])) && (!empty($_POST['status'])) && (!empty($_POST['local'])) ) {
         global $database;
@@ -398,8 +402,6 @@ function external_guardar_hotspot(){
                         if( $radius->query("INSERT INTO `radius`.`radgroupreply` (`groupname`, `attribute`, `op`, `value`) VALUES ('".$_POST['name']."', 'Acct-Interim-Interval', ':=', '600')")) die();
                     }
                 }
-               
-               
             } else {
                 $temporal = $database->query('SELECT * FROM hotspots WHERE id = "'.$_POST['id'].'"');
                 $aux = $temporal->fetch_assoc();
@@ -411,6 +413,73 @@ function external_guardar_hotspot(){
         }
     }
 }
+
+function external_guardar_servicio(){
+    if ((!empty($_POST['name'])) && (!empty($_POST['status'])) && (!empty($_POST['local'])) ) {
+        global $database;
+        global $radius;
+        if ($_POST['action'] == 1) {
+            if ($database->query('DELETE FROM `servicios` WHERE id="'.$_POST['id'].'"')) {
+                if ($radius->query('DELETE FROM `radgroupcheck` WHERE `groupname` = "'.$_POST['local'].'" AND `value`= "'.$_POST['name'].'"')) die();
+            }
+        } else {
+            if (empty($_POST['id'])){
+                if ($database->query('INSERT INTO `servicios`(`ServerName`, `SerialNumber`, `Status`, `Local`) VALUES ("'.$_POST['name'].'",'.((empty($_POST['number']))?"NULL":'"'.$_POST['number'].'"').',"'.$_POST['status'].'","'.$_POST['local'].'"  )')){
+                    if( $radius->query('INSERT INTO `radgroupcheck`(`groupname`, `attribute`, `op`, `value`) VALUES ("'.$_POST['name'].'","Called-Station-Id","==","'.$_POST['name'].'")')){
+                        if( $radius->query("INSERT INTO `radius`.`radgroupreply` (`groupname`, `attribute`, `op`, `value`) VALUES ('".$_POST['name']."', 'Acct-Interim-Interval', ':=', '600')")) die();
+                    }
+                }
+            } else {
+                $temporal = $database->query('SELECT * FROM servicios WHERE id = "'.$_POST['id'].'"');
+                $aux = $temporal->fetch_assoc();
+                if ($database->query('UPDATE `servicios` SET `ServerName`="'.$_POST['name'].'",`SerialNumber`='.((empty($_POST['number']))?"NULL":'"'.$_POST['number'].'"').',`Status`="'.$_POST['status'].'",`Local`="'.$_POST['local'].'" WHERE id="'.$_POST['id'].'"')) {
+                    if ($radius->query('UPDATE `radgroupcheck` SET `groupname` = "'.$_POST['local'].'", `value`= "'.$_POST['name'].'"  WHERE groupname="'.$aux['Local'].'" AND value = "'.$aux['ServerName'].'"')) die();
+                }
+            }
+        }
+    }
+}
+
+function external_eliminar_servicio(){
+    global $database;
+    global $radius;
+    if (isset($_POST['id'])){
+        if($_POST['servi'] == 'dispositivos'){
+            if ($data = $database->query('SELECT * FROM hotspots INNER JOIN `locales` on locales.id = hotspots.Local WHERE hotspots.id="'.$_POST['id'].'"')) {
+                $aux = $data->fetch_assoc();
+                if ($database->query('DELETE FROM `hotspots` WHERE id="'.$_POST['id'].'"')) {
+                    if ($radius->query('DELETE FROM `radgroupcheck` WHERE `groupname` = "'.$aux['ServerName'].'" AND `value`= "'.$aux['ServerName'].'"')) die();
+                        die();
+                }
+            }
+        }elseif ($_POST['servi'] == 'servicios'){
+             if ($data = $database->query('SELECT * FROM servicios INNER JOIN `locales` on locales.id = servicios.Local WHERE servicios.id="'.$_POST['id'].'"')) {
+                $aux = $data->fetch_assoc();
+                if ($database->query('DELETE FROM `servicios` WHERE id="'.$_POST['id'].'"')) {
+                    if ($radius->query('DELETE FROM `radgroupcheck` WHERE `groupname` = "'.$aux['ServerName'].'" AND `value`= "'.$aux['ServerName'].'"')) die();
+                        die();
+                }
+            }
+        }
+    }
+    
+}
+
+// function external_eliminar_hotspot(){
+//     global $database;
+//     global $radius;
+//     if (isset($_POST['id'])){
+//         if ($data = $database->query('SELECT * FROM hotspots INNER JOIN `locales` on locales.id = hotspots.Local WHERE hotspots.id="'.$_POST['id'].'"')) {
+//             $aux = $data->fetch_assoc();
+//             if ($database->query('DELETE FROM `hotspots` WHERE id="'.$_POST['id'].'"')) {
+//                 if ($radius->query('DELETE FROM `radgroupcheck` WHERE `groupname` = "'.$aux['ServerName'].'" AND `value`= "'.$aux['ServerName'].'"')) die();
+//                     die();
+//             }
+//         }
+//     }
+    
+// }
+
 function external_guardar_perfil() {
     global $database;
     if (count($_POST) > 14) {
@@ -815,6 +884,21 @@ function external_guardar_dispositivo() {
         }
     }
 }
+function external_guardar_dispositivoserv() {
+    if (isset($_POST['descripcion']) && isset($_POST['notas']) && isset($_POST['hotspot']) && isset($_POST['tipo']) && isset($_POST['action'])) {
+        global $database;
+        if ($_POST['action'] == 1) {
+            if ($database->query("DELETE FROM `dispositivos` WHERE `id`=".$_POST['id'])) die();
+        } else {
+            if (empty($_POST['id'])) {
+                if ($database->query('INSERT INTO `dispositivos`(`id_servicio`, `tipo`, `descripcion`, `notas`) VALUES ("'.$_POST['hotspot'].'","'.$_POST['tipo'].'","'.$_POST['descripcion'].'","'.$_POST['notas'].'")')) die();
+            } else {
+                die();
+                // if ($database->query('UPDATE `bonos` SET `id_ser`="'.$_POST['id_hotspot'].'",`cantidad`="'.$_POST['cantidad'].'",`tipo`="'.$_POST['tipo'].'" WHERE `id`='.$_POST['id'])) die();
+            }
+        }
+    }
+}
 
 
 
@@ -826,6 +910,7 @@ function external_actualiza_dispositivos() {
     // Se comprueba que tenga contenido
     if(strlen($input) > 0) {
         $json = json_decode($input, true);
+        file_put_contents('ztelegram_input', print_r($input, true));
         //Se comprueba que sea un json
         if (!is_null($json)) {
             //Comrpuebo que el array tenga elementos
@@ -833,21 +918,39 @@ function external_actualiza_dispositivos() {
                 global $database;
                 $result = $database->query("SELECT syslog.id, syslog.local, syslog.dispositivo, syslog.fecha FROM syslog LEFT JOIN dispositivos ON dispositivos.descripcion = syslog.dispositivo WHERE ((dispositivos.habilitado = 1) OR (syslog.dispositivo = 'hotspot'))");
                 if ($result->num_rows > 0) while ($aux = $result->fetch_assoc()) $out[] = $aux;
+                file_put_contents('zOnline', print_r("----> Comienzo Bucle: ".date('d/m/Y H:i:s', microtime(true))." <----\n", true), FILE_APPEND);
+                file_put_contents('zOnline2', print_r("----> Comienzo Bucle: ".date('d/m/Y H:i:s', microtime(true))." <----\n", true), FILE_APPEND);
                 foreach ($json as $key => $value) {
                     // se comprueba que se pasan el numero de elementos necesarios
                     if (count($value) == 5) {
                         foreach ($out as $key2 => $value2) {
                             if (($value2['dispositivo'] == $value['dispositivo']) && ($value2['local'] == $value['local'])) {
-                                if(  ( strtotime("-30 min") > strtotime($value2['fecha'])) ) external_telegram($value['local']." - ".$value['dispositivo']." => Online");
+                                //Se podria desplazar 
+                                if(( strtotime("-32 min") > strtotime(strval($value2['fecha'])))) {
+                                    
+                                    file_put_contents('zOnline', print_r($value['local']." - ".$value['dispositivo']." ->Hora input:  ".$value['fecha'].", Hora en BD: ".$value2['fecha']." Hora ACTUAL: ->".date('d/m/Y H:i:s', microtime(true))." => Online Desarrollo\n", true), FILE_APPEND);
+                                    file_put_contents('zOnline2', print_r($value['local']." - ".$value['dispositivo']." ->Hora input:  ".$value['fecha'].", Hora en BD: ".$value2['fecha'].", Hora ACTUAL: ->".date('d/m/Y H:i:s', microtime(true))." => Online Desarrollo\n", true), FILE_APPEND);
+                                }
                                 unset($out[$key2]);
                             }
                         }
-                        $database->query("INSERT INTO `syslog`(`fecha`, `ip`, `local`, `dispositivo`, `info`) VALUES ('".$value['fecha']."','".$value['ip']."','".$value['local']."','".$value['dispositivo']."','".json_encode($value['info'])."') ON DUPLICATE KEY UPDATE fecha='".$value['fecha']."', info='".json_encode($value['info'])."'");  
+                        $database->query("INSERT INTO `syslog`(`fecha`, `ip`, `local`, `dispositivo`, `info`) VALUES ('".$value['fecha']."','".$value['ip']."','".$value['local']."','".$value['dispositivo']."','".json_encode($value['info'])."') ON DUPLICATE KEY UPDATE fecha='".$value['fecha']."', info='".json_encode($value['info'])."', ip='".$value['ip']."'");  
                     }
                 }
+                file_put_contents('zOnline', print_r("----> Fin Bucle:      ".date('d/m/Y H:i:s', microtime(true))." <----\n\n", true), FILE_APPEND);
+                file_put_contents('zOnline2', print_r("----> Fin Bucle:      ".date('d/m/Y H:i:s', microtime(true))." <----\n\n", true), FILE_APPEND);
+                file_put_contents('zOUT', print_r($out, true));
                 if (count($out) > 0) {
-                    foreach ($out as $value3) if ( (strtotime($value3['fecha']) >= strtotime("-45 min")) && (strtotime($value3['fecha']) < strtotime("-30 min")) ) external_telegram($value3['local']." - ".$value3['dispositivo']." => Offline");
-                 }    
+                    foreach ($out as $value3) {
+                        //Se desplaza en 5 min
+                        if ( (strtotime(strval($value3['fecha'])) >= strtotime("-46 min")) && (strtotime(strval($value3['fecha'])) < strtotime("-31 min")) ) {
+                            // external_telegram($value3['local']." - ".$value3['dispositivo']." => Offline Desarrollo");
+                            file_put_contents('zOffline', print_r($value3['local']." - ".$value3['dispositivo']." -> Hora en BD: ".$value3['fecha'].", Hora ACTUAL: ->".date('d/m/Y H:i:s', microtime(true))." => Offline Desarrollo\n", true), FILE_APPEND);
+                            file_put_contents('zOffline2', print_r($value3['local']." - ".$value3['dispositivo']." -> Hora en BD: ".$value3['fecha'].", Hora ACTUAL: ->".date('d/m/Y H:i:s', microtime(true))." => Offline Desarrollo\n", true), FILE_APPEND);
+                            
+                        }
+                    }
+                }    
             }
         }
     }
@@ -864,7 +967,7 @@ function external_habilitar_dispositivo() {
 
 function external_standalone() {
     global $database;
-    $result = $database->query("SELECT syslog.local, syslog.dispositivo, syslog.fecha, syslog.ip, dispositivos.notas FROM syslog LEFT JOIN dispositivos ON dispositivos.descripcion = syslog.dispositivo WHERE (dispositivos.habilitado = 1 OR syslog.dispositivo = 'hotspot') AND syslog.fecha < '".date("Y-m-d H:i:s", strtotime("-30 min"))."'  GROUP BY  syslog.dispositivo");
+    $result = $database->query("SELECT syslog.local, syslog.dispositivo, syslog.fecha, syslog.ip, dispositivos.notas FROM syslog LEFT JOIN dispositivos ON dispositivos.descripcion = syslog.dispositivo WHERE (dispositivos.habilitado = 1 OR syslog.dispositivo = 'hotspot') AND syslog.fecha < '".date("Y-m-d H:i:s", strtotime("-32 min"))."'  GROUP BY  syslog.dispositivo");
     $out = array();
     if ($result->num_rows > 0) while ($aux = $result->fetch_assoc()) $out[] = $aux;
     $echo = '<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta http-equiv="refresh" content="900"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content=""><meta name="author" content="Servibyte SCP"><title>Servibyte Platform</title><link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"><!-- MetisMenu CSS --><link href="/scripts/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet"><!-- Custom CSS --><link href="/scripts/dist/css/sb-admin-2.css" rel="stylesheet"><!-- Custom Fonts --><link href="/scripts/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"><!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries --><!-- WARNING: Respond.js does not work if you view the page via file:// --><!--[if lt IE 9]><script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script><script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script><![endif]--><link rel="stylesheet" type="text/css" media="all" href="/scripts/default.css"/><link rel="stylesheet" type="text/css" media="all" href="/scripts/datatable/zzz.responsive.dataTables.min.css"/><link rel="stylesheet" type="text/css" media="all" href="/scripts/datatable/jquery.dataTables.min.css"/><link rel="stylesheet" type="text/css" media="all" href="/scripts/includes/mantenimiento.css"/><script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script><script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script><!-- Metis Menu Plugin JavaScript --><script src="/scripts/bower_components/metisMenu/dist/metisMenu.min.js"></script><!-- Custom Theme JavaScript --><script src="/scripts/dist/js/sb-admin-2.js"></script><script type="text/javascript" src="/scripts/datatable/jquery.dataTables.min.js"></script><script type="text/javascript" src="/scripts/datatable/zzz.dataTables.responsive.min.js"></script><script type="text/javascript" src="/scripts/default.js"></script><script type="text/javascript" src="/scripts/includes/mantenimiento.js"></script></head><body><h1 class="page-header align_center"><img src="/images/logos/admin.png"></h1><div class="dataTable_wrapper row"><div class="col-md-12">';
@@ -908,7 +1011,7 @@ print
 :if ([:len [find interface=ether2 ]] = 0 ) do={/ip dhcp-client add interface=ether2 disabled=no}
 /
 /system identity set name='.$hotspot['ServerName'].'
-/interface bridge add name=bridge_hotspot
+/interface bridge add name=BRIDGE_HOTSPOT
 :if ([:len [/interface wireless find ]]>0) do={/interface wireless set wlan1 disabled=no mode=ap-bridge band=2ghz-b/g/n channel-width=20mhz frequency=2437 wireless-protocol=802.11 default-forwarding=no ssid='.$hotspot['ServerName'].';/interface bridge port add bridge=bridge_hotspot interface=wlan1}
 :delay 3s;
 /tool fetch url="http://servibyte.net/ftp/hotspot/alogin.html" dst-path="hotspot/alogin.html"

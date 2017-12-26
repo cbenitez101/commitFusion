@@ -23,12 +23,14 @@ if (isLoggedIn()) {
                     $menu[] = $value['errlog'];
                     foreach ($value as $key => $item) if ((strstr($key, '_')) && (!empty($item))) $barra[substr(strstr($key, '_'), 1)][] = $value['id'];
                 }
-                //dump($menu, true);
+                
                 $tabla_menu = array();
                 foreach ($barra as $key => $value) {
                     $tabla_menu[] = $key;
                     $tabla_menu[] = "<input type='checkbox' class='table-menu' id='$key' data-usuarios='[".implode(',',$value)."]'>";
                 }
+                
+                
                 $result =$database->query("select permisos.usuario,permisos.cliente,permisos.local, users.id, clientes.nombre as cnombre, clientes.id as cid, locales.nombre as lnombre, locales.id as lid from clientes left join permisos on permisos.cliente = clientes.id left join users on permisos.usuario = users.id left join locales on locales.cliente = clientes.id");   //Se piden todas los clientes y locales con sus permisos
                 $permisos = array();
                 while ($row = $result->fetch_assoc()) {     //Se monta un  array para con los permisos de cada usuario en cada local, usuario
@@ -51,6 +53,7 @@ if (isLoggedIn()) {
                         }
                     }
                 }
+                
                 $tabla = array();
                 foreach ($permisos as $key => $value) {
                     $tabla[]=$value['id'];
@@ -181,7 +184,8 @@ if (isLoggedIn()) {
                 // $result = $si->query("SELECT id, name FROM `si_customers`");
                 // $siout = array();
                 // while ($aux = $result->fetch_assoc()) $siout[] = $aux;
-                $result = $database->query("SELECT hotspots.id, hotspots.ServerName, hotspots.SerialNumber, hotspots.Status, hotspots.Local, hotspots.Informe, locales.nombre as 'Nombre Local', hotspots.BoolFull, hotspots.BoolFecha, hotspots.BoolPrecio, hotspots.BoolDuracion, hotspots.BoolIdentificador, hotspots.BoolLogo FROM hotspots INNER JOIN locales ON hotspots.Local = locales.id ORDER BY `hotspots`.`id` ASC");
+               $result = $database->query("SELECT hotspots.id, hotspots.ServerName, hotspots.SerialNumber, hotspots.Status, hotspots.Local, hotspots.Informe, locales.nombre as 'Nombre Local', hotspots.BoolFull, hotspots.BoolFecha, hotspots.BoolPrecio, hotspots.BoolDuracion, hotspots.BoolIdentificador, hotspots.BoolLogo FROM hotspots INNER JOIN locales ON hotspots.Local = locales.id ORDER BY `hotspots`.`id` ASC");
+
                 $out = array();
                 while ($aux = $result->fetch_assoc()) $out[] = $aux;
                 $menu = array();

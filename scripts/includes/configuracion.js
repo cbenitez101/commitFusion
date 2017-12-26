@@ -85,7 +85,6 @@ $(document).ready(function(){
                 if (!$(this).hasClass('sorting_1')) {
                     row1 = api1.row($(this).parent());
                     data1 = api1.row($(this).parent()).data();
-                    
                     $('.modal').modal();
                 }
             });
@@ -158,7 +157,6 @@ $(document).ready(function(){
     
     // Pone los datos de la variable modal en la tabla
     $('.modal').on('show.bs.modal', function(){
-        // console.log(data);
         if (data != null) {
             var i = 0;
             $('#button-copy').hide();
@@ -259,7 +257,6 @@ check-for-updates once\r\n\
                 i++;
             });
             $('.modal-body [id^="modal_perfil"]').each(function(elem) {
-                // console.log($(this).attr("class").split(" ")[1].split("-")[1]);
                 $(this).val(data[$(this).attr("class").split(" ")[1].split("-")[1]]);
             });
             $('.modal-body [id^="modal_lote"]').each(function(elem) {
@@ -320,7 +317,7 @@ check-for-updates once\r\n\
         
         
         
-         $('.tooltip-demo').tooltip({
+        $('.tooltip-demo').tooltip({
             selector: "[data-toggle=tooltip]",
             container: "body"
         });
@@ -468,7 +465,6 @@ check-for-updates once\r\n\
                         dataok.push($(this).val());
                     });
                 }
-                // console.log(dataok);
                 guardar_local(0);
             } 
         } else if ($(this).text() == 'Eliminar') {
@@ -685,9 +681,6 @@ function guardar_hotspot(action) {
         guardar.push($(this).val());
     });
 
-                
-    // console.log(guardar);
-    // console.log(dataok);
     if (guardar.length > 0) {
         $.ajax({
             url: '/guardar_hotspot',
@@ -871,7 +864,6 @@ function guardar_cliente(action) {
 function guardar_logo(guardar){
     var data = new FormData();
     $.each(files, function(key, value){
-        // console.log(value);
         if (key !== 'logo') {
             data.append(key, value);
         }
@@ -879,7 +871,6 @@ function guardar_logo(guardar){
     //data.append('nombre', guardar [1]);
     data.append('nombre', guardar.length > 3 ? guardar[4] : guardar [1]);
     if (guardar.length > 3) data.append('local', guardar[1]);
-    // console.log(data);
     $.ajax({
         url: '/upload_logo',
         type: 'POST',
