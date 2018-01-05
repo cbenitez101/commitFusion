@@ -114,7 +114,7 @@
 									<form role="form">
 										<input type="hidden" name="dispositivoid" id="modal_dispositivoid">
 										<div class="form-group">
-											<label>Hotspot</label>
+											<label>Servicio</label>
 											<select class="form-control" name="dispositivohotspot" id="modal_dispositivoservicio">
 													<option value="">Seleccione un Servicio</option>
 												{foreach item=item from=$servicios }

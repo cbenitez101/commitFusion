@@ -1,4 +1,5 @@
 $(document).ready(function(){
+    $('#bloctToExcel').hide();
     $('.ticket-crear .btnPrint').printPage({
         attr: 'data-url',
         message:'Se esta imprimiendo el ticket.',
@@ -17,7 +18,7 @@ $(document).ready(function(){
     // Manejador de la tabla, se le pone que al hacer lick en una fila llame al modal y guarda los datos de la tabla
     // en data.
     var pagina = (($('#pagina').attr('name') === undefined)?'':$('#pagina').attr('name'));
-    console.log(pagina);
+    // console.log(pagina);
     table = $('#table-search').DataTable({
         "preDrawCallback" : function() {
             if (!$('table').hasClass('tickettable') && !$('table').hasClass('fbtable')) {
@@ -37,6 +38,7 @@ $(document).ready(function(){
         },
         responsive: true,
         dom: 'Blfrtip',
+        // paging: false,
         buttons: [
             {
                 extend: 'pdfHtml5',
@@ -67,9 +69,35 @@ $(document).ready(function(){
                 }
             },
         ]
-       
     });
-
+    
+    // Accion que controla el evento click en la primera columna de cada row para realizar seleccion multiple
+    // Mostramos el boton de crear excel si hay rows seleccionadas y ocultamos en caso contrario.
+    $('#table-search tbody td').click(function () {
+        if ($(this).hasClass('sorting_1')) $(this).parent().toggleClass('selected');
+        if($('#table-search tr.selected').length > 0) {
+            $('#crearbloc').attr('class', 'col-md-1 col-md-offset-9');
+            $('#bloctToExcel').show();
+            
+        }else {
+            $('#crearbloc').attr('class', 'col-md-1 col-md-offset-11');
+            $('#bloctToExcel').hide();
+        }
+    });
+    
+    // Evento que controla la seleccion multiple. Recoje los IDs de los blocs de las rows seleccionadas
+    // para enviarla a la funcion que crea el excel a partir de dichos blocs
+    $('#blocToExcelbutton').click(function(){
+        var blocs = '';
+        var first=true;
+        table.rows('.selected').nodes().to$().each(function(){
+            blocs+=((first)?'':',')+table.row( this ).data()[0];
+            first = false;
+        });
+        window.location='/bloc_excel?bloc='+blocs;
+    });
+   
+    
     // Pone los datos de la variable modal en la tabla
     $('.modal:not(#modal_importar)').on('show.bs.modal', function(){
 
@@ -404,4 +432,37 @@ function guardar_bono(action) {
             //window.location = document.URL;
         });
     }
+}
+
+function creaExcel(){
+    var ids = Array();
+    $('#table-search tr.selected').each(function(){
+        ids.push(table.row( this ).data()[0])
+            // console.log( "ID: "+table.row( this ).data()[0] );
+    });
+    console.log(ids);
+     $.ajax({
+        url: '/bloc_excel',
+        type: 'POST',
+        data: {ids: ids}
+    }).done(function(data){
+        console.log(data);
+          window.open('data:application/vnd.ms-excel,' + data);
+    // e.preventDefault();
+        // if (action === 0) {
+        //     if (guardar[0] === '') {
+        //         window.location = document.URL;
+        //     } else {
+        //         dataok[5] = $('#modal_bonohotspot option[value=' + guardar[3] + ']').text();
+        //         row.data(dataok);
+        //         dataok = [];
+        //     }
+        //     mensajealert('ok');
+        // } else {
+        //     dataok = [];
+        //     row.remove().draw();
+        //     mensajealert('delete');
+        // }
+        //window.location = document.URL;
+    });
 }

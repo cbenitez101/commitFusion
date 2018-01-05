@@ -430,7 +430,13 @@ if (isLoggedIn()) {
             break;
         case 'resultado':
             if ($_SESSION['cliente'] == 'admin') {
-                $result = $database->query("SELECT * FROM `ventashotspot` INNER JOIN lotes ON ventashotspot.Id_lote = lotes.id INNER JOIN perfiles ON lotes.Id_perfil = perfiles.id WHERE ".((!empty($_GET['fechainicio']))? " ventashotspot.FechaVenta > '".$_GET['fechainicio']." 00:00:00'":((!empty($_GET['user']))? "1":" ventashotspot.FechaVenta > '".date("Y-m-d", strtotime("-1 month"))." 00:00:00'")).((!empty($_GET['fechafin']))?" AND ventashotspot.FechaVenta < '".$_GET['fechafin']." 23:59:59'":"").((!empty($_GET['user']))?" AND ventashotspot.Usuario LIKE  '%\_".$_GET['user']."%'":"").((!empty($_GET['server']))?" AND ventashotspot.Usuario LIKE  '".$_GET['server']."\_%'":"").((!empty($_GET['identificador']))?" AND ventashotspot.identificador LIKE  '".$_GET['identificador']."' AND ventashotspot.identificador NOT LIKE 'FREE\_'":""));
+                // $result = $database->query("SELECT * FROM `ventashotspot` INNER JOIN lotes ON ventashotspot.Id_lote = lotes.id INNER JOIN perfiles ON lotes.Id_perfil = perfiles.id WHERE ".((!empty($_GET['fechainicio']))? " ventashotspot.FechaVenta > '".$_GET['fechainicio']." 00:00:00'":((!empty($_GET['user']))? "1":" ventashotspot.FechaVenta > '".date("Y-m-d", strtotime("-1 month"))." 00:00:00'")).((!empty($_GET['fechafin']))?" AND ventashotspot.FechaVenta < '".$_GET['fechafin']." 23:59:59'":"").((!empty($_GET['user']))?" AND ventashotspot.Usuario LIKE  '%\_".$_GET['user']."%'":"").((!empty($_GET['server']))?" AND ventashotspot.Usuario LIKE  '".$_GET['server']."\_%'":"").((!empty($_GET['identificador']))?" AND ventashotspot.identificador LIKE  '".$_GET['identificador']."' AND ventashotspot.identificador NOT LIKE 'FREE\_'":""));
+                
+                
+                      $result = $database->query("SELECT * FROM `ventashotspot` INNER JOIN lotes ON ventashotspot.Id_lote = lotes.id INNER JOIN perfiles ON lotes.Id_perfil = perfiles.id WHERE ".((!empty($_GET['fechainicio']))? " ventashotspot.FechaVenta > '".$_GET['fechainicio']." 00:00:00'":((!empty($_GET['user']))? "1":" ventashotspot.FechaVenta > '".date("Y-m-d", strtotime("-2 years"))." 00:00:00'")).((!empty($_GET['fechafin']))?" AND ventashotspot.FechaVenta < '".$_GET['fechafin']." 23:59:59'":"").((!empty($_GET['user']))?" AND ventashotspot.Usuario LIKE  '%\_".$_GET['user']."%'":"").((!empty($_GET['server']))?" AND ventashotspot.Usuario LIKE  '".$_GET['server']."\_%'":"").((!empty($_GET['identificador']))?" AND ventashotspot.identificador LIKE  '".$_GET['identificador']."' AND ventashotspot.identificador NOT LIKE 'FREE\_'":""));
+                
+                
+                // file_put_contents('zRESULTADO', print_r("SELECT * FROM `ventashotspot` INNER JOIN lotes ON ventashotspot.Id_lote = lotes.id INNER JOIN perfiles ON lotes.Id_perfil = perfiles.id WHERE ".((!empty($_GET['fechainicio']))? " ventashotspot.FechaVenta > '".$_GET['fechainicio']." 00:00:00'":((!empty($_GET['user']))? "1":" ventashotspot.FechaVenta > '".date("Y-m-d", strtotime("-1 month"))." 00:00:00'")).((!empty($_GET['fechafin']))?" AND ventashotspot.FechaVenta < '".$_GET['fechafin']." 23:59:59'":"").((!empty($_GET['user']))?" AND ventashotspot.Usuario LIKE  '%\_".$_GET['user']."%'":"").((!empty($_GET['server']))?" AND ventashotspot.Usuario LIKE  '".$_GET['server']."\_%'":"").((!empty($_GET['identificador']))?" AND ventashotspot.identificador LIKE  '".$_GET['identificador']."' AND ventashotspot.identificador NOT LIKE 'FREE\_'":""), true));
             } else {
                 $result = $database->query("SELECT * FROM `ventashotspot` INNER JOIN lotes ON ventashotspot.Id_lote = lotes.id INNER JOIN perfiles ON lotes.Id_perfil = perfiles.id WHERE Usuario LIKE '".$_SESSION['local']."\_%'".((!empty($_GET['fechainicio']))?" AND FechaVenta > '".$_GET['fechainicio']." 00:00:00'":" AND FechaVenta > '".date("Y-m-d", strtotime("-1 month"))." 00:00:00'").((!empty($_GET['fechafin']))?" AND FechaVenta < '".$_GET['fechafin']." 23:59:59'":"").((!empty($_GET['user']))?" AND Usuario LIKE  '%_".$_GET['user']."%'":"").((!empty($_GET['identificador']))?" AND ventashotspot.identificador LIKE  '".$_GET['identificador']."' AND ventashotspot.identificador NOT LIKE 'FREE\_'":""));
             }
@@ -482,8 +488,10 @@ if (isLoggedIn()) {
             $menu = array();
             foreach ($out as $value) {
                 foreach($value as $item) $menu[]=$item;
+                
 //                $menu[]= '<input type="button" class="import_bloc ui-button" value="Importar" data-id="'.$value['id'].'" data-tiempo="'.$value['tiempo'].'">';
             }
+
 //            $smarty->assign('cols', implode(',', array_keys($out[0])).((count($out) > 0)?",Importar":""));
             $smarty->assign('cols', implode(',', array_keys($out[0])));
             $smarty->assign('bloc', $menu);

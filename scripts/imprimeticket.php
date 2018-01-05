@@ -128,7 +128,7 @@ and open the template in the editor.
             	    </div>
             	    <div class="grid_6"> &nbsp;</div>
             	    <div class="grid_2">
-            	        <img class="flagimg" src="../images/en.png" alt="en"></img>
+            	        <img class="flagimg" src="../images/en.png" id="esflag" alt="en"></img>
             	    </div>
             	</div>
                 <div class="clear">&nbsp;</div> 
@@ -155,13 +155,13 @@ and open the template in the editor.
                         <ol>
                             <li><strong>Can I connect more than one device at the same time? </strong>Yes, there is a limit of x devices per session. If you want to connect more than x device first must log out one in use. To know how to disconnect, see point 6.</li>
                             <li><strong>Are there limitations of traffic, speed or applications? </strong>The limits are set at download and upload speed. There is no limitation about the traffic amount or kind of applications.</li>
-                            <li><strong>Payment?</strong>You can pay cash or credit card at info establishment's desk, or by paypal payment at wireless wabsite platform (where connection code is required).</li>
-                            <li><strong>Data security?</strong>All networks are protected that users can not see each other. The connection data device will be recorded according to Spanish Data Protection Law (LOPD).</li>
-                            <li><strong>How do I connect?</strong>First of all, check that the wireless device is tuned on (at device network configuration). Select establishment. It is open acces without password, select the network and connect to it. Once connected, if it does not open a webpage asking the connection pass, open a browser and try to navigate to any web page (try access to google for example). Once the webpage is loaded insert code request connection, accept the terms and press enter. It will show a confirmation message and then you can navigate.</li>
-                            <li><strong>How do I disconnect?</strong>To log out reach http://exit.com. The session will close automatically if it is not connected over a period of 7 days</li>
+                            <li><strong>Payment?</strong>You can pay cash or credit card at info establishment's desk, or by paypal payment at wireless wabsite platform (where connection code is required).</li><!--<br>-->
+                            <li><strong>Data security?</strong>All networks are protected that users can not see each other. The connection data device will be recorded according to Spanish Data Protection Law (LOPD).</li><!--<br>-->
+                            <li><strong>How do I connect?</strong>First of all, check that the wireless device is tuned on (at device network configuration). Select establishment. It is open acces without password, select the network and connect to it. Once connected, if it does not open a webpage asking the connection pass, open a browser and try to navigate to any web page (try access to google for example). Once the webpage is loaded insert code request connection, accept the terms and press enter. It will show a confirmation message and then you can navigate.</li><!--<br><br>-->
+                            <li><strong>How do I disconnect?</strong>To log out reach http://exit.com. The session will close automatically if it is not connected over a period of 7 days</li><!--<br>-->
                             <li><strong>Troubleshooting</strong>
                                 <ol>
-                                    <li><u>I can not connect:</u> Depending on the number of authorized devices at the same time you might have another device logged in. Log out all devices and try again. If this is not the case or having closed all devices still can not be able to connect, delete browser cookier (in device browser settings) and Wi-Fi connections choose "forget network" option (in the wireless device configuration).</li>
+                                    <li><u>I can not connect:</u> Depending on the number of authorized devices at the same time you might have another device logged in. Log out all devices and try again. If this is not the case or having closed all devices still can not be able to connect, delete browser cookier (in device browser settings) and Wi-Fi connections choose "forget network" option (in the wireless device configuration).</li><!--<br><br>-->
                                     <li><u>I am connected to the network but not navigate:</u> Make sure you are logged in, if you do not know if you're logged in, then logout and try again to log in.</li>
                                     <li><u>Other questions:</u> If you have more doubt, please ask in establishment info where they will advise you and if it's needed open a sat ticket.</li>
                                 </ol>

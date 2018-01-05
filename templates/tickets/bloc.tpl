@@ -16,7 +16,12 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-md-1 col-md-offset-11">
+					<div id="bloctToExcel" class="col-md-2">
+						<button id="blocToExcelbutton" type="button" class="btn btn-info">
+							Generar Excel
+						</button>
+					</div>
+					<div id="crearbloc" class="col-md-1 col-md-offset-11">
 						<button type="button" class="btn btn-success" data-toggle="modal" data-target=".modal">
 							Crear
 						</button>

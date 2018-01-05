@@ -41,3 +41,11 @@ h4 {
 /*body {*/
 /*     -webkit-print-color-adjust:exact;*/
 /*}*/
+tr.selected{
+    background-color: #A6D785 !important;
+    border-color: #5bc0de !important;
+}
+
+.tabledit tbody tr td.sorting_1 {
+    cursor: crosshair;
+}

@@ -388,12 +388,23 @@ function external_quitar_dash() {
  * guardar_hotspot y guardar_servicio se podrían juntar¿?
 */
 function external_guardar_hotspot(){
-    if ((!empty($_POST['name'])) && (!empty($_POST['status'])) && (!empty($_POST['local'])) ) {
+    if ((!empty($_POST['name'])) && (!empty($_POST['status'])) && (!empty($_POST['local'])) || !empty($_POST['id'])) {
         global $database;
         global $radius;
         if ($_POST['action'] == 1) {
+            /**
+             * Segun Moi, administrativamente no nos interesa borrar de ninguna de las tbalas del radius ni del syslog. 
+             * Por lo tanto yo borraría hotspot y dispositivos que cuelgan del mismo, dejando syslog, y radius tal cual está. FALTA BORRAR DISPOSITIVOS
+             */
             if ($database->query('DELETE FROM `hotspots` WHERE id="'.$_POST['id'].'"')) {
-                if ($radius->query('DELETE FROM `radgroupcheck` WHERE `groupname` = "'.$_POST['local'].'" AND `value`= "'.$_POST['name'].'"')) die();
+                /**
+                 * Eliminar este if pero no el interior si no queremos eliminar los dispositivos que cuelgan
+                 * del hotspot en cuestion
+                 */
+                if($database->query('DELETE FROM `dispositivos` WHERE id_hotspot="'.$_POST['id'].'"')){
+                    if ($radius->query('DELETE FROM `radgroupcheck` WHERE `groupname` = "'.$_POST['local'].'" AND `value`= "'.$_POST['name'].'"')) die();
+                }
+               
             }
         } else {
             if (empty($_POST['id'])){
@@ -415,13 +426,24 @@ function external_guardar_hotspot(){
 }
 
 function external_guardar_servicio(){
-    if ((!empty($_POST['name'])) && (!empty($_POST['status'])) && (!empty($_POST['local'])) ) {
+    /**
+     * Hacer lo mismo que con los hotspots, al eliminar un servicio, eliminar todos los dispositivos que cuelgan del mismo.
+     */
+  
+    if ((!empty($_POST['name'])) && (!empty($_POST['status'])) && (!empty($_POST['local'])) || (!empty($_POST['id']) && $_POST['action'] == 1)) {
         global $database;
         global $radius;
         if ($_POST['action'] == 1) {
             if ($database->query('DELETE FROM `servicios` WHERE id="'.$_POST['id'].'"')) {
-                if ($radius->query('DELETE FROM `radgroupcheck` WHERE `groupname` = "'.$_POST['local'].'" AND `value`= "'.$_POST['name'].'"')) die();
-            }
+              /**
+                 * Eliminar este if pero no el interior si no queremos eliminar los dispositivos que
+                 * cuelgan del hotspot en cuestion
+                 */
+                if($database->query('DELETE FROM `dispositivos` WHERE id_servicio="'.$_POST['id'].'"')){
+                    if ($radius->query('DELETE FROM `radgroupcheck` WHERE `groupname` = "'.$_POST['local'].'" AND `value`= "'.$_POST['name'].'"')) die();
+                    die();
+                }
+            }  
         } else {
             if (empty($_POST['id'])){
                 if ($database->query('INSERT INTO `servicios`(`ServerName`, `SerialNumber`, `Status`, `Local`) VALUES ("'.$_POST['name'].'",'.((empty($_POST['number']))?"NULL":'"'.$_POST['number'].'"').',"'.$_POST['status'].'","'.$_POST['local'].'"  )')){
@@ -439,31 +461,46 @@ function external_guardar_servicio(){
         }
     }
 }
-
-function external_eliminar_servicio(){
-    global $database;
-    global $radius;
-    if (isset($_POST['id'])){
-        if($_POST['servi'] == 'dispositivos'){
-            if ($data = $database->query('SELECT * FROM hotspots INNER JOIN `locales` on locales.id = hotspots.Local WHERE hotspots.id="'.$_POST['id'].'"')) {
-                $aux = $data->fetch_assoc();
-                if ($database->query('DELETE FROM `hotspots` WHERE id="'.$_POST['id'].'"')) {
-                    if ($radius->query('DELETE FROM `radgroupcheck` WHERE `groupname` = "'.$aux['ServerName'].'" AND `value`= "'.$aux['ServerName'].'"')) die();
-                        die();
-                }
-            }
-        }elseif ($_POST['servi'] == 'servicios'){
-             if ($data = $database->query('SELECT * FROM servicios INNER JOIN `locales` on locales.id = servicios.Local WHERE servicios.id="'.$_POST['id'].'"')) {
-                $aux = $data->fetch_assoc();
-                if ($database->query('DELETE FROM `servicios` WHERE id="'.$_POST['id'].'"')) {
-                    if ($radius->query('DELETE FROM `radgroupcheck` WHERE `groupname` = "'.$aux['ServerName'].'" AND `value`= "'.$aux['ServerName'].'"')) die();
-                        die();
-                }
-            }
-        }
-    }
+/**
+ * Juntar con guardar servicio 
+ */
+// function external_eliminar_servicio(){
+//     global $database;
+//     global $radius;
+//     if (isset($_POST['id'])){
+//         if($_POST['servi'] == 'dispositivos'){
+//             if ($data = $database->query('SELECT * FROM hotspots INNER JOIN `locales` on locales.id = hotspots.Local WHERE hotspots.id="'.$_POST['id'].'"')) {
+//                 $aux = $data->fetch_assoc();
+//                 if ($database->query('DELETE FROM `hotspots` WHERE id="'.$_POST['id'].'"')) {
+                    
+//                  /**
+//                  * Eliminar este if pero no el interior si no queremos eliminar los dispositivos que cuelgan
+//                  * del hotspot en cuestion
+//                  */
+//                     if ($database->query('DELETE FROM `dispositivos` WHERE id_hotspot="'.$_POST['id'].'"')){
+//                         if ($radius->query('DELETE FROM `radgroupcheck` WHERE `groupname` = "'.$aux['ServerName'].'" AND `value`= "'.$aux['ServerName'].'"')) die();
+//                         die();
+//                     }
+//                 }
+//             }
+//         }elseif ($_POST['servi'] == 'servicios'){
+//              if ($data = $database->query('SELECT * FROM servicios INNER JOIN `locales` on locales.id = servicios.Local WHERE servicios.id="'.$_POST['id'].'"')) {
+//                 $aux = $data->fetch_assoc();
+//                 if ($database->query('DELETE FROM `servicios` WHERE id="'.$_POST['id'].'"')) {
+//                      /**
+//                      * Eliminar este if pero no el interior si no queremos eliminar los dispositivos que
+//                      * cuelgan del hotspot en cuestion
+//                      */
+//                     if($database->query('DELETE FROM `dispositivos` WHERE id_servicio="'.$_POST['id'].'"')){
+//                         if ($radius->query('DELETE FROM `radgroupcheck` WHERE `groupname` = "'.$aux['ServerName'].'" AND `value`= "'.$aux['ServerName'].'"')) die();
+//                         die();
+//                     }
+//                 }
+//             }
+//         }
+//     }
     
-}
+// }
 
 // function external_eliminar_hotspot(){
 //     global $database;
@@ -719,16 +756,48 @@ function external_guardar_bloc(){
     }
 }
 
+/**
+ *  Vamos a cambiar external_bloc_excel para permitir pasar un array de IDs de blocks y convertirlos a un excel
+ * en el que estén todos los usuarios de los blocs que hemos seleccionado.
+ */
+
 function external_bloc_excel($bloc = NULL){
+
+    
+
+    
     if (isset($_POST['bloc'])) $bloc = $_POST['bloc'];
     elseif (isset ($_GET['bloc']))$bloc = $_GET['bloc'];
     if (!empty($bloc)){
         global $database;
-        $result = $database->query("SELECT `user` FROM `bloc_usuarios` WHERE `bloc_id`= $bloc");
-        $users = array();
-        while ($aux = $result->fetch_assoc()) $users[] = $aux['user'];
-        header('Content-type: application/vnd.ms-excel');
-        header("Content-Disposition: attachment; filename=bloc-$bloc-".count($users).".xls");
+        if (strpos($bloc, ",") === false){
+            $result = $database->query("SELECT `user` FROM `bloc_usuarios` WHERE `bloc_id`= $bloc");
+            $users = array();
+            while ($aux = $result->fetch_assoc()) $users[] = $aux['user'];
+        }else{
+            $users = array();
+            foreach (explode(",", $bloc) as $value) {
+                $result = $database->query("SELECT `user` FROM `bloc_usuarios` WHERE `bloc_id`= $value");
+                while ($aux = $result->fetch_assoc()) $users[] = $aux['user'];
+            }
+        }
+        
+        
+        
+        
+        // $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        // $writer->save("05featuredemo.xlsx");
+        
+        
+        
+        
+        
+        
+        // header('Content-type: application/vnd.ms-excel; charset=utf-8');
+        
+        header('Content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=utf-8');
+        
+        header("Content-Disposition: attachment; filename=bloc-".str_replace(",","_",$bloc)."-".count($users).".xls");
         header("Pragma: no-cache");
         header("Expires: 0");
         $out = '<table>';
@@ -885,6 +954,7 @@ function external_guardar_dispositivo() {
     }
 }
 function external_guardar_dispositivoserv() {
+    // file_put_contents('zGUARDARDISPOSITIVOSERV', print_r($_POST, true));
     if (isset($_POST['descripcion']) && isset($_POST['notas']) && isset($_POST['hotspot']) && isset($_POST['tipo']) && isset($_POST['action'])) {
         global $database;
         if ($_POST['action'] == 1) {
@@ -927,7 +997,7 @@ function external_actualiza_dispositivos() {
                             if (($value2['dispositivo'] == $value['dispositivo']) && ($value2['local'] == $value['local'])) {
                                 //Se podria desplazar 
                                 if(( strtotime("-32 min") > strtotime(strval($value2['fecha'])))) {
-                                    
+                                    // external_telegram($value3['local']." - ".$value3['dispositivo']." => Online Desarrollo");
                                     file_put_contents('zOnline', print_r($value['local']." - ".$value['dispositivo']." ->Hora input:  ".$value['fecha'].", Hora en BD: ".$value2['fecha']." Hora ACTUAL: ->".date('d/m/Y H:i:s', microtime(true))." => Online Desarrollo\n", true), FILE_APPEND);
                                     file_put_contents('zOnline2', print_r($value['local']." - ".$value['dispositivo']." ->Hora input:  ".$value['fecha'].", Hora en BD: ".$value2['fecha'].", Hora ACTUAL: ->".date('d/m/Y H:i:s', microtime(true))." => Online Desarrollo\n", true), FILE_APPEND);
                                 }

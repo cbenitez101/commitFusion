@@ -43,7 +43,7 @@
 								</div>
 							</div>
 						{/foreach}
-						<div class="modal fade" id="modal_gasto" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						<div class="modal fade" id="modal_gasto" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
 							<div class="modal-dialog">
 								<div class="modal-content">
 									<div class="modal-header">

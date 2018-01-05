@@ -28,20 +28,16 @@
 				</div>
 				{if $smarty.session.cliente == 'admin'}	
 				<div class="row">
-					
-					 {if $noactivos}
-					 	<div class="col-md-2">
-							<button type="button" id="eliminarHotspot" class="btn btn-danger" >Eliminar Hotspot</button>
-						</div>
-						<div class="col-md-2 col-md-offset-8">
-							
-					{else}
-						<div class="col-md-2 col-md-offset-10">
-					{/if}
+						<div class="col-md-2">
 						<button type="button" class="btn btn-success" data-toggle="modal" data-target=".modal">
 							Crear Dispositivo
 						</button>
 					</div>
+					 {if $noactivos}
+					 	<div class="col-md-2 col-md-offset-8">
+							<button type="button" id="eliminarHotspot" class="btn btn-danger" >Eliminar Hotspot</button>
+						</div>
+					{/if}
 				</div>
 				<div class="modal fade" id="modal_dispositivo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 					<div class="modal-dialog">
