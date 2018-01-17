@@ -6,6 +6,7 @@
  * @return array Returns the page that shall be displayed and the key-value-pairs for the controller. 
  */
 function getTemplateData($getparams) {
+    // file_put_contents('ZPARAMS', print_r($getparams, true));
     global $pages;    
     $get_values = array();
     if (empty($getparams)) {  
@@ -316,6 +317,7 @@ function external_guardar_cliente() {
 }
 
 function external_guardar_local() {
+    // Se le añade campo de Monitorizacion en cada local para mostrar dispositivos en Mantenimiento > Dispositivos (de momento en Mantenimiento > Servicios)
     if ((!empty($_POST['nombre'])) && (!empty($_POST['cliente'])) && (!empty($_POST['clientenombre']))) {
         global $database;
         if ($_POST['action'] == 1) {
@@ -329,12 +331,12 @@ function external_guardar_local() {
             }
         } else {
             if (empty($_POST['id'])) {
-                if ($database->query("INSERT INTO `locales`(`nombre`, `cliente`) VALUES ('".$_POST['nombre']."',".$_POST['cliente'].")")) die();
+                if ($database->query("INSERT INTO `locales`(`nombre`, `cliente`,`Monitorizacion`) VALUES ('".$_POST['nombre']."',".$_POST['cliente'].",".$_POST['monitorizacion'].")")) die();
             } else {
                 $result = $database->query("SELECT locales.nombre, clientes.nombre as clientenombre FROM `locales` INNER JOIN `clientes` ON locales.cliente = clientes.id  WHERE locales.id=".$_POST['id']);
                 $aux = $result->fetch_assoc();
                 global $fulldomain;
-                if ($database->query("UPDATE `locales` SET `nombre`='".$_POST['nombre']."', `cliente`=".$_POST['cliente']." WHERE `id`=".$_POST['id'])) {
+                if ($database->query("UPDATE `locales` SET `nombre`='".$_POST['nombre']."', `cliente`=".$_POST['cliente']." , `Monitorizacion`=".$_POST['monitorizacion']." WHERE `id`=".$_POST['id'])) {
                     if (file_exists($fulldomain.'/images/logos/'.strtolower($aux['clientenombre']).'.'.strtolower($aux['nombre']).'.png')) {
                         if (rename($fulldomain.'/images/logos/'.strtolower($aux['clientenombre']).'.'.strtolower($aux['nombre']).'.png', $fulldomain.'/images/logos/'.strtolower($_POST['clientenombre']).'.'.strtolower($_POST['nombre']).'.png')) die();   
                     }
@@ -347,7 +349,7 @@ function external_guardar_local() {
 function external_upload_logo() {
     global $fulldomain;
     foreach ($_FILES as $file) {
-        if (move_uploaded_file($file['tmp_name'], $fulldomain.'/images/logos/'.strtolower($_POST['nombre']).(($_POST['local'])?'.'.strtolower($_POST['local']):'').'.png')) die();
+        if (move_uploaded_file($file['tmp_name'], $fulldomain.'/images/logos/'.strtolower($_POST['nombre']).((isset($_POST['local']))?'.'.strtolower($_POST['local']):'').'.png')) die();
     }
     
 }
@@ -762,41 +764,54 @@ function external_guardar_bloc(){
  */
 
 function external_bloc_excel($bloc = NULL){
-
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
 
+
+
+//   $spreadsheet = new Spreadsheet();
+//     $sheet = $spreadsheet->getActiveSheet();
+//     $sheet->setCellValue('A1', 'PRUEBA1 !');
+//     $writer = new Xlsx($spreadsheet);
+//     $writer->save('PRUEBA.xlsx');
+//     header('Content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=utf-8');
+//     header("Content-Disposition: attachment; filename=PRUEBA.xlsx");
+//     header("Pragma: no-cache");
+//     header("Expires: 0");
+//     @readfile('PRUEBA.xlsx');
+//     unlink('PRUEBA.xlsx');
+    
+    
+    
+    
     
     if (isset($_POST['bloc'])) $bloc = $_POST['bloc'];
     elseif (isset ($_GET['bloc']))$bloc = $_GET['bloc'];
     if (!empty($bloc)){
         global $database;
-        if (strpos($bloc, ",") === false){
-            $result = $database->query("SELECT `user` FROM `bloc_usuarios` WHERE `bloc_id`= $bloc");
-            $users = array();
-            while ($aux = $result->fetch_assoc()) $users[] = $aux['user'];
-        }else{
+        // if (strpos($bloc, ",") === false){
+        //     $result = $database->query("SELECT `user` FROM `bloc_usuarios` WHERE `bloc_id`= $bloc");
+        //     $users = array();
+        //     while ($aux = $result->fetch_assoc()) $users[] = $aux['user'];
+        // }else{
             $users = array();
             foreach (explode(",", $bloc) as $value) {
                 $result = $database->query("SELECT `user` FROM `bloc_usuarios` WHERE `bloc_id`= $value");
                 while ($aux = $result->fetch_assoc()) $users[] = $aux['user'];
             }
-        }
-        
-        
-        
-        
-        // $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
-        // $writer->save("05featuredemo.xlsx");
-        
-        
-        
-        
-        
+        // }
         
         // header('Content-type: application/vnd.ms-excel; charset=utf-8');
         
         header('Content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=utf-8');
-        
         header("Content-Disposition: attachment; filename=bloc-".str_replace(",","_",$bloc)."-".count($users).".xls");
         header("Pragma: no-cache");
         header("Expires: 0");
@@ -939,22 +954,40 @@ function external_guardar_bono(){
     }
 }
 
+/* FORMA ANTIGUA PARA GUARDAR DISPOSITIVOS */
+// function external_guardar_dispositivo() {
+//     if (isset($_POST['descripcion']) && isset($_POST['notas']) && isset($_POST['hotspot']) && isset($_POST['tipo']) && isset($_POST['action'])) {
+//         global $database;
+//         if ($_POST['action'] == 1) {
+//             if ($database->query("DELETE FROM `dispositivos` WHERE `id`=".$_POST['id'])) die();
+//         } else {
+//             if (empty($_POST['id'])) {
+//                 if ($database->query('INSERT INTO `dispositivos`(`id_hotspot`, `tipo`, `descripcion`, `notas`) VALUES ("'.$_POST['hotspot'].'","'.$_POST['tipo'].'","'.$_POST['descripcion'].'","'.$_POST['notas'].'")')) die();
+//             } else {
+//                 if ($database->query('UPDATE `bonos` SET `id_hotspot`="'.$_POST['id_hotspot'].'",`cantidad`="'.$_POST['cantidad'].'",`tipo`="'.$_POST['tipo'].'" WHERE `id`='.$_POST['id'])) die();
+//             }
+//         }
+//     }
+// }
+
 function external_guardar_dispositivo() {
-    if (isset($_POST['descripcion']) && isset($_POST['notas']) && isset($_POST['hotspot']) && isset($_POST['tipo']) && isset($_POST['action'])) {
+
+    if (isset($_POST['descripcion']) && isset($_POST['notas']) /*&& isset($_POST['hotspot'])*/ && isset($_POST['tipo']) && isset($_POST['action'])) {
         global $database;
         if ($_POST['action'] == 1) {
             if ($database->query("DELETE FROM `dispositivos` WHERE `id`=".$_POST['id'])) die();
         } else {
             if (empty($_POST['id'])) {
-                if ($database->query('INSERT INTO `dispositivos`(`id_hotspot`, `tipo`, `descripcion`, `notas`) VALUES ("'.$_POST['hotspot'].'","'.$_POST['tipo'].'","'.$_POST['descripcion'].'","'.$_POST['notas'].'")')) die();
+                if ($database->query('INSERT INTO `dispositivos` ('.((isset($_POST['hotspot']))?'`id_hotspot`,':'').' `tipo`, `descripcion`, `notas`, `local`) VALUES ('.((isset($_POST['hotspot']))?'"'.$_POST['hotspot'].'",':null).'"'.$_POST['tipo'].'","'.$_POST['descripcion'].'","'.$_POST['notas'].'",'.$_POST['idlocal'].')')) die();
             } else {
                 if ($database->query('UPDATE `bonos` SET `id_hotspot`="'.$_POST['id_hotspot'].'",`cantidad`="'.$_POST['cantidad'].'",`tipo`="'.$_POST['tipo'].'" WHERE `id`='.$_POST['id'])) die();
             }
         }
     }
 }
+
+
 function external_guardar_dispositivoserv() {
-    // file_put_contents('zGUARDARDISPOSITIVOSERV', print_r($_POST, true));
     if (isset($_POST['descripcion']) && isset($_POST['notas']) && isset($_POST['hotspot']) && isset($_POST['tipo']) && isset($_POST['action'])) {
         global $database;
         if ($_POST['action'] == 1) {

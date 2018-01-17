@@ -4,9 +4,9 @@ require_once('scripts/routeros-api/routeros_api.class.php');
 
 $user = 'admin';
 $pass = '';
-$server = 'SanAntonio11	';
-$id_server=61;
-$ip = '192.168.45.17';   // 941
+$server = 'ArenasSur';
+$id_server=62;
+$ip = '192.168.45.72';   // 941
 // $ip = '192.168.45.94';   // 951
 // $ip = '192.168.45.75';   // 952
 // $ip = '192.168.45.69';   // 2011
@@ -169,49 +169,49 @@ if ($API->connect($ip, $user, $pass)) {
                     $READ = $API->read();
                     if(count($READ) > 0){
                         if (!array_key_exists('!trap', $READ) && !array_key_exists('!trap', $READETHER)){
-                            if(enviaComando('/interface/bridge/port/add', array('bridge'=>'bridge5_WAN','interface'=>'ether1'))) {
-                                print_r("--Se añade ether1 a bridge5_WAN\n");
-                            } else print_r("---ERROR: No se ha podido añadir ether1 a bridge5_WAN\n");
+                            if(enviaComando('/interface/bridge/port/add', array('bridge'=>'bridge5_WAN','interface'=>'sfp-sfpplus1'))) {
+                                print_r("--Se añade sfp-sfpplus1 a bridge5_WAN\n");
+                            } else print_r("---ERROR: No se ha podido añadir sfp-sfpplus1 a bridge5_WAN\n");
                             
                             
                             
-                            if (enviaComando('/interface/set', array('numbers'=>'ether2','comment'=>'ether2_clientes1'))) print_r("comentario para ether2\n");
-                            else print_r("---ERROR: No se ha podido añadir comentario para ether2\n");
+                            if (enviaComando('/interface/set', array('numbers'=>'sfp-sfpplus2','comment'=>'sfp-sfpplus2_clientes1'))) print_r("comentario para sfp-sfpplus2\n");
+                            else print_r("---ERROR: No se ha podido añadir comentario para sfp-sfpplus2\n");
                             
                             /* Se añaden comentarios a las distintas interfaces */
                             if (strstr($READ[0]['model'],'941') > -1 || strstr($READ[0]['model'],'951') > -1 || strstr($READ[0]['model'],'952') > -1) {
                                 
-                                if (enviaComando('/interface/set', array('numbers'=>'ether3','comment'=>'ether3_adm'))) print_r("comentario para ether3\n");
+                                if (enviaComando('/interface/set', array('numbers'=>'sfp-sfpplus3','comment'=>'ether3_adm'))) print_r("comentario para ether3\n");
                                 else print_r("---ERROR: No se ha podido añadir comentario para ether3\n");
                                 
-                                if (enviaComando('/interface/set', array('numbers'=>'ether4','comment'=>'ether4_trunk'))) print_r("comentario para ether4\n");
+                                if (enviaComando('/interface/set', array('numbers'=>'sfp-sfpplus4','comment'=>'ether4_trunk'))) print_r("comentario para ether4\n");
                                 else print_r("---ERROR: No se ha podido añadir comentario para ether4\n");
                     
                                  /* Se añaden los puertos al bridge correspondiente */
-                                if (enviaComando('/interface/bridge/port/add', array('bridge'=>'bridge1_hs_clientes1','interface'=>'ether2'))){
+                                if (enviaComando('/interface/bridge/port/add', array('bridge'=>'bridge1_hs_clientes1','interface'=>'sfp-sfpplus2'))){
                                     print_r("--Se añade ether2 a bridge1_hs_clientes1\n");
                                     
-                                    if (enviaComando('/interface/bridge/port/add', array('bridge'=>'bridge4_administracion','interface'=>'ether3'))){
+                                    if (enviaComando('/interface/bridge/port/add', array('bridge'=>'bridge4_administracion','interface'=>'sfp-sfpplus3'))){
                                         print_r("--Se añade ether3 a bridge4_administracion\n");
                                         /* Se deshabilita interface de admin */
                                         
-                                        if(enviaComando('/interface/disable', array('numbers'=>'ether3'))) print_r("Se deshabilita interface de admin\n");
+                                        if(enviaComando('/interface/disable', array('numbers'=>'sfp-sfpplus3'))) print_r("Se deshabilita interface de admin\n");
                                         else print_r("---ERROR: No se ha podido deshabilitar el interface de admin\n");
                                         
-                                        if (enviaComando('/interface/bridge/port/add', array('bridge'=>'bridge_trunk','interface'=>'ether4'))){
+                                        if (enviaComando('/interface/bridge/port/add', array('bridge'=>'bridge_trunk','interface'=>'sfp-sfpplus4'))){
                                             print_r("--Se añade ether4 a bridge_trunk\n");
                                             
                                             /* Dependiendo del modelo con el que estemos operando realizamos */ 
                                             if (strstr($READ[0]['model'],'951') > -1 || strstr($READ[0]['model'],'952') > -1){
                                                 /* Si estamos trabajando con los modelos 951 o 952 incluimos tambien ether5*/
                                                  
-                                                if(enviaComando('/interface/set', array('numbers'=>'ether5','comment'=>'ether5_trunk'))) {
+                                                if(enviaComando('/interface/set', array('numbers'=>'sfp-sfpplus5','comment'=>'ether5_trunk'))) {
                                                     print_r("--Se añade comentario para ether5\n");
                                                     
-                                                    if(enviaComando('/interface/disable', array('numbers'=>'ether5'))) {
+                                                    if(enviaComando('/interface/disable', array('numbers'=>'sfp-sfpplus5'))) {
                                                         print_r("--Se deshabilita ether5\n");
                                                         
-                                                        if(enviaComando('/interface/bridge/port/add', array('bridge'=>'bridge_trunk','interface'=>'ether5'))) {
+                                                        if(enviaComando('/interface/bridge/port/add', array('bridge'=>'bridge_trunk','interface'=>'sfp-sfpplus5'))) {
                                                             print_r("--Se añade ether5 a bridge_trunk\n");
                                                         } else print_r("---ERROR: No se ha podido añadir ether5 a bridge_trunk\n");
                                                         
@@ -227,28 +227,28 @@ if ($API->connect($ip, $user, $pass)) {
                                 
                             } else if(strstr($READ[0]['model'],'1009') > -1 || strstr($READ[0]['model'],'1100') > -1 || strstr($READ[0]['model'],'2011') > -1 || strstr($READ[0]['model'],'3011') > -1){
                                 
-                                if (enviaComando('/interface/set', array('numbers'=>'ether3','comment'=>'ether3_clientes2'))) print_r("--comentario para ether3\n");
+                                if (enviaComando('/interface/set', array('numbers'=>'sfp-sfpplus3','comment'=>'ether3_clientes2'))) print_r("--comentario para ether3\n");
                                 else print_r("---ERROR: No se ha podido añadir comentario para ether3\n");
                                 
-                                if (enviaComando('/interface/set', array('numbers'=>'ether4','comment'=>'ether4_staff'))) print_r("--comentario para ether4\n");
+                                if (enviaComando('/interface/set', array('numbers'=>'sfp-sfpplus4','comment'=>'ether4_staff'))) print_r("--comentario para ether4\n");
                                 else print_r("---ERROR: No se ha podido añadir comentario para ether4\n");
                                 
-                                if (enviaComando('/interface/set', array('numbers'=>'ether5','comment'=>'ether5_adm'))) print_r("--comentario para ether5\n");
+                                if (enviaComando('/interface/set', array('numbers'=>'sfp-sfpplus5','comment'=>'ether5_adm'))) print_r("--comentario para ether5\n");
                                 else print_r("---ERROR: No se ha podido añadir comentario para ether5\n");
                                 
-                                if (enviaComando('/interface/bridge/port/add', array('bridge'=>'bridge1_hs_clientes1','interface'=>'ether2'))) {
+                                if (enviaComando('/interface/bridge/port/add', array('bridge'=>'bridge1_hs_clientes1','interface'=>'sfp-sfpplus2'))) {
                                   print_r("--ether2 añadido a bridge1_hs_clientes1\n"); 
                                    
-                                    if (enviaComando('/interface/bridge/port/add', array('bridge'=>'bridge2_hs_clientes2','interface'=>'ether3'))) {
+                                    if (enviaComando('/interface/bridge/port/add', array('bridge'=>'bridge2_hs_clientes2','interface'=>'sfp-sfpplus3'))) {
                                       print_r("--ether3 añadido a bridge2_hs_clientes2\n"); 
                                        
-                                        if (enviaComando('/interface/bridge/port/add', array('bridge'=>'bridge3_hs_staff','interface'=>'ether4'))) {
+                                        if (enviaComando('/interface/bridge/port/add', array('bridge'=>'bridge3_hs_staff','interface'=>'sfp-sfpplus4'))) {
                                           print_r("--ether4 añadido a bridge3_staff\n"); 
                                            
-                                            if (enviaComando('/interface/bridge/port/add', array('bridge'=>'bridge4_administracion','interface'=>'ether5'))) {
+                                            if (enviaComando('/interface/bridge/port/add', array('bridge'=>'bridge4_administracion','interface'=>'sfp-sfpplus5'))) {
                                               print_r("--ether5 añadido a bridge4_administracion\n"); 
                                               
-                                                if (enviaComando('/interface/disable', array('numbers'=>'ether5'))){
+                                                if (enviaComando('/interface/disable', array('numbers'=>'sfp-sfpplus5'))){
                                                   print_r("--ether5 deshabilitado\n");
                                                   
                                                     for($i=5; $i <= (count($READETHER) - 1); $i++){

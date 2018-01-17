@@ -291,6 +291,7 @@ var checkin;
 var checkout;
 var dataok = [];
 var datosgraf2, datosgraf3, datosgraf4;
+var Highcharts;
 function guardar_gasto(action) {
     var guardar = [];
     $('[id^="modal_gasto"] input').each(function(){

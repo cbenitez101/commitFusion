@@ -123,6 +123,10 @@
         									        <div class="col-md-2" id="localimagen"></div>
         									    </div>
         									</div>
+    										<div class="form-group">
+        										<label>Monitorizacion</label><br/>
+        										<input id="modal_monitorizacion" name="monitorizacion" checked type="checkbox" data-width="75">
+        									</div>
         								</form>
         							</div>
         							<div class="modal-footer">

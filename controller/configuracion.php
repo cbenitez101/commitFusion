@@ -4,6 +4,8 @@ if (isLoggedIn()) {
     // load_modul('bsdatepicker');
     load_modul('bootstrap-datepicker');
     load_modul('tooltipster');
+    load_modul('clipboard');
+    load_modul('bootstrap-toggle');
     $smarty->assign('page', $template_data[1]);
     switch ($template_data[1]) {
         case 'usuarios':
@@ -134,12 +136,13 @@ if (isLoggedIn()) {
                 $smarty->assign('cols', implode(', ', array_keys($out[0])).',logo');
                 $smarty->assign('clientes', $menu);
                 $smarty->assign('clientelocales', $out);
-                $result = $database->query("SELECT locales.id, locales.nombre, locales.cliente, clientes.nombre as nombrecliente FROM locales left join clientes on locales.cliente=clientes.id");  //Se selecciona todos los locales
+                $result = $database->query("SELECT locales.id, locales.nombre, locales.cliente, clientes.nombre as nombrecliente, locales.Monitorizacion as monitorizacion FROM locales left join clientes on locales.cliente=clientes.id");  //Se selecciona todos los locales
                 $out = array();
                 while ($aux = $result->fetch_assoc()) $out[] = $aux;
+                
                 $menu = array();
                 foreach ($out as $value) {
-                    foreach ($value as $item) $menu[]=$item;
+                    foreach ($value as $key => $item) $menu[] = $item;
                     $menu[] = ((file_exists($fulldomain.'/images/logos/'.strtolower($value['nombrecliente']).'.'.strtolower($value['nombre']).'.png'))?'<img src="/images/logos/'.strtolower($value['nombrecliente']).'.'.strtolower($value['nombre']).'.png?'.time().'" class="logo_td">':'');
                 }
                 $smarty->assign('cols1', implode(', ', array_keys($out[0])).',logo');
@@ -179,7 +182,7 @@ if (isLoggedIn()) {
             }
         case 'hotspots':
             if ($_SESSION['cliente'] == 'admin') {
-                load_modul('clipboard');
+                
                 // $si = new mysqli('217.125.25.165', 'servibyte', 'sbyte_15_Mxz', 'simpleinvoices', 8092);
                 // $result = $si->query("SELECT id, name FROM `si_customers`");
                 // $siout = array();

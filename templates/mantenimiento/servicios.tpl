@@ -2,13 +2,13 @@
 	<div class="col-lg-8">
 		<h1 class="page-header"> {if isset($server)}Dispositivos de {$server} {else} Servicios{/if}</h1>
 	</div>
-	<div class="col-lg-4">
+	<!--<div class="col-lg-4">
 		{if isset($creaServicio)} 
 			<button type="button" id="eliminaServicio" class="btn btn-danger" style="margin-top:40px;">
 				Eliminar Servicio
 			</button>
 		{/if}
-	</div>
+	</div>-->
 
 	<!-- /.col-lg-12 -->
 </div>
@@ -34,13 +34,9 @@
 				{if $smarty.session.cliente == 'admin'}	
 					<div class="row">
 						<div class="col-md-2">
-							<button type="button" class="btn btn-success" data-toggle="modal" data-target=".modal">
-								{if isset($creaServicio)} 
-									Crear Dispositivo
-								{else}
-									Crear Servicio
-								{/if}
-							</button>
+							{if isset($creaServicio)} 
+								<button type="button" class="btn btn-success" data-toggle="modal" data-target=".modal">Crear Dispositivo</button>	
+							{/if}
 						</div>
 					</div>
 					{if !isset($creaServicio)}	
@@ -113,7 +109,7 @@
 								<div class="modal-body">
 									<form role="form">
 										<input type="hidden" name="dispositivoid" id="modal_dispositivoid">
-										<div class="form-group">
+										<!--<div class="form-group">
 											<label>Servicio</label>
 											<select class="form-control" name="dispositivohotspot" id="modal_dispositivoservicio">
 													<option value="">Seleccione un Servicio</option>
@@ -123,12 +119,25 @@
 											</select>
 										</div>
 										<div class="form-group">
+											<label>Hotspots</label><br/>
+											<input type="checkbox" id="introduceHotspot" >Introducir a Hotspot</input>
+											<select class="form-control" name="dispositivohotspot" id="modal_dispositivoservicio" disabled>
+													<option value="">Seleccione un Hotspot</option>
+												{foreach item=item from=$servicios }
+													<option value="{$item.id}">{$item.ServerName}</option>
+												{/foreach}
+											</select>
+										</div>-->
+										<div class="form-group">
 											<label>Tipo de Dispositivo</label>
 											<select class="form-control" name="dispositivotipo" id="modal_dispositivotipo">
 												<option value="">Seleccione un tipo de dispositivo</option>
 												<option value="ap">Antena</option>
 												<option value="balanceador">Balanceador</option>
 												<option value="switch">Switch</option>
+												<option value="tpv">TPV</option>
+												<option value="camara">Cámara</option>
+												<option value="servidor">Servidor</option>
 												<option value="otro">Otro</option>
 											</select>
 										</div>

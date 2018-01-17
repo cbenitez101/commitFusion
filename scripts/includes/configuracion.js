@@ -149,7 +149,7 @@ $(document).ready(function(){
         },
         "responsive" : true
     });
-    
+
     $('#tabs a').click(function (e) {
       e.preventDefault()
       $(this).tab('show')
@@ -157,34 +157,30 @@ $(document).ready(function(){
     
     // Pone los datos de la variable modal en la tabla
     $('.modal').on('show.bs.modal', function(){
+        $('#modal_monitorizacion').bootstrapToggle({
+            onstyle: 'success',
+            offstyle: 'danger',
+            on: 'Sí',
+            off: 'No'
+                
+        });
+        $('#button-copy').hide();
         if (data != null) {
+           
             var i = 0;
-            $('#button-copy').hide();
+            // $('#button-copy').hide();
             $('.modal-body [id^="modal_server"]').each(function(elem) {
                 if (i == 3) {
                     $(this).val(data[i].toLowerCase());
                 } else if (i == 0) {
                     $(this).val(data[i]);
                     if ((data[i] !== "") && (data[2] === "")) {
-//                         $('#button-copy').attr('data-clipboard-text','/ip dns\r\n\
-// print\r\n\
-// :if ( [get servers] = "" ) do={/ip dns set servers=8.8.8.8,8.8.4.4 allow-remote-requests=yes}\r\n\
-// /ip dhcp-client\r\n\
-// :if ([:len [find interface=ether2 ]] = 0 ) do={/ip dhcp-client add interface=ether2 disabled=no}\r\n\
-// :delay 1s;\r\n\
-// /\r\n\
-// /system package update\r\n\
-// check-for-updates once\r\n\
-// :delay 1s;\r\n\
-// :if ( [get status] = "New version is available") do={ install }\r\n\
-// :delay 5s;\r\n\
-// /system script add name=start policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive source="/tool fetch url=\\"http://servibyte.net/script_hotspot\\?id_hotspot=' + data[i] + '&hotspot_serial=$[:put [/system routerboard get serial-number]]\\" dst-path=flash/hotspot.rsc \\r\\n:delay 3s\\r\\n/system reset-configuration no-defaults=yes skip-backup=yes run-after-reset=flash/hotspot.rsc"\r\n\
-// /system script run start\r\n\
-// ');
+                        
                         $('#button-copy').show();
+                        
                         clipboard = new Clipboard('#button-copy', {
-                            text: function(trigger) {
-                                return '/ip dns\r\n\
+                        text: function (trigger) {
+                          return '/ip dns\r\n\
 print\r\n\
 :if ( [get servers] = "" ) do={/ip dns set servers=8.8.8.8,8.8.4.4 allow-remote-requests=yes}\r\n\
 /ip dhcp-client\r\n\
@@ -196,11 +192,12 @@ check-for-updates once\r\n\
 :delay 1s;\r\n\
 :if ( [get status] = "New version is available") do={ install }\r\n\
 :delay 5s;\r\n\
-/system script add name=start policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive source="/tool fetch url=\\"http://servibyte.net/script_hotspot\\?id_hotspot=' + data[i] + '&hotspot_serial=$[:put [/system routerboard get serial-number]]\\" dst-path=flash/hotspot.rsc \\r\\n:delay 3s\\r\\n/system reset-configuration no-defaults=yes skip-backup=yes run-after-reset=flash/hotspot.rsc"\r\n\
+/system script add name=start policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive source="/tool fetch url=\\"http://servibyte.net/script_hotspot\\?id_hotspot=' + data[0] + '&hotspot_serial=$[:put [/system routerboard get serial-number]]\\" dst-path=flash/hotspot.rsc \\r\\n:delay 3s\\r\\n/system reset-configuration no-defaults=yes skip-backup=yes run-after-reset=flash/hotspot.rsc"\r\n\
 /system script run start\r\n\
-';
-                            }
-                        });
+';}
+                              
+                         });
+                             
                         clipboard.on('success', function(e) {
                             console.info('Action:', e.action);
                             console.info('Text:', e.text);
@@ -213,6 +210,8 @@ check-for-updates once\r\n\
                             console.error('Action:', e.action);
                             console.error('Trigger:', e.trigger);
                         });
+                  
+                   
 
                     }
                 } else if (i == 5) {
@@ -254,6 +253,7 @@ check-for-updates once\r\n\
                 } else if (i < 6) {
                     $(this).val(data[i]);
                 }
+                // if (i==0) $('#button-copy').click();
                 i++;
             });
             $('.modal-body [id^="modal_perfil"]').each(function(elem) {
@@ -297,16 +297,23 @@ check-for-updates once\r\n\
                 table2.page.len(10).draw();
             }
         } else if (data1 != null){
+            // Inicializacion bootstrapToggle
+           
             var i = 0;
             $('.modal-body [id^="modal_local"]').each(function(elem) {
                 if ($(this).attr('id') !== 'modal_localimagen') {
                     $(this).val(data1[i]);
                     i++;
                 } else {
-                    $('#localimagen').html(data1[i + 1]);
+                    // Cambiamos i+1 por i+2 para saltarnos el campo monitorizacion recien agregado para nueva funcionalidad
+                    $('#localimagen').html(data1[i + 2]);
                     i++;
                 }
             });
+            //Parte para inicializar el toggle de monitorizacion con el valor obtenido de base de datos
+            if (parseInt(data1[4])) $('#modal_monitorizacion').bootstrapToggle('on');
+            else $('#modal_monitorizacion').bootstrapToggle('off');
+            
         } else {
             $('#modal_usuariopasssend').prop('checked', true);
             $('#passrefresh').click();
@@ -316,7 +323,7 @@ check-for-updates once\r\n\
         
         
         
-        
+        //Inicializacion del tooltip ¿Se está utilizando?
         $('.tooltip-demo').tooltip({
             selector: "[data-toggle=tooltip]",
             container: "body"
@@ -341,11 +348,12 @@ check-for-updates once\r\n\
         $('#clienteimagen').html('');
         $('#localimagen').html('');
         //$('#button-copy').attr('data-clipboard-text',"");
-        $("#button-copy").hide();
+        // $("#button-copy").hide();
         $("[id^='modal_serverhs']").prop('checked', false);
         $('#modal_perfilformato').css('border', '');
         $('#modal_perfilpassword').css('border', '');
         $('[id*="modal_perfil"]').val("");
+        $('#modal_monitorizacion').bootstrapToggle('destroy');
     });
     // Acciones de los botones
     $('.modal button.action').click(function(e){
@@ -452,20 +460,24 @@ check-for-updates once\r\n\
            
              
             if ($('#modal_cliente').length !== 0) { // Solo entra aqui si existe el modal_cliente
-                if ($('#modal_clienteid').val() !== "") {
-                    $('.modal-body [id^="modal_cliente"]').each(function(elem) {
-                        dataok.push($(this).val());
-                    });
+                if($('#tabs').find('.active').text().trim() == "Clientes"){
+                    if ($('#modal_clienteid').val() !== "") {
+                        $('.modal-body [id^="modal_cliente"]').each(function(elem) {
+                            dataok.push($(this).val());
+                        });
+                    }
+                    guardar_cliente(0);
                 }
-                guardar_cliente(0);
             }
             if ($('#modal_local').length !== 0) { // Solo entra aqui si existe el modal_local
-                if ($('#modal_localid').val() !== "") {
-                    $('.modal-body [id^="modal_local"]').each(function(elem) {
-                        dataok.push($(this).val());
-                    });
+                if($('#tabs').find('.active').text().trim() == "Locales"){
+                    if ($('#modal_localid').val() !== "") {
+                        $('.modal-body [id^="modal_local"]').each(function(elem) {
+                            dataok.push($(this).val());
+                        });
+                    }
+                    guardar_local(0);
                 }
-                guardar_local(0);
             } 
         } else if ($(this).text() == 'Eliminar') {
             if ($('#modal_hotspot').length !== 0) {
@@ -829,6 +841,7 @@ function guardar_cliente(action) {
     $('input[id^="modal_cliente"]').each(function(){
         guardar.push($(this).val());
     });
+    // console.log(guardar);
     //guardar logo
     if ((files !== 'undefined') && (guardar[2] !== "")) guardar_logo(guardar);
     if (guardar.length > 0) {
@@ -890,13 +903,14 @@ function guardar_local(action) {
         guardar.push($(this).val());
         guardar.push($(this).find(':selected').text());
     });
+    // console.log(guardar);
     //guardar logo
     if ((files !== 'undefined') && (guardar[2] !== "")) guardar_logo(guardar);
     if (guardar.length > 0) {
         $.ajax({
             url: '/guardar_local',
             type: 'POST',
-            data: {id: guardar[0], nombre: guardar[1], cliente: guardar[3], clientenombre: guardar[4], action: action}
+            data: {id: guardar[0], nombre: guardar[1], cliente: guardar[3], clientenombre: guardar[4], monitorizacion:(($('#modal_monitorizacion').prop('checked'))?1:0), action: action}
         }).done(function(){
             if (action === 0) {
                 if (guardar[0] === '') {
@@ -918,6 +932,8 @@ function guardar_local(action) {
                     //Hasta que no se arregle el autorecargado no hace falta esta parte
                 }
                 mensajealert('ok');
+                //Añado recarga de momento hasta ver el problema que hay en etsa parte
+                window.location = document.URL;
             } else {
                 row.remove().draw();
                 mensajealert('delete');

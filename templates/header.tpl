@@ -35,11 +35,12 @@
 	    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 	    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 	    <![endif]-->
-    {foreach item=code from=$includeheadercss}
-	    {$code}
-    {/foreach}
+        {foreach item=code from=$includeheadercss}
+    	    {$code}
+        {/foreach}
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
         <!-- Metis Menu Plugin JavaScript -->
         <script src="/scripts/bower_components/metisMenu/dist/metisMenu.min.js"></script>
