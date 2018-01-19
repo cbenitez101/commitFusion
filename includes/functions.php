@@ -427,82 +427,49 @@ function external_guardar_hotspot(){
     }
 }
 
-function external_guardar_servicio(){
-    /**
-     * Hacer lo mismo que con los hotspots, al eliminar un servicio, eliminar todos los dispositivos que cuelgan del mismo.
-     */
-  
-    if ((!empty($_POST['name'])) && (!empty($_POST['status'])) && (!empty($_POST['local'])) || (!empty($_POST['id']) && $_POST['action'] == 1)) {
-        global $database;
-        global $radius;
-        if ($_POST['action'] == 1) {
-            if ($database->query('DELETE FROM `servicios` WHERE id="'.$_POST['id'].'"')) {
-              /**
-                 * Eliminar este if pero no el interior si no queremos eliminar los dispositivos que
-                 * cuelgan del hotspot en cuestion
-                 */
-                if($database->query('DELETE FROM `dispositivos` WHERE id_servicio="'.$_POST['id'].'"')){
-                    if ($radius->query('DELETE FROM `radgroupcheck` WHERE `groupname` = "'.$_POST['local'].'" AND `value`= "'.$_POST['name'].'"')) die();
-                    die();
-                }
-            }  
-        } else {
-            if (empty($_POST['id'])){
-                if ($database->query('INSERT INTO `servicios`(`ServerName`, `SerialNumber`, `Status`, `Local`) VALUES ("'.$_POST['name'].'",'.((empty($_POST['number']))?"NULL":'"'.$_POST['number'].'"').',"'.$_POST['status'].'","'.$_POST['local'].'"  )')){
-                    if( $radius->query('INSERT INTO `radgroupcheck`(`groupname`, `attribute`, `op`, `value`) VALUES ("'.$_POST['name'].'","Called-Station-Id","==","'.$_POST['name'].'")')){
-                        if( $radius->query("INSERT INTO `radius`.`radgroupreply` (`groupname`, `attribute`, `op`, `value`) VALUES ('".$_POST['name']."', 'Acct-Interim-Interval', ':=', '600')")) die();
-                    }
-                }
-            } else {
-                $temporal = $database->query('SELECT * FROM servicios WHERE id = "'.$_POST['id'].'"');
-                $aux = $temporal->fetch_assoc();
-                if ($database->query('UPDATE `servicios` SET `ServerName`="'.$_POST['name'].'",`SerialNumber`='.((empty($_POST['number']))?"NULL":'"'.$_POST['number'].'"').',`Status`="'.$_POST['status'].'",`Local`="'.$_POST['local'].'" WHERE id="'.$_POST['id'].'"')) {
-                    if ($radius->query('UPDATE `radgroupcheck` SET `groupname` = "'.$_POST['local'].'", `value`= "'.$_POST['name'].'"  WHERE groupname="'.$aux['Local'].'" AND value = "'.$aux['ServerName'].'"')) die();
-                }
-            }
-        }
-    }
-}
+
+
 /**
- * Juntar con guardar servicio 
+ * ELIMINAR SI NO HACE FALTA
  */
-// function external_eliminar_servicio(){
-//     global $database;
-//     global $radius;
-//     if (isset($_POST['id'])){
-//         if($_POST['servi'] == 'dispositivos'){
-//             if ($data = $database->query('SELECT * FROM hotspots INNER JOIN `locales` on locales.id = hotspots.Local WHERE hotspots.id="'.$_POST['id'].'"')) {
-//                 $aux = $data->fetch_assoc();
-//                 if ($database->query('DELETE FROM `hotspots` WHERE id="'.$_POST['id'].'"')) {
-                    
-//                  /**
-//                  * Eliminar este if pero no el interior si no queremos eliminar los dispositivos que cuelgan
-//                  * del hotspot en cuestion
+
+// function external_guardar_servicio(){
+//     /**
+//      * Hacer lo mismo que con los hotspots, al eliminar un servicio, eliminar todos los dispositivos que cuelgan del mismo.
+//      */
+  
+//     if ((!empty($_POST['name'])) && (!empty($_POST['status'])) && (!empty($_POST['local'])) || (!empty($_POST['id']) && $_POST['action'] == 1)) {
+//         global $database;
+//         global $radius;
+//         if ($_POST['action'] == 1) {
+//             if ($database->query('DELETE FROM `servicios` WHERE id="'.$_POST['id'].'"')) {
+//               /**
+//                  * Eliminar este if pero no el interior si no queremos eliminar los dispositivos que
+//                  * cuelgan del hotspot en cuestion
 //                  */
-//                     if ($database->query('DELETE FROM `dispositivos` WHERE id_hotspot="'.$_POST['id'].'"')){
-//                         if ($radius->query('DELETE FROM `radgroupcheck` WHERE `groupname` = "'.$aux['ServerName'].'" AND `value`= "'.$aux['ServerName'].'"')) die();
-//                         die();
+//                 if($database->query('DELETE FROM `dispositivos` WHERE id_servicio="'.$_POST['id'].'"')){
+//                     if ($radius->query('DELETE FROM `radgroupcheck` WHERE `groupname` = "'.$_POST['local'].'" AND `value`= "'.$_POST['name'].'"')) die();
+//                     die();
+//                 }
+//             }  
+//         } else {
+//             if (empty($_POST['id'])){
+//                 if ($database->query('INSERT INTO `servicios`(`ServerName`, `SerialNumber`, `Status`, `Local`) VALUES ("'.$_POST['name'].'",'.((empty($_POST['number']))?"NULL":'"'.$_POST['number'].'"').',"'.$_POST['status'].'","'.$_POST['local'].'"  )')){
+//                     if( $radius->query('INSERT INTO `radgroupcheck`(`groupname`, `attribute`, `op`, `value`) VALUES ("'.$_POST['name'].'","Called-Station-Id","==","'.$_POST['name'].'")')){
+//                         if( $radius->query("INSERT INTO `radius`.`radgroupreply` (`groupname`, `attribute`, `op`, `value`) VALUES ('".$_POST['name']."', 'Acct-Interim-Interval', ':=', '600')")) die();
 //                     }
 //                 }
-//             }
-//         }elseif ($_POST['servi'] == 'servicios'){
-//              if ($data = $database->query('SELECT * FROM servicios INNER JOIN `locales` on locales.id = servicios.Local WHERE servicios.id="'.$_POST['id'].'"')) {
-//                 $aux = $data->fetch_assoc();
-//                 if ($database->query('DELETE FROM `servicios` WHERE id="'.$_POST['id'].'"')) {
-//                      /**
-//                      * Eliminar este if pero no el interior si no queremos eliminar los dispositivos que
-//                      * cuelgan del hotspot en cuestion
-//                      */
-//                     if($database->query('DELETE FROM `dispositivos` WHERE id_servicio="'.$_POST['id'].'"')){
-//                         if ($radius->query('DELETE FROM `radgroupcheck` WHERE `groupname` = "'.$aux['ServerName'].'" AND `value`= "'.$aux['ServerName'].'"')) die();
-//                         die();
-//                     }
+//             } else {
+//                 $temporal = $database->query('SELECT * FROM servicios WHERE id = "'.$_POST['id'].'"');
+//                 $aux = $temporal->fetch_assoc();
+//                 if ($database->query('UPDATE `servicios` SET `ServerName`="'.$_POST['name'].'",`SerialNumber`='.((empty($_POST['number']))?"NULL":'"'.$_POST['number'].'"').',`Status`="'.$_POST['status'].'",`Local`="'.$_POST['local'].'" WHERE id="'.$_POST['id'].'"')) {
+//                     if ($radius->query('UPDATE `radgroupcheck` SET `groupname` = "'.$_POST['local'].'", `value`= "'.$_POST['name'].'"  WHERE groupname="'.$aux['Local'].'" AND value = "'.$aux['ServerName'].'"')) die();
 //                 }
 //             }
 //         }
 //     }
-    
 // }
+
 
 // function external_eliminar_hotspot(){
 //     global $database;
@@ -762,55 +729,20 @@ function external_guardar_bloc(){
  *  Vamos a cambiar external_bloc_excel para permitir pasar un array de IDs de blocks y convertirlos a un excel
  * en el que estén todos los usuarios de los blocs que hemos seleccionado.
  */
-
 function external_bloc_excel($bloc = NULL){
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 
-
-
-//   $spreadsheet = new Spreadsheet();
-//     $sheet = $spreadsheet->getActiveSheet();
-//     $sheet->setCellValue('A1', 'PRUEBA1 !');
-//     $writer = new Xlsx($spreadsheet);
-//     $writer->save('PRUEBA.xlsx');
-//     header('Content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=utf-8');
-//     header("Content-Disposition: attachment; filename=PRUEBA.xlsx");
-//     header("Pragma: no-cache");
-//     header("Expires: 0");
-//     @readfile('PRUEBA.xlsx');
-//     unlink('PRUEBA.xlsx');
-    
-    
-    
-    
-    
     if (isset($_POST['bloc'])) $bloc = $_POST['bloc'];
     elseif (isset ($_GET['bloc']))$bloc = $_GET['bloc'];
     if (!empty($bloc)){
         global $database;
-        // if (strpos($bloc, ",") === false){
-        //     $result = $database->query("SELECT `user` FROM `bloc_usuarios` WHERE `bloc_id`= $bloc");
-        //     $users = array();
-        //     while ($aux = $result->fetch_assoc()) $users[] = $aux['user'];
-        // }else{
-            $users = array();
-            foreach (explode(",", $bloc) as $value) {
-                $result = $database->query("SELECT `user` FROM `bloc_usuarios` WHERE `bloc_id`= $value");
-                while ($aux = $result->fetch_assoc()) $users[] = $aux['user'];
-            }
-        // }
-        
+
+        $users = array();
+        foreach (explode(",", $bloc) as $value) {
+            $result = $database->query("SELECT `user` FROM `bloc_usuarios` WHERE `bloc_id`= $value");
+            while ($aux = $result->fetch_assoc()) $users[] = $aux['user'];
+        }
+
         // header('Content-type: application/vnd.ms-excel; charset=utf-8');
-        
         header('Content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=utf-8');
         header("Content-Disposition: attachment; filename=bloc-".str_replace(",","_",$bloc)."-".count($users).".xls");
         header("Pragma: no-cache");
@@ -954,59 +886,35 @@ function external_guardar_bono(){
     }
 }
 
-/* FORMA ANTIGUA PARA GUARDAR DISPOSITIVOS */
-// function external_guardar_dispositivo() {
-//     if (isset($_POST['descripcion']) && isset($_POST['notas']) && isset($_POST['hotspot']) && isset($_POST['tipo']) && isset($_POST['action'])) {
-//         global $database;
-//         if ($_POST['action'] == 1) {
-//             if ($database->query("DELETE FROM `dispositivos` WHERE `id`=".$_POST['id'])) die();
-//         } else {
-//             if (empty($_POST['id'])) {
-//                 if ($database->query('INSERT INTO `dispositivos`(`id_hotspot`, `tipo`, `descripcion`, `notas`) VALUES ("'.$_POST['hotspot'].'","'.$_POST['tipo'].'","'.$_POST['descripcion'].'","'.$_POST['notas'].'")')) die();
-//             } else {
-//                 if ($database->query('UPDATE `bonos` SET `id_hotspot`="'.$_POST['id_hotspot'].'",`cantidad`="'.$_POST['cantidad'].'",`tipo`="'.$_POST['tipo'].'" WHERE `id`='.$_POST['id'])) die();
-//             }
-//         }
-//     }
-// }
 
+ 
 function external_guardar_dispositivo() {
-
-    if (isset($_POST['descripcion']) && isset($_POST['notas']) /*&& isset($_POST['hotspot'])*/ && isset($_POST['tipo']) && isset($_POST['action'])) {
+    if (isset($_POST['descripcion']) && isset($_POST['notas']) && isset($_POST['tipo']) && isset($_POST['action'])) {
         global $database;
         if ($_POST['action'] == 1) {
             if ($database->query("DELETE FROM `dispositivos` WHERE `id`=".$_POST['id'])) die();
         } else {
             if (empty($_POST['id'])) {
-                if ($database->query('INSERT INTO `dispositivos` ('.((isset($_POST['hotspot']))?'`id_hotspot`,':'').' `tipo`, `descripcion`, `notas`, `local`) VALUES ('.((isset($_POST['hotspot']))?'"'.$_POST['hotspot'].'",':null).'"'.$_POST['tipo'].'","'.$_POST['descripcion'].'","'.$_POST['notas'].'",'.$_POST['idlocal'].')')) die();
-            } else {
-                if ($database->query('UPDATE `bonos` SET `id_hotspot`="'.$_POST['id_hotspot'].'",`cantidad`="'.$_POST['cantidad'].'",`tipo`="'.$_POST['tipo'].'" WHERE `id`='.$_POST['id'])) die();
+                if ($database->query('INSERT INTO `dispositivos` ( `tipo`, `descripcion`, `notas`, `local`) VALUES ("'.$_POST['tipo'].'","'.$_POST['descripcion'].'","'.$_POST['notas'].'",'.$_POST['idlocal'].')')) die();
+            }else{
+                /**
+                 * Hacer aqui el update
+                 */
+                // if ($database->query('INSERT INTO `dispositivos` ( `tipo`, `descripcion`, `notas`, `local`) VALUES ("'.$_POST['tipo'].'","'.$_POST['descripcion'].'","'.$_POST['notas'].'",'.$_POST['idlocal'].')')) die();
             }
         }
     }
 }
 
 
-function external_guardar_dispositivoserv() {
-    if (isset($_POST['descripcion']) && isset($_POST['notas']) && isset($_POST['hotspot']) && isset($_POST['tipo']) && isset($_POST['action'])) {
-        global $database;
-        if ($_POST['action'] == 1) {
-            if ($database->query("DELETE FROM `dispositivos` WHERE `id`=".$_POST['id'])) die();
-        } else {
-            if (empty($_POST['id'])) {
-                if ($database->query('INSERT INTO `dispositivos`(`id_servicio`, `tipo`, `descripcion`, `notas`) VALUES ("'.$_POST['hotspot'].'","'.$_POST['tipo'].'","'.$_POST['descripcion'].'","'.$_POST['notas'].'")')) die();
-            } else {
-                die();
-                // if ($database->query('UPDATE `bonos` SET `id_ser`="'.$_POST['id_hotspot'].'",`cantidad`="'.$_POST['cantidad'].'",`tipo`="'.$_POST['tipo'].'" WHERE `id`='.$_POST['id'])) die();
-            }
-        }
-    }
-}
 
 
 
 // Se me ocurre meter el dispositivo que pongamos en estado offline en un array, y en cuanto lo pongamos online
 // sacarlo del mismo. 
+/**
+ * QUITAR FILE_PUT_CONTENTS
+ */
 function external_actualiza_dispositivos() {
     //Se recepciona los datos
     $input = file_get_contents('php://input');
