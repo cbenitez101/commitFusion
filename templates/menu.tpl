@@ -45,6 +45,8 @@
 									fa-bar-chart-o
 								{elseif $key == 'mantenimiento'}
 									fa-eye
+								{elseif $key == 'extras'}
+									fa-plus
 								{/if}
 								 fa-fw"></i>
 								{$key|capitalize}{if count($item) > 0}<span class="fa arrow"></span>{/if}</a>

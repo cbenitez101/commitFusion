@@ -32,9 +32,7 @@
 				{if $smarty.session.cliente == 'admin'}	
 					<div class="row">
 						<div class="col-md-2">
-							{if isset($creaServicio)} 
-								<button type="button" class="btn btn-success" data-toggle="modal" data-target=".modal">Crear Dispositivo</button>	
-							{/if}
+							<button type="button" class="btn btn-success" data-toggle="modal" data-target=".modal">Crear Dispositivo</button>
 						</div>
 					</div>
 					<div class="modal fade" id="modal_dispositivo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -47,6 +45,17 @@
 							<div class="modal-body">
 								<form role="form">
 									<input type="hidden" name="dispositivoid" id="modal_dispositivoid">
+									{if isset($listalocales)}	
+										<div class="form-group">
+											<label>Locales</label>
+											<select class="form-control" name="dispositivolocal" id="modal_dispositivolocal">
+												<option value="">Seleccione un local</option>
+												{foreach item=item from=$listalocales}
+												   	<option value="{$item.id}">{$item.nombre}</option>
+												 {/foreach}
+											</select>
+										</div>
+									{/if}
 									<div class="form-group">
 										<label>Tipo de Dispositivo</label>
 										<select class="form-control" name="dispositivotipo" id="modal_dispositivotipo">

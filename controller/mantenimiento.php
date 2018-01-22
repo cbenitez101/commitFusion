@@ -11,12 +11,10 @@ if (isLoggedIn()) {
                     
                     /**
                      * INICIO PARTE NUEVA DE DISPOSITIVOS
-                     */ 
-                    
-                     /**
-                     * PASO 2: Obtenemos los dispositivos linkados al local(id) ya sean APs de hotspot u otros dispositivos ya sean Camaras, TPVs, servidores...
+                     * PASO 2: Obtenemos los dispositivos linkados al local(id) ya sean APs de hotspot u otros dispositivos ya sean Camaras,
+                     * TPVs, servidores...
                      */
-                  $result = $database->query("SELECT syslog.*, dispositivos.notas, dispositivos.tipo, dispositivos.habilitado, dispositivos.id as dispid FROM `locales` LEFT JOIN `dispositivos` ON dispositivos.local = locales.id LEFT JOIN `syslog` ON (locales.nombre = syslog.local AND syslog.dispositivo = dispositivos.descripcion OR (locales.nombre = syslog.local AND syslog.dispositivo = 'Hotspot')) WHERE locales.id=".$template_data[2]." GROUP BY id");
+                  $result = $database->query("SELECT syslog.*, dispositivos.notas, dispositivos.tipo, dispositivos.habilitado, dispositivos.id as dispid FROM `locales` LEFT JOIN `dispositivos` ON dispositivos.id_hotspot = locales.id LEFT JOIN `syslog` ON (locales.nombre = syslog.local AND syslog.dispositivo = dispositivos.descripcion OR (locales.nombre = syslog.local AND syslog.dispositivo = 'Hotspot')) WHERE locales.id=".$template_data[2]." GROUP BY id");
                    
                     $out = array();
                     if ($result->num_rows > 0) {
@@ -44,7 +42,6 @@ if (isLoggedIn()) {
                     /**
                      * Var creaservicio se utiliza para saber como tratar los elementos mostrados, ya sea un servicio o un dispositivo
                     */
-                    // $smarty->assign('creaServicio', true);
                     $smarty->assign('cols', $keys);
                     $smarty->assign('dispositivos', $menu);
                     
@@ -53,29 +50,28 @@ if (isLoggedIn()) {
                      */ 
 
                 } else {   
-                     /**
+                    /**
                      * INICIO PARTE NUEVA DE DISPOSITIVOS
-                     */ 
-                     
-                      /**
                      * PASO 1: Buscamos Locales que tengan el campo monitorizacion a TRUE
                     */
-                    $result = $database->query("SELECT locales.id ,locales.nombre as Local, COUNT(*) AS dispositivos, (SELECT COUNT(*) FROM syslog WHERE local = locales.nombre AND fecha > '".date("Y-m-d H:i:s", strtotime("-30 min"))."' AND (dispositivo IN (SELECT descripcion FROM dispositivos WHERE habilitado = 1 AND local = locales.id))  OR (dispositivo = 'hotspot' AND local = locales.nombre)) as activos FROM `locales` LEFT JOIN dispositivos ON dispositivos.local= locales.id WHERE locales.Monitorizacion = 1 GROUP BY locales.id ");
+                    $result = $database->query("SELECT locales.id ,locales.nombre as Local, COUNT(*) AS dispositivos, (SELECT COUNT(*) FROM syslog WHERE local = locales.nombre AND fecha > '".date("Y-m-d H:i:s", strtotime("-30 min"))."' AND (dispositivo IN (SELECT descripcion FROM dispositivos WHERE habilitado = 1 AND id_hotspot = locales.id))  OR (dispositivo = 'hotspot' AND local = locales.nombre)) as activos FROM `locales` LEFT JOIN dispositivos ON dispositivos.id_hotspot= locales.id WHERE locales.Monitorizacion = 1 GROUP BY locales.id ");
                     
                      if ($result->num_rows > 0) {
                         while ($aux = $result->fetch_assoc()){
                             if ($aux['dispositivos'] > 1) $aux['dispositivos']++;
-                            // if ($aux['activos'] > 1) $aux['activos']++;
                             $out[] = $aux;
                         } 
-                        //  file_put_contents('ZOUTQUERYSERV', print_r($out, true));
                         $menu = array();
-                        foreach ($out as $value) {
-                            foreach ($value as $key => $item) {
-                                $menu[] = (($key == "Monitorizacion")?(($value)?"Sí":"No"):$item); 
-                               
-                            }
-                        }
+                        // Se cambia valor del campo Monitorizacion de 0 o 1 a Si o no
+                        foreach ($out as $value) foreach ($value as $key => $item) $menu[] = (($key == "Monitorizacion")?(($value)?"Sí":"No"):$item); 
+                        /**
+                         * Lista de locales para select option al agregar un nuevo dispositivo desde fuera de un local (tabla de locales)
+                         */
+                        $result2 = $database->query("SELECT id, nombre FROM locales");
+                        if ($result2->num_rows > 0)   while ($aux2 = $result2->fetch_assoc()) $out2[] = $aux2;
+                        
+                        //Variables smarty. 
+                        $smarty->assign('listalocales', $out2);
                         $smarty->assign('dispositivos', $menu);
                         $smarty->assign('cols', implode(', ', array_keys($out[0])));
                     }

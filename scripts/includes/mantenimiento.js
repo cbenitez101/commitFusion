@@ -1,6 +1,7 @@
 $(document).ready(function(){
     // Manejador de la tabla, se le pone que al hacer lick en una fila llame al modal y guarda los datos de la tabla
     // en data.
+    
     table = $('#table-search').DataTable({
         "preDrawCallback" : function() {
                 var api = this.api();
@@ -87,10 +88,10 @@ function guardar_dispositivo(action) {
     $('select[id^="modal_dispositivo"]').each(function(){
         guardar.push($(this).val());
     });
-    $.ajax({
+     $.ajax({
         url: '/guardar_dispositivo',
         type: 'POST',
-        data: {id: guardar[0], descripcion: guardar[1], notas: guardar[2], tipo: guardar[3], idlocal:window.location.href.split("/")[5], action: action, api: '943756eb7841efcc43b7cd37d7254c76'}
+        data: {id: guardar[0], descripcion: guardar[1], notas: guardar[2],  tipo: (($('#modal_dispositivolocal').length > 0)?guardar[4]:guardar[3]), idlocal:  (($('#modal_dispositivolocal').length > 0)?guardar[3]:window.location.href.split("/")[5]), action: action, api: '943756eb7841efcc43b7cd37d7254c76'}
     }).done(function(){
         if (action === 0) {
             if (guardar[0] === '') {

@@ -157,6 +157,7 @@ $(document).ready(function(){
     
     // Pone los datos de la variable modal en la tabla
     $('.modal').on('show.bs.modal', function(){
+        // Inicializacion bootstrapToggle
         $('#modal_monitorizacion').bootstrapToggle({
             onstyle: 'success',
             offstyle: 'danger',
@@ -253,7 +254,6 @@ check-for-updates once\r\n\
                 } else if (i < 6) {
                     $(this).val(data[i]);
                 }
-                // if (i==0) $('#button-copy').click();
                 i++;
             });
             $('.modal-body [id^="modal_perfil"]').each(function(elem) {
@@ -297,8 +297,6 @@ check-for-updates once\r\n\
                 table2.page.len(10).draw();
             }
         } else if (data1 != null){
-            // Inicializacion bootstrapToggle
-           
             var i = 0;
             $('.modal-body [id^="modal_local"]').each(function(elem) {
                 if ($(this).attr('id') !== 'modal_localimagen') {
