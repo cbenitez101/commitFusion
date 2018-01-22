@@ -841,7 +841,6 @@ function external_guardar_bono(){
 
  
 function external_guardar_dispositivo() {
-    // file_put_contents('ZZHOLAHOLA', print_r($_POST, true), FILE_APPEND);
     if (isset($_POST['descripcion']) && isset($_POST['notas']) && isset($_POST['tipo']) && isset($_POST['action'])) {
         global $database;
         if ($_POST['action'] == 1) {
