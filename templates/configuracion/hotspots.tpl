@@ -71,6 +71,8 @@
 										</select>
 									</div>
 									
+								
+									
 									
 									<label>Opciones de presentación:</label><br>
 									
@@ -115,6 +117,11 @@
 										
 									</div>
 									
+									<!-- Campo par APIKEY -->
+									<div class="form-group">
+										<label>APIKEY</label>
+										<input class="form-control" name="apikey" id="modal_serverapikey" disabled>
+									</div>
 									
 									<div class="row">
 										

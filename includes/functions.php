@@ -422,7 +422,7 @@ function external_guardar_hotspot(){
             }
         } else {
             if (empty($_POST['id'])){
-                if ($database->query('INSERT INTO `hotspots`(`ServerName`, `SerialNumber`, `Status`, `Local`, `Informe`, `BoolFull`, `BoolFecha`, `BoolPrecio`, `BoolDuracion`, `BoolIdentificador`, `BoolLogo`) VALUES ("'.$_POST['name'].'",'.((empty($_POST['number']))?"NULL":'"'.$_POST['number'].'"').',"'.$_POST['status'].'","'.$_POST['local'].'","'.$_POST['informe'].'","'.$_POST['full'].'", "'.$_POST['fecha'].'","'.$_POST['precio'].'","'.$_POST['duracion'].'","'.$_POST['identificador'].'","'.$_POST['logo'].'"  )')){
+                if ($database->query('INSERT INTO `hotspots`(`ServerName`, `SerialNumber`, `Status`, `Local`, `Informe`, `BoolFull`, `BoolFecha`, `BoolPrecio`, `BoolDuracion`, `BoolIdentificador`, `BoolLogo`,`apikey`) VALUES ("'.$_POST['name'].'",'.((empty($_POST['number']))?"NULL":'"'.$_POST['number'].'"').',"'.$_POST['status'].'","'.$_POST['local'].'","'.$_POST['informe'].'","'.$_POST['full'].'", "'.$_POST['fecha'].'","'.$_POST['precio'].'","'.$_POST['duracion'].'","'.$_POST['identificador'].'","'.$_POST['logo'].'", "'.md5(uniqid(rand(), true)).'" )')){
                     if( $radius->query('INSERT INTO `radgroupcheck`(`groupname`, `attribute`, `op`, `value`) VALUES ("'.$_POST['name'].'","Called-Station-Id","==","'.$_POST['name'].'")')){
                         if( $radius->query("INSERT INTO `radius`.`radgroupreply` (`groupname`, `attribute`, `op`, `value`) VALUES ('".$_POST['name']."', 'Acct-Interim-Interval', ':=', '600')")) die();
                     }

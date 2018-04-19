@@ -31,6 +31,7 @@ $(document).ready(function(){
                 null,
                 null,
                 null,
+                null,
                 {   
                     "defaultContent":""
                 }
@@ -231,6 +232,7 @@ check-for-updates once\r\n\
                     // if (data[i] !== "") $(this).val(data[i]);
                 }else if(i == 13){   
                      if (data[i] == 1) $(this).prop('checked', true);
+                     else $(this).val(data[i]);
                     // if (data[i] == 1) $('#modal_serverfull1').prop('checked', true);
                     // else $('#modal_serverfull2').prop('checked', true);
                 }else if( i == 8 ){
@@ -677,14 +679,17 @@ var formatstring = ['T', 'A', 'M', 'm', 'N', 'b', 'B', 'V', 'v', 'C', 'c'];
 function guardar_hotspot(action) {
     var guardar = [];
     $('input[id^="modal_server"]').each(function(){
-        if ($(this).attr('id') === 'modal_serverhsfull1' && $(this).prop('checked')) {
-            guardar.push( 1 );
-        }else if($(this).attr('id') === 'modal_serverhsfull2' && $(this).prop('checked')){
-            guardar.push( 0 );
-        
-        } else if( $(this).attr('id') === 'modal_serverhsfecha' || $(this).attr('id') === 'modal_serverhsprecio' || $(this).attr('id') === 'modal_serverhsduracion' || $(this).attr('id') === 'modal_serverhsidentificador' || $(this).attr('id') == 'modal_serverhslogo'  ){
-            guardar.push( (($(this).prop('checked'))?1:0) );
-        } else if ($(this).attr('name') !== 'modal_serverfull') guardar.push( $(this).val());
+        if ($(this).attr('name') != 'apikey'){
+            if ($(this).attr('id') === 'modal_serverhsfull1' && $(this).prop('checked')) {
+                guardar.push( 1 );
+            }else if($(this).attr('id') === 'modal_serverhsfull2' && $(this).prop('checked')){
+                guardar.push( 0 );
+            
+            } else if( $(this).attr('id') === 'modal_serverhsfecha' || $(this).attr('id') === 'modal_serverhsprecio' || $(this).attr('id') === 'modal_serverhsduracion' || $(this).attr('id') === 'modal_serverhsidentificador' || $(this).attr('id') == 'modal_serverhslogo'  ){
+                guardar.push( (($(this).prop('checked'))?1:0) );
+            } else if ($(this).attr('name') !== 'modal_serverfull') guardar.push( $(this).val());
+        }
+           
     });
     
     $('select[id^="modal_server"]').each(function(){

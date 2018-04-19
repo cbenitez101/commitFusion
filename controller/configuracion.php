@@ -187,7 +187,7 @@ if (isLoggedIn()) {
                 // $result = $si->query("SELECT id, name FROM `si_customers`");
                 // $siout = array();
                 // while ($aux = $result->fetch_assoc()) $siout[] = $aux;
-               $result = $database->query("SELECT hotspots.id, hotspots.ServerName, hotspots.SerialNumber, hotspots.Status, hotspots.Local, hotspots.Informe, locales.nombre as 'Nombre Local', hotspots.BoolFull, hotspots.BoolFecha, hotspots.BoolPrecio, hotspots.BoolDuracion, hotspots.BoolIdentificador, hotspots.BoolLogo FROM hotspots INNER JOIN locales ON hotspots.Local = locales.id ORDER BY `hotspots`.`id` ASC");
+               $result = $database->query("SELECT hotspots.id, hotspots.ServerName, hotspots.SerialNumber, hotspots.Status, hotspots.Local, hotspots.Informe, locales.nombre as 'Nombre Local', hotspots.BoolFull, hotspots.BoolFecha, hotspots.BoolPrecio, hotspots.BoolDuracion, hotspots.BoolIdentificador, hotspots.BoolLogo, hotspots.apikey FROM hotspots INNER JOIN locales ON hotspots.Local = locales.id ORDER BY `hotspots`.`id` ASC");
 
                 $out = array();
                 while ($aux = $result->fetch_assoc()) $out[] = $aux;
