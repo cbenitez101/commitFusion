@@ -31,7 +31,7 @@ if ($API->connect($ip, $user, $pass)) {
     $hotspotserial = $READ[0]['serial-number'];
 
     if (enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/script_hotspot?id_hotspot=$id_server&hotspot_serial=$hotspotserial", "dst-path"=>'flash/hotspot.rsc'))){
-    	Echo "ok";
+    	echo "ok";
     } else {
     	echo "fail";
     }

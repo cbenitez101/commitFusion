@@ -73,29 +73,29 @@ $(document).ready(function(){
     
     // Accion que controla el evento click en la primera columna de cada row para realizar seleccion multiple
     // Mostramos el boton de crear excel si hay rows seleccionadas y ocultamos en caso contrario.
-    $('#table-search tbody td').click(function () {
-        if ($(this).hasClass('sorting_1')) $(this).parent().toggleClass('selected');
-        if($('#table-search tr.selected').length > 0) {
-            $('#crearbloc').attr('class', 'col-md-1 col-md-offset-9');
-            $('#bloctToExcel').show();
+    // $('#table-search tbody td').click(function () {
+    //     if ($(this).hasClass('sorting_1')) $(this).parent().toggleClass('selected');
+    //     if($('#table-search tr.selected').length > 0) {
+    //         $('#crearbloc').attr('class', 'col-md-1 col-md-offset-9');
+    //         $('#bloctToExcel').show();
             
-        }else {
-            $('#crearbloc').attr('class', 'col-md-1 col-md-offset-11');
-            $('#bloctToExcel').hide();
-        }
-    });
+    //     }else {
+    //         $('#crearbloc').attr('class', 'col-md-1 col-md-offset-11');
+    //         $('#bloctToExcel').hide();
+    //     }
+    // });
     
     // Evento que controla la seleccion multiple. Recoje los IDs de los blocs de las rows seleccionadas
     // para enviarla a la funcion que crea el excel a partir de dichos blocs
-    $('#blocToExcelbutton').click(function(){
-        var blocs = '';
-        var first=true;
-        table.rows('.selected').nodes().to$().each(function(){
-            blocs+=((first)?'':',')+table.row( this ).data()[0];
-            first = false;
-        });
-        window.location='/bloc_excel?bloc='+blocs;
-    });
+    // $('#blocToExcelbutton').click(function(){
+    //     var blocs = '';
+    //     var first=true;
+    //     table.rows('.selected').nodes().to$().each(function(){
+    //         blocs+=((first)?'':',')+table.row( this ).data()[0];
+    //         first = false;
+    //     });
+    //     window.location='/bloc_excel?bloc='+blocs;
+    // });
    
     
     // Pone los datos de la variable modal en la tabla

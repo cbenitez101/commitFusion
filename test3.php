@@ -4,9 +4,9 @@ require_once('scripts/routeros-api/routeros_api.class.php');
 
 $user = 'admin';
 $pass = '';
-$server = 'BeachClub';
-$id_server=66;
-$ip = '192.168.45.21';   // 941
+$server = 'PubliHotspot';
+$id_server=63;
+$ip = '192.168.45.7';   // 941
 // $ip = '192.168.45.94';   // 951
 // $ip = '192.168.45.75';   // 952
 // $ip = '192.168.45.69';   // 2011

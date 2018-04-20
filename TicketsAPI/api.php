@@ -7,25 +7,18 @@ include_once('configs.php');
 
 /* HEADERS */
 header("Access-Control-Allow-Origin: *");
-
 header('Access-Control-Allow-Credentials: true');
-
 header('Access-Control-Allow-Methods: PUT, GET, POST, DELETE, OPTIONS');
-
 header("Access-Control-Allow-Headers: X-Requested-With");
-
 header('Content-Type: text/html; charset=utf-8');
-
 header('P3P: CP="IDC DSP COR CURa ADMa OUR IND PHY ONL COM STA"'); 
 
-/* SET TIMEZONE */
+/* SET TIMEZONE: Hay que comprobar que la hora sea la correcta ya que se ejecuta desde la VPS */
+/* Probablemente haya que quitar esta instruccion y/o añadirle 1 hora a los expirationTime */
 date_default_timezone_set ('Atlantic/Canary');
 
 // Se comprueba si se nos han enviado datos
 if (!empty($_POST)){
-    
-
-    
     // Se obtienen los headers de la peticion realizada
     $headers = apache_request_headers();
     
@@ -38,7 +31,7 @@ if (!empty($_POST)){
 
 
         // Se busca el usuario por su apikey
-        if ($result = $apidbp->query("SELECT * FROM hotspots WHERE apikey='".$headers['Authorization']."'"));  
+        if ($hotspots = $apidbp->query("SELECT * FROM hotspots WHERE apikey='".$headers['Authorization']."'"));  
         
         /*---------------------------------------------------------------
                     FIN OBTENCION API KEY Y DATOS HOTSPOT
@@ -46,9 +39,9 @@ if (!empty($_POST)){
         
         // Si se encuentra el usuario por su APIKEY procesamos el body de la petición, accediendo a los
         // campos que se nos envían
-        if ($result->num_rows > 0){
+        if ($hotspots->num_rows > 0){
             
-            $aux = $result->fetch_assoc();
+            $aux = $hotspots->fetch_assoc();
             
             $idHotspot = $aux['id'];
             
@@ -62,20 +55,21 @@ if (!empty($_POST)){
             if (isset($_POST['profileid']) && isset($_POST['ref']) && !isset($_POST['username'])){
                 
                 // Obtenemos perfil mediante el id que nos pasan en el body de la peticion. Si nos faltan datos, los cogeremos del perfil   
-                $result4 = $apidbp->query("SELECT * FROM `perfiles` WHERE id = '".$_POST['profileid']."'");
+                $perfiles = $apidbp->query("SELECT * FROM `perfiles` WHERE id = '".$_POST['profileid']."'");
                 
-                $aux4 = $result4->fetch_assoc();
+                $auxperfil = $perfiles->fetch_assoc();
                    
                 // Cálculo de la fecha de expiración. Si nos dan hora, se pone el expiration con la fecha y hora dadas. Si no nos mandan la hora ponemos el expirationTime a las 0:00 horas del dia siguiente.
                 if (isset($_POST['expirationDay'])) {
                     
+                    // TIMEZONE: Probar y añadir 1 hora al expirationTime si es necesario ya que el VPS tiene horario peninsular.
                     $expirationDate = ((isset($_POST['expirationTime']))? date('d M Y', strtotime($_POST['expirationDay']))." ".$_POST['expirationTime'] : date('d M Y', strtotime($_POST['expirationDay']. '+ 1 Day'))." 0:00");
                     
                 } else{ // En caso de no pasarnos hora, cogeremos el Expiratio y/o duration del perfil
                     
-                    if ($aux4['Expiration'] !== '0000-00-00') $expirationDate = $aux4['Expiration'];
+                    if ($auxperfil['Expiration'] !== '0000-00-00') $expirationDate = $auxperfil['Expiration'];
                     
-                    else $duration = $aux4['Duracion']; // En caso contrario utilizaremos el expiration o la duracion del profile
+                    else $duration = $auxperfil['Duracion']; // En caso contrario utilizaremos el expiration o la duracion del profile
                     
                 }
                 
@@ -99,47 +93,36 @@ if (!empty($_POST)){
                     
                 } else {    // En el caso que no se envíen nombre y apellidos, utilizaremos los formatos de usuario y contraseña del perfil
                     
-                    if ($aux4['userformat'] !== '') {   // Si el campo usuario no esta vacio se crea el usuario con dicho formato
+                    if ($auxperfil['userformat'] !== '') {   // Si el campo usuario no esta vacio se crea el usuario con dicho formato
                         
-                        $username = usuario_aleatorio($aux4['userformat']);
+                        $username = usuario_aleatorio($auxperfil['userformat']);
                         
-                        if ($aux4['Password'] == 'usuario'){    // Si el password es 'usuario', tendrá el mismo valor que el usuario
+                        // Si el password es 'usuario', tendrá el mismo valor que el usuario
+                        if ($auxperfil['Password'] == 'usuario') $contrasena = $username;
+                        
+                        else $contrasena =  usuario_aleatorio($auxperfil['Password']); // Si no pone 'usuario', generamos la contraseña con el patrón guardado 
                             
-                            $contrasena = $username;
-                            
-                        }else{
-                            
-                            $contrasena =  usuario_aleatorio($aux4['Password']); // Si no pone 'usuario', generamos la contraseña con el patrón guardado 
-                            
-                        }
+                        
                         
                     } else { // Si el formato de usuario está vacio, se genera un usuario con el formato 'CVCVCVNN'
                         
                         $username = usuario_aleatorio('CVCVCVNN');
                         
-                        if ($aux4['Password'] == 'usuario'){
+                        if ($auxperfil['Password'] == 'usuario') $contrasena = $username;
+                        
+                        else $contrasena = usuario_aleatorio($auxperfil['Password']);
                             
-                            $contrasena = $username;
-                            
-                        }else{
-                            
-                            $contrasena = usuario_aleatorio($aux4['Password']);
-                            
-                        }
                     }
 
                 }
                 
                 // Se comprueba que no exista el usuario ya creado con anterioridad
-                $resul2 = $apidbr->query("SELECT * FROM `radusergroup` WHERE `username` = '".$ServerName.'_'.$contrasena."'");
+                $radusrgrp = $apidbr->query("SELECT * FROM `radusergroup` WHERE `username` = '".$ServerName.'_'.$contrasena."'");
                 
-                $resul3 = $apidbr->query("SELECT * FROM `radcheck` WHERE `username` = '".$ServerName.'_'.$contrasena."'");
-            
-                // if ($database->query('INSERT INTO `lotes`(`Id_perfil`, `Duracion`, `Costo`, `Precio`) VALUES ("'.$_POST['id_perfil'].'", "'.$_POST['duracion'].'", "'.$_POST['costo'].'", "'.$_POST['precio'].'")')) die();
+                $resul = $apidbr->query("SELECT * FROM `radcheck` WHERE `username` = '".$ServerName.'_'.$contrasena."'");
 
-                
                 // Si no existe el usuario procedemos a crear las entradas necesarias en el radius.
-                if ($resul2->num_rows == 0 && $resul3->num_rows == 0 ){
+                if ($radusrgrp->num_rows == 0 && $resul->num_rows == 0 ){
                     
                     // Introducimos valores necesarios en el radius para crear y habilitar el nuevo ticket
                     
@@ -147,19 +130,19 @@ if (!empty($_POST)){
                         
                         if ($apidbr->query("INSERT INTO `radcheck`( `username`, `attribute`, `op`, `value`) VALUES ('".$ServerName.'_'.$username."','Cleartext-Password',':=','$contrasena')")) {
                             
-                            if ($apidbr->query("INSERT INTO `radcheck`( `username`, `attribute`, `op`, `value`) VALUES ('".$ServerName.'_'.$username."','".$aux4['Movilidad']."','==','".$ServerName."')")) {
+                            if ($apidbr->query("INSERT INTO `radcheck`( `username`, `attribute`, `op`, `value`) VALUES ('".$ServerName.'_'.$username."','".$auxperfil['Movilidad']."','==','".$ServerName."')")) {
                             
-                                if (isset($duration)) $apidbr->query("INSERT INTO `radcheck`( `username`, `attribute`, `op`, `value`) VALUES ('".$ServerName.'_'.$username."','".$aux4['ModoConsumo']."',':=','".$duration."')");
+                                if (isset($duration)) $apidbr->query("INSERT INTO `radcheck`( `username`, `attribute`, `op`, `value`) VALUES ('".$ServerName.'_'.$username."','".$auxperfil['ModoConsumo']."',':=','".$duration."')");
                             
                                 if (isset($expirationDate)) $apidbr->query("INSERT INTO `radcheck`( `username`, `attribute`, `op`, `value`) VALUES ('".$ServerName.'_'.$username."','Expiration',':=','".$expirationDate."')");
                                 
-                                if ($result6 = $apidbp->query("SELECT id, precio FROM `lotes` WHERE Id_perfil = ".$_POST['profileid'])){
+                                if ($lotes = $apidbp->query("SELECT id, precio FROM `lotes` WHERE Id_perfil = ".$_POST['profileid'])){
                                     
-                                    if ($result6->num_rows > 0){
+                                    if ($lotes->num_rows > 0){
                                     
-                                        $aux6 = $result6->fetch_assoc();
+                                        $auxplote = $lotes->fetch_assoc();
                                         
-                                        $apidbp->query("INSERT INTO `ventashotspot`(`Id_Lote`, `FechaVenta`, `Usuario`, `Precio`, `identificador`) VALUES ('".$aux6['id']."',NOW(),'".$ServerName.'_'.$username."','".$aux6['precio']."','".$_POST['ref']."')");
+                                        $apidbp->query("INSERT INTO `ventashotspot`(`Id_Lote`, `FechaVenta`, `Usuario`, `Precio`, `identificador`) VALUES ('".$auxplote['id']."',NOW(),'".$ServerName.'_'.$username."','".$auxplote['precio']."','".$_POST['ref']."')");
                                     }
                                     
                                 }
@@ -175,17 +158,17 @@ if (!empty($_POST)){
                         
                         if ($contrasena == $username) $response = ['code'=>'10', 'username'=>$username, 'ExpirationDate'=>$expirationDate];
                         
-                        else $response = ['code'=>'10', 'username'=>$username, 'ExpirationDate'=>$expirationDate];
+                        else $response = ['code'=>'10', 'username'=>$username,'password'=>$contrasena ,'ExpirationDate'=>$expirationDate];
                         
                     }else{
                         
                         if ($contrasena == $username) $response = ['code'=>'10', 'username'=>$username, 'duration'=>$duration];
                         
-                        else $response = ['code'=>'10', 'username'=>$username, 'duration'=>$duration];
+                        else $response = ['code'=>'10', 'username'=>$username,'password'=>$contrasena, 'duration'=>$duration];
                         
                     }
                      
-                    http_response_code(200);
+                    http_response_code(200); // 200 OK
                     
                     echo json_encode($response);
                     
@@ -193,7 +176,7 @@ if (!empty($_POST)){
                   // Error, ya hay un user creado con ese nombre de usuario.
                     $response = ['code'=>'00'];
                     
-                    http_response_code(400);
+                    http_response_code(400); //Error 400 Bad Request
                     
                     echo json_encode($response);
                     
@@ -211,15 +194,14 @@ if (!empty($_POST)){
                     |                                                      |
                     ------------------------------------------------------*/
                        
-                    // $database3= new mysqli('localhost', 'radiususer', 'Pwp+*f2b', 'radius');
                     
-                    if ($result5 = $apidbr->query("UPDATE `radcheck` SET `value` ='".$expirationDate."' WHERE `attribute` = 'Expiration' AND `username` = '".$ServerName."_".$_POST['username']."'")){
+                    if ($radcheck = $apidbr->query("UPDATE `radcheck` SET `value` ='".$expirationDate."' WHERE `attribute` = 'Expiration' AND `username` = '".$ServerName."_".$_POST['username']."'")){
                         
                         if (mysqli_affected_rows($apidbr) > 0){
                             
                             $response = ['code'=>'11', 'username'=>$_POST['username'], 'expirationDay' => $expirationDate];
                     
-                            http_response_code(200);
+                            http_response_code(200); // 200 OK
                             
                             echo json_encode($response); 
                             
@@ -227,7 +209,7 @@ if (!empty($_POST)){
                             
                             $response = ['code'=>'02'];
                         
-                            http_response_code(400);
+                            http_response_code(400); //Error 400 Bad Request
                             
                             echo json_encode($response);
                             
@@ -237,7 +219,7 @@ if (!empty($_POST)){
                         
                         $response = ['code'=>'03'];
                     
-                        http_response_code(400);
+                        http_response_code(400); //Error 400 Bad Request
                         
                         echo json_encode($response);
 
@@ -247,7 +229,7 @@ if (!empty($_POST)){
                      
                     $response = ['code'=>'01'];
                     
-                    http_response_code(400);
+                    http_response_code(400); //Error 400 Bad Request
                     
                     echo json_encode($response);
                     
