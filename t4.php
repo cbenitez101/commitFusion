@@ -4,13 +4,17 @@ require_once('scripts/routeros-api/routeros_api.class.php');
 
 $user = 'admin';
 $pass = '';
-$server = 'PubliHotspot';
-$id_server=63;
-$ip = '192.168.45.7';   // 941
+$server = 'BeachClub';
+$id_server=66;
+$ip = '192.168.45.21';   // 941
 // $ip = '192.168.45.94';   // 951
 // $ip = '192.168.45.75';   // 952
 // $ip = '192.168.45.69';   // 2011
 
+
+/*------------------------------------------------------------
+            Hay que corregir el script
+------------------------------------------------------------*/
 
 $API = new RouterosAPI();
 $API->debug = false;
@@ -1102,7 +1106,7 @@ function enviaComando($comando, $opciones){
         $res = $API->comm($comando, $opciones);
         if (!empty($res) && (gettype($res) == 'array') && (array_key_exists ('!trap',$res))){
             print_r("ERROR: No se ha podido realizar la operación.\n\n");
-            file_put_contents("error", "Error: ".$comando." => ".print_r($opciones, true)."\r\n".print_r($res, true)."\r\n", FILE_APPEND);
+            file_put_contents("MikrotikAPI_errorLog", "Error: ".$comando." => ".print_r($opciones, true)."\r\n".print_r($res, true)."\r\n", FILE_APPEND);
             return false;
         } else return true;
     } else return true;  
