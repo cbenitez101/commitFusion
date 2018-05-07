@@ -18,10 +18,12 @@ $user = 'admin';
 $pass = '';
 
 $server = 'PubliHotspot';
+// $server = 'Christo_NOTFORRESALE';
 
 $id_server=63;
 
 $ip = '192.168.45.7';
+// $ip = '192.168.45.21';
 
 /* Declaración del objeto RouterosAPI() sobre el cual se hará la conexión y se trabajará */
 $API = new RouterosAPI();
@@ -51,13 +53,13 @@ if ($API->connect($ip, $user, $pass)) {
     /* Se añade usuario administrador y su contraseña y se elimina el usuario admin */
     print_r("\t---------------\n\tAÑADIR USUARIO\n\t---------------\n");
     
-    if (enviaComando('/user/add',array('name'=>'administrador', 'group'=>'full', 'password'=>'sb_A54$x'))){ // Se añade nuevo
+    if (enviaComando('/user/add',array('name'=>'administrador', 'group'=>'full', 'password'=>'sb_A54$x'))){
     
         print_r("==> OK <==\n\n"); 
         
         print_r("\t------------------------\n\tELIMINAR USUARIO ANTIGUO\n\t------------------------\n");
         
-        if (enviaComando('/user/remove',array('numbers'=>'admin'))) print_r("==> OK <==\n\n");    // Se elimina viejo
+        if (enviaComando('/user/remove',array('numbers'=>'admin'))) print_r("==> OK <==\n\n");
         
         else print_r("==> ERROR <== \n\n");
         
@@ -122,20 +124,27 @@ if ($API->connect($ip, $user, $pass)) {
     
     
     
-    // print_r("\t-----------------------\n\tAÑADIR CONEXION VPN\n\t-----------------------\n");
-    // if (enviaComando('/interface/pptp-client/add', array("name"=>'Servibyte', "connect-to" => "217.125.25.165", "user"=>$server, "password"=>"A54_sb?8", "disabled"=>"no"))) print_r("==> OK <==\n\n");
-    // else print_r("==> ERROR <== \n\n");
+    print_r("\t-----------------------\n\tAÑADIR CONEXION VPN\n\t-----------------------\n");
+    if (enviaComando('/interface/pptp-client/add', array("name"=>'Servibyte', "connect-to" => "217.125.25.165", "user"=>$server, "password"=>"A54_sb?8", "disabled"=>"no"))) print_r("==> OK <==\n\n");
+    else print_r("==> ERROR <== \n\n");
+    
+    
+    
+    
+    /***************************************************************
+     *                                                              |
+     * Segun tengo entendido en la nueva version de routeros        |
+     * el discovery no está implicito, teniendo que declarar en     |
+     * una lista las interfaces que si que queremos que lo tengan   |
+     *  
+     * ************************************************************/
     
     
     
     
     
     
-    
-    
-    
-    
-  /* CREACION DE BRIDGES */
+    /* CREACION DE BRIDGES */
     print_r("\t--------------------------------\n\tCREACIÓN DE bridge1_hs_clientes1\n\t--------------------------------\n\t");
     
     if (enviaComando('/interface/bridge/add', array("name"=>'bridge1_hs_clientes1', 'protocol-mode'=>'none'))){
@@ -303,16 +312,35 @@ if ($API->connect($ip, $user, $pass)) {
                                                 switch ((((int)substr($value['name'], -2) == 0)?substr($value['name'], -1):substr($value['name'], -2))) {
                                                     
                                                     case 1:
+                                                        // if (strpos($value['name'], "combo") === false){
                                                         
-                                                        print_r("\t--------------------------------\n\tSE AÑADE ".$value['name']." A bridge5_WAN.\n\t--------------------------------\n\t");
-                                                        
-                                                        if(enviaComando('/interface/bridge/port/add', array('bridge'=>'bridge5_WAN','interface'=>$value['name']))) {
+                                                        //   if(enviaComando('/interface/bridge/port/add', array('bridge'=>((strpos($value['name'], "combo") === false || ( (strstr($READ[0]['model'],'1072') > -1) && ($value['name'] == 'ether1')))?'bridge5_WAN':'bridge_trunk'),'interface'=>$value['name']))) {
                                                             
-                                                          print_r("==> OK <==\n\n");
-                                                           
-                                                        } else print_r("==> ERROR <==\n\n");
+                                                            // MIRAR PARTE DE COMBO, ALOMEJOR NO E SNECESARIO CONTEMPLAR TANTOS MODELOS DE ROUTERBOARD
+                                                            
+                                                            
+                                                            print_r("\t--------------------------------\n\tSE AÑADE ".$value['name']." A bridge5_WAN.\n\t--------------------------------\n\t");
                                                         
-                                                        break;
+                                                            if(enviaComando('/interface/bridge/port/add', array('bridge'=>((strpos($value['name'], "combo") === false)?'bridge5_WAN':'bridge_trunk'),'interface'=>$value['name']))) {
+                                                                
+                                                              print_r("==> OK <==\n\n");
+                                                               
+                                                            } else print_r("==> ERROR <==\n\n");
+                                                            
+                                                            
+                                                        // }else {
+                                                            
+                                                        //     print_r("\t--------------------------------\n\tSE AÑADE ".$value['name']." A bridge_trunk.\n\t--------------------------------\n\t");
+                                                        
+                                                        //     if(enviaComando('/interface/bridge/port/add', array('bridge'=>'bridge_trunk','interface'=>$value['name']))) {
+                                                                
+                                                        //       print_r("==> OK <==\n\n");
+                                                               
+                                                        //     } else print_r("==> ERROR <==\n\n");
+                                                            
+                                                        // }
+                                                        
+                                                       break;
                                                         
                                                     case 2:
                                                         
@@ -366,11 +394,12 @@ if ($API->connect($ip, $user, $pass)) {
                                                     default:
                                                         
                                                         print_r("\t-----------------------------------\n\tSE AÑADE ".$value['name']." A bridge_trunk.\n\t-----------------------------------\n\t");
-                                                         if(enviaComando('/interface/bridge/port/add', array('bridge'=>'bridge_trunk','interface'=>$value['name']))) {
+                                                        
+                                                        if(enviaComando('/interface/bridge/port/add', array('bridge'=>'bridge_trunk','interface'=>$value['name']))) {
                                                              
                                                             print_r("==> OK <==\n\n");
                                                             
-                                                         } else print_r("==> ERROR <==\n\n");
+                                                        } else print_r("==> ERROR <==\n\n");
                                                          
                                                         break;
                                                         
@@ -669,39 +698,45 @@ if ($API->connect($ip, $user, $pass)) {
     
     
     
-    print_r("\t---------------------\n\tFetch certificate.crt\n\t----------------------\n\t");
+    print_r("\t---------------------\n\tFETCH certificate.crt\n\t----------------------\n\t");
     
-    if (enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/certificate.crt"))){
+    // if (enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/certificate.ca-crt"))){
+    if (enviaComando('/tool/fetch', array("url"=> "http://www.plataforma.openwebcanarias.es/ftp/certificate.ca-crt"))){
         
         print_r("==> OK <==\n\n");
         
         print_r("\t---------------------\n\tIMPORT certificate.crt\n\t----------------------\n\t");
         
-        if(enviaComando('/certificate/import', array("file-name"=> "certificate.crt", "passphrase"=>"PwpXXf8bPwpXXf8b"))){
+        // if(enviaComando('/certificate/import', array("file-name"=> "certificate.crt", "passphrase"=>"PwpXXf8bPwpXXf8b"))){
+        if(enviaComando('/certificate/import', array("file-name"=> "certificate.ca-crt", "passphrase"=>""))){
             
             print_r("==> OK <==\n\n");
             
             print_r("\t---------------------\n\tFetch hotspot.key\n\t----------------------\n\t");
             
-            if (enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot.key"))){
+            // if (enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/certificate.crt"))){
+            if (enviaComando('/tool/fetch', array("url"=> "http://www.plataforma.openwebcanarias.es/ftp/certificate.crt"))){
                 
                 print_r("==> OK <==\n\n");
                 
                 print_r("\t---------------------\n\tIMPORT hotspot.key\n\t----------------------\n\t");
                 
-                if(enviaComando('/certificate/import', array("file-name"=> "hotspot.key", "passphrase"=>"PwpXXf8bPwpXXf8b"))){
+                // if(enviaComando('/certificate/import', array("file-name"=> "hotspot.key", "passphrase"=>"PwpXXf8bPwpXXf8b"))){
+                 if(enviaComando('/certificate/import', array("file-name"=> "certificate.crt", "passphrase"=>""))){
                     
                     print_r("==> OK <==\n\n");
                     
                      print_r("\t---------------------\n\tFetch certificate.ca-crt\n\t----------------------\n\t");
                      
-                    if (enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/certificate.ca-crt"))){
+                    // if (enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot.key"))){
+                    if (enviaComando('/tool/fetch', array("url"=> "http://www.plataforma.openwebcanarias.es/ftp/hotspot.key"))){
                         
                         print_r("==> OK <==\n\n");
                         
                         print_r("\t---------------------\n\tIMPORT certificate.ca-crt\n\t----------------------\n\t");
                         
-                        if(enviaComando('/certificate/import', array("file-name"=> "certificate.ca-crt", "passphrase"=>"PwpXXf8bPwpXXf8b"))){
+                        // if(enviaComando('/certificate/import', array("file-name"=> "certificate.ca-crt", "passphrase"=>"PwpXXf8bPwpXXf8b"))){
+                            if(enviaComando('/certificate/import', array("file-name"=> "hotspot.key", "passphrase"=>""))){
                             
                             print_r("==> OK <==\n\n");
                             
@@ -1641,7 +1676,7 @@ if ($API->connect($ip, $user, $pass)) {
     
     
     /********************************************
-     *  METER EN PARTE DE HOTSPOT MAS ARRIBA    |
+     * ¿METER EN PARTE DE HOTSPOT MAS ARRIBA?   |
      * *****************************************/
     
     
@@ -1772,7 +1807,7 @@ if ($API->connect($ip, $user, $pass)) {
         /* Borrado de ficheros del router */
     $API->write('/file/getall');
     $READ = $API->read();
-    print_r($READ);
+    // print_r($READ);
     foreach($READ as $key => $value){
         if(strpos($value['name'], 'backup') == false){
             $API->comm('/file/remove', array("numbers"=>$value['.id']));
@@ -2209,7 +2244,20 @@ if ($API->connect($ip, $user, $pass)) {
     
     
     
+    // print_r("\t---------------------\n\tDELETE DHCP-CLIENT ON ETHER1\n\t----------------------\n\t");
     
+    // $API->write('/ip/dhcp-client/print');
+    // $READ = $API->read();
+    // print_r($READ);
+    
+    // foreach ($READ as $key => $value) {
+    //     if(enviaComando('/ip/dhcp-client/', array("numbers"=> $value['.id']))){
+        
+    //         print_r("==> OK <==\n\n");  
+            
+    //     }else print_r("==> ERROR <==\n\n");
+    // }
+  
     
     
     

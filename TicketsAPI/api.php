@@ -15,6 +15,8 @@ header('P3P: CP="IDC DSP COR CURa ADMa OUR IND PHY ONL COM STA"');
 
 /* SET TIMEZONE: Hay que comprobar que la hora sea la correcta ya que se ejecuta desde la VPS */
 /* Probablemente haya que quitar esta instruccion y/o añadirle 1 hora a los expirationTime */
+
+
 date_default_timezone_set ('Atlantic/Canary');
 
 // Se comprueba si se nos han enviado datos
@@ -63,7 +65,12 @@ if (!empty($_POST)){
                 if (isset($_POST['expirationDay'])) {
                     
                     // TIMEZONE: Probar y añadir 1 hora al expirationTime si es necesario ya que el VPS tiene horario peninsular.
-                    $expirationDate = ((isset($_POST['expirationTime']))? date('d M Y', strtotime($_POST['expirationDay']))." ".$_POST['expirationTime'] : date('d M Y', strtotime($_POST['expirationDay']. '+ 1 Day'))." 0:00");
+                    
+                    $addedTime = date('d M Y H:i', strtotime( $_POST['expirationDay']." ".$_POST['expirationTime']."+1 hour"));
+                    
+                    $expirationDate = ((isset($_POST['expirationTime']))? $addedTime : date('d M Y', strtotime($_POST['expirationDay']. '+ 1 Day'))." 0:00");
+                    
+                    // $expirationDate = ((isset($_POST['expirationTime']))? date('d M Y', strtotime($_POST['expirationDay']))." ".$_POST['expirationTime'] : date('d M Y', strtotime($_POST['expirationDay']. '+ 1 Day'))." 0:00");
                     
                 } else{ // En caso de no pasarnos hora, cogeremos el Expiratio y/o duration del perfil
                     
@@ -185,8 +192,16 @@ if (!empty($_POST)){
             }else{
                 
                 if (isset($_POST['username']) && isset($_POST['expirationDay'])){
+                    
+                    
+                    $addedTime = date('d M Y H:i', strtotime( $_POST['expirationDay']." ".$_POST['expirationTime']."+1 hour"));
+                    
+                    $expirationDate = ((isset($_POST['expirationTime']))? $addedTime : date('d M Y', strtotime($_POST['expirationDay']. '+ 1 Day'))." 0:00");
+                    
+                    
+                    // No añade la hora de más
                      
-                    $expirationDate = ((isset($_POST['expirationTime']))? date('d M Y', strtotime($_POST['expirationDay']))." ".$_POST['expirationTime'] : date('d M Y', strtotime($_POST['expirationDay']. '+ 1 Day'))." 0:00");
+                    // $expirationDate = ((isset($_POST['expirationTime']))? date('d M Y', strtotime($_POST['expirationDay']))." ".$_POST['expirationTime'] : date('d M Y', strtotime($_POST['expirationDay']. '+ 1 Day'))." 0:00");
                     
                     /*------------------------------------------------------
                     |                                                      |
