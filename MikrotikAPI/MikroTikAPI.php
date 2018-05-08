@@ -700,8 +700,8 @@ if ($API->connect($ip, $user, $pass)) {
     
     print_r("\t---------------------\n\tFETCH certificate.crt\n\t----------------------\n\t");
     
-    // if (enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/certificate.ca-crt"))){
-    if (enviaComando('/tool/fetch', array("url"=> "http://www.plataforma.openwebcanarias.es/ftp/certificate.ca-crt"))){
+    if (enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/certificate.ca-crt", "user"=>"Hotspot", "password"=>"Hs07052018", "mode"=>"http"))){
+    // if (enviaComando('/tool/fetch', array("url"=> "http://www.plataforma.openwebcanarias.es/ftp/certificate.ca-crt"))){
         
         print_r("==> OK <==\n\n");
         
@@ -714,8 +714,8 @@ if ($API->connect($ip, $user, $pass)) {
             
             print_r("\t---------------------\n\tFetch hotspot.key\n\t----------------------\n\t");
             
-            // if (enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/certificate.crt"))){
-            if (enviaComando('/tool/fetch', array("url"=> "http://www.plataforma.openwebcanarias.es/ftp/certificate.crt"))){
+            if (enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/certificate.crt", "user"=>"Hotspot", "password"=>"Hs07052018", "mode"=>"http"))){
+            // if (enviaComando('/tool/fetch', array("url"=> "http://www.plataforma.openwebcanarias.es/ftp/certificate.crt"))){
                 
                 print_r("==> OK <==\n\n");
                 
@@ -728,8 +728,8 @@ if ($API->connect($ip, $user, $pass)) {
                     
                      print_r("\t---------------------\n\tFetch certificate.ca-crt\n\t----------------------\n\t");
                      
-                    // if (enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot.key"))){
-                    if (enviaComando('/tool/fetch', array("url"=> "http://www.plataforma.openwebcanarias.es/ftp/hotspot.key"))){
+                    if (enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot.key", "user"=>"Hotspot", "password"=>"Hs07052018", "mode"=>"http"))){
+                    // if (enviaComando('/tool/fetch', array("url"=> "http://www.plataforma.openwebcanarias.es/ftp/hotspot.key"))){
                         
                         print_r("==> OK <==\n\n");
                         
@@ -923,7 +923,7 @@ if ($API->connect($ip, $user, $pass)) {
     
     print_r("\t---------------------\n\tFETCH DEL SYSNOTE\n\t----------------------\n\t"); 
     
-    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/sys-note.txt"))){
+    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/sys-note.txt", "user"=>"Hotspot", "password"=>"Hs07052018", "mode"=>"http"))){
         
         print_r("==> OK <==\n\n");
         
@@ -1821,7 +1821,7 @@ if ($API->connect($ip, $user, $pass)) {
     
     print_r("\t---------------------\n\tFETCH hotspot/alogin.html\n\t----------------------\n\t"); 
     
-    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/alogin.html","dst-path"=>"hotspot/alogin.html"))){
+    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/alogin.html","dst-path"=>"hotspot/alogin.html", "user"=>"Hotspot", "password"=>"Hs07052018", "mode"=>"http"))){
         
         print_r("==> OK <==\n\n");
         
@@ -1833,7 +1833,7 @@ if ($API->connect($ip, $user, $pass)) {
     
     print_r("\t---------------------\n\tFETCH hotspot/averia.jpg\n\t----------------------\n\t"); 
     
-    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/averia.jpg","dst-path"=>"hotspot/averia.jpg"))){
+    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/averia.jpg","dst-path"=>"hotspot/averia.jpg", "user"=>"Hotspot", "password"=>"Hs07052018", "mode"=>"http"))){
         
         print_r("==> OK <==\n\n");
         
@@ -1844,7 +1844,7 @@ if ($API->connect($ip, $user, $pass)) {
 
     print_r("\t---------------------\n\tFETCH hotspot/error.html\n\t----------------------\n\t"); 
     
-    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/error.html","dst-path"=>"hotspot/error.html"))){
+    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/error.html","dst-path"=>"hotspot/error.html", "user"=>"Hotspot", "password"=>"Hs07052018", "mode"=>"http"))){
         
         print_r("==> OK <==\n\n");
         
@@ -1857,7 +1857,7 @@ if ($API->connect($ip, $user, $pass)) {
     
     print_r("\t---------------------\n\tFETCH hotspot/errors.txt\n\t----------------------\n\t");
     
-    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/errors.txt","dst-path"=>"hotspot/errors.txt"))){
+    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/errors.txt","dst-path"=>"hotspot/errors.txt", "user"=>"Hotspot", "password"=>"Hs07052018", "mode"=>"http"))){
         
         print_r("==> OK <==\n\n");
         
@@ -1868,7 +1868,7 @@ if ($API->connect($ip, $user, $pass)) {
     
     print_r("\t---------------------\n\tFETCH hotspot/interneterror.html\n\t----------------------\n\t");
     
-    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/interneterror.html","dst-path"=>"hotspot/interneterror.html"))){
+    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/interneterror.html","dst-path"=>"hotspot/interneterror.html", "user"=>"Hotspot", "password"=>"Hs07052018", "mode"=>"http"))){
         
         print_r("==> OK <==\n\n");
         
@@ -1880,7 +1880,7 @@ if ($API->connect($ip, $user, $pass)) {
     
     print_r("\t---------------------\n\tFETCH hotspotserial-login.html\n\t----------------------\n\t");
     
-    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/".$hotspotserial."-login.html","dst-path"=>"hotspot/login.html"))){
+    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/".$hotspotserial."-login.html","dst-path"=>"hotspot/login.html", "user"=>"Hotspot", "password"=>"Hs07052018", "mode"=>"http"))){
         
          print_r("==> OK <==\n\n");
          
@@ -1891,7 +1891,7 @@ if ($API->connect($ip, $user, $pass)) {
     
     print_r("\t---------------------\n\tFETCH hotspot/logoservibyte.png\n\t----------------------\n\t");
     
-    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/logoservibyte.png","dst-path"=>"hotspot/logoservibyte.png"))){
+    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/logoservibyte.png","dst-path"=>"hotspot/logoservibyte.png", "user"=>"Hotspot", "password"=>"Hs07052018", "mode"=>"http"))){
         
         print_r("==> OK <==\n\n");
         
@@ -1904,7 +1904,7 @@ if ($API->connect($ip, $user, $pass)) {
     
     print_r("\t---------------------\n\tFETCH hotspot/logout.html\n\t----------------------\n\t");
     
-    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/logout.html","dst-path"=>"hotspot/logout.html"))){
+    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/logout.html","dst-path"=>"hotspot/logout.html", "user"=>"Hotspot", "password"=>"Hs07052018", "mode"=>"http"))){
         
         print_r("==> OK <==\n\n");
         
@@ -1918,7 +1918,7 @@ if ($API->connect($ip, $user, $pass)) {
     
     print_r("\t---------------------\n\tFETCH hotspot/md5.js\n\t----------------------\n\t");
     
-    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/md5.js","dst-path"=>"hotspot/md5.js"))){
+    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/md5.js","dst-path"=>"hotspot/md5.js", "user"=>"Hotspot", "password"=>"Hs07052018", "mode"=>"http"))){
         
         print_r("==> OK <==\n\n");
         
@@ -1932,7 +1932,7 @@ if ($API->connect($ip, $user, $pass)) {
     
     print_r("\t---------------------\n\tFETCH hotspot/radvert.html\n\t----------------------\n\t");
     
-    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/radvert.html","dst-path"=>"hotspot/radvert.html"))){
+    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/radvert.html","dst-path"=>"hotspot/radvert.html", "user"=>"Hotspot", "password"=>"Hs07052018", "mode"=>"http"))){
         
         print_r("==> OK <==\n\n");
         
@@ -1943,7 +1943,7 @@ if ($API->connect($ip, $user, $pass)) {
     
     print_r("\t---------------------\n\tFETCH hotspot/redirect.html\n\t----------------------\n\t");
     
-    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/redirect.html","dst-path"=>"hotspot/redirect.html"))){
+    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/redirect.html","dst-path"=>"hotspot/redirect.html", "user"=>"Hotspot", "password"=>"Hs07052018", "mode"=>"http"))){
         
         print_r("==> OK <==\n\n");
         
@@ -1952,7 +1952,7 @@ if ($API->connect($ip, $user, $pass)) {
     
     print_r("\t---------------------\n\tFETCH hotspot/rlogin.html\n\t----------------------\n\t");
     
-    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/rlogin.html","dst-path"=>"hotspot/rlogin.html"))){
+    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/rlogin.html","dst-path"=>"hotspot/rlogin.html", "user"=>"Hotspot", "password"=>"Hs07052018", "mode"=>"http"))){
         
         print_r("==> OK <==\n\n");
         
@@ -1961,7 +1961,7 @@ if ($API->connect($ip, $user, $pass)) {
     
     print_r("\t---------------------\n\tFETCH hotspot/status.html\n\t----------------------\n\t");
     
-    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/status.html","dst-path"=>"hotspot/status.html"))){
+    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/status.html","dst-path"=>"hotspot/status.html", "user"=>"Hotspot", "password"=>"Hs07052018", "mode"=>"http"))){
         
         print_r("==> OK <==\n\n");
         
@@ -1970,7 +1970,7 @@ if ($API->connect($ip, $user, $pass)) {
     
     print_r("\t---------------------\n\tFETCH hotspot/testinternet.txt\n\t----------------------\n\t");
     
-    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/testinternet.txt","dst-path"=>"hotspot/testinternet.txt"))){
+    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/testinternet.txt","dst-path"=>"hotspot/testinternet.txt", "user"=>"Hotspot", "password"=>"Hs07052018", "mode"=>"http"))){
         
         print_r("==> OK <==\n\n");
         
@@ -1979,7 +1979,7 @@ if ($API->connect($ip, $user, $pass)) {
     
     print_r("\t---------------------\n\tFETCH hotspot/img/logobottom.png\n\t----------------------\n\t");
 
-    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/img/logobottom.png","dst-path"=>"hotspot/img/logobottom.png"))){
+    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/img/logobottom.png","dst-path"=>"hotspot/img/logobottom.png", "user"=>"Hotspot", "password"=>"Hs07052018", "mode"=>"http"))){
         
         print_r("==> OK <==\n\n");
         
@@ -1988,7 +1988,7 @@ if ($API->connect($ip, $user, $pass)) {
     
     print_r("\t---------------------\n\tFETCH hotspot/lv/alogin.html\n\t----------------------\n\t");
 
-    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/lv/alogin.html","dst-path"=>"hotspot/lv/alogin.html"))){
+    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/lv/alogin.html","dst-path"=>"hotspot/lv/alogin.html", "user"=>"Hotspot", "password"=>"Hs07052018", "mode"=>"http"))){
         
         print_r("==> OK <==\n\n");
         
@@ -1997,7 +1997,7 @@ if ($API->connect($ip, $user, $pass)) {
     
     print_r("\t---------------------\n\tFETCH hotspot/lv/errors.txt\n\t----------------------\n\t");
     
-    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/lv/errors.txt","dst-path"=>"hotspot/lv/errors.txt"))){
+    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/lv/errors.txt","dst-path"=>"hotspot/lv/errors.txt", "user"=>"Hotspot", "password"=>"Hs07052018", "mode"=>"http"))){
         
         print_r("==> OK <==\n\n");
         
@@ -2006,7 +2006,7 @@ if ($API->connect($ip, $user, $pass)) {
     
     print_r("\t---------------------\n\tFETCH hotspot/lv/login.html\n\t----------------------\n\t");
 
-    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/lv/login.html","dst-path"=>"hotspot/lv/login.html"))){
+    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/lv/login.html","dst-path"=>"hotspot/lv/login.html", "user"=>"Hotspot", "password"=>"Hs07052018", "mode"=>"http"))){
         
         print_r("==> OK <==\n\n");
         
@@ -2015,7 +2015,7 @@ if ($API->connect($ip, $user, $pass)) {
     
     print_r("\t---------------------\n\tFETCH hotspot/lv/logout.html\n\t----------------------\n\t");
     
-    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/lv/logout.html","dst-path"=>"hotspot/lv/logout.html"))){
+    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/lv/logout.html","dst-path"=>"hotspot/lv/logout.html", "user"=>"Hotspot", "password"=>"Hs07052018", "mode"=>"http"))){
         
       print_r("==> OK <==\n\n");
         
@@ -2024,7 +2024,7 @@ if ($API->connect($ip, $user, $pass)) {
     
     print_r("\t---------------------\n\tFETCH hotspot/lv/radvert.html\n\t----------------------\n\t");
     
-    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/lv/radvert.html","dst-path"=>"hotspot/lv/radvert.html"))){
+    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/lv/radvert.html","dst-path"=>"hotspot/lv/radvert.html", "user"=>"Hotspot", "password"=>"Hs07052018", "mode"=>"http"))){
         
         print_r("==> OK <==\n\n");
         
@@ -2033,7 +2033,7 @@ if ($API->connect($ip, $user, $pass)) {
     
     print_r("\t---------------------\n\tFETCH hotspot/lv/status.html\n\t----------------------\n\t");
 
-    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/lv/status.html","dst-path"=>"hotspot/lv/status.html"))){
+    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/lv/status.html","dst-path"=>"hotspot/lv/status.html", "user"=>"Hotspot", "password"=>"Hs07052018", "mode"=>"http"))){
         
         print_r("==> OK <==\n\n");
         
@@ -2042,7 +2042,7 @@ if ($API->connect($ip, $user, $pass)) {
     
     print_r("\t---------------------\n\tFETCH hotspot/xml/alogin.html\n\t----------------------\n\t");
 
-    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/xml/alogin.html","dst-path"=>"hotspot/xml/alogin.html"))){
+    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/xml/alogin.html","dst-path"=>"hotspot/xml/alogin.html", "user"=>"Hotspot", "password"=>"Hs07052018", "mode"=>"http"))){
         
         print_r("==> OK <==\n\n");
         
@@ -2051,7 +2051,7 @@ if ($API->connect($ip, $user, $pass)) {
     
     print_r("\t---------------------\n\tFETCH hotspot/xml/error.html\n\t----------------------\n\t");
 
-    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/xml/error.html","dst-path"=>"hotspot/xml/error.html"))){
+    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/xml/error.html","dst-path"=>"hotspot/xml/error.html", "user"=>"Hotspot", "password"=>"Hs07052018", "mode"=>"http"))){
         
         print_r("==> OK <==\n\n");
         
@@ -2060,7 +2060,7 @@ if ($API->connect($ip, $user, $pass)) {
     
     print_r("\t---------------------\n\tFETCH hotspot/xml/flogout.html\n\t----------------------\n\t");
 
-    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/xml/flogout.html","dst-path"=>"hotspot/xml/flogout.html"))){
+    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/xml/flogout.html","dst-path"=>"hotspot/xml/flogout.html", "user"=>"Hotspot", "password"=>"Hs07052018", "mode"=>"http"))){
         
         print_r("==> OK <==\n\n");
         
@@ -2069,7 +2069,7 @@ if ($API->connect($ip, $user, $pass)) {
     
     print_r("\t---------------------\n\tFETCH hotspot/xml/login.html\n\t----------------------\n\t");
 
-    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/xml/login.html","dst-path"=>"hotspot/xml/login.html"))){
+    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/xml/login.html","dst-path"=>"hotspot/xml/login.html", "user"=>"Hotspot", "password"=>"Hs07052018", "mode"=>"http"))){
         
         print_r("==> OK <==\n\n");
         
@@ -2078,7 +2078,7 @@ if ($API->connect($ip, $user, $pass)) {
     
     print_r("\t---------------------\n\tFETCH hotspot/xml/logout.htmll\n\t----------------------\n\t");
    
-    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/xml/logout.html","dst-path"=>"hotspot/xml/logout.html"))){
+    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/xml/logout.html","dst-path"=>"hotspot/xml/logout.html", "user"=>"Hotspot", "password"=>"Hs07052018", "mode"=>"http"))){
         
         print_r("==> OK <==\n\n");
         
@@ -2087,7 +2087,7 @@ if ($API->connect($ip, $user, $pass)) {
     
     print_r("\t---------------------\n\tFETCH hotspot/xml/rlogin.html\n\t----------------------\n\t");
 
-    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/xml/rlogin.html","dst-path"=>"hotspot/xml/rlogin.html"))){
+    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/xml/rlogin.html","dst-path"=>"hotspot/xml/rlogin.html", "user"=>"Hotspot", "password"=>"Hs07052018", "mode"=>"http"))){
         
         print_r("==> OK <==\n\n");
         
@@ -2096,7 +2096,7 @@ if ($API->connect($ip, $user, $pass)) {
     
     print_r("\t---------------------\n\tFETCH hotspot/xml/WISPAccessGatewayParam.xsd\n\t----------------------\n\t");
 
-    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/xml/WISPAccessGatewayParam.xsd","dst-path"=>"hotspot/xml/WISPAccessGatewayParam.xsd"))){
+    if(enviaComando('/tool/fetch', array("url"=> "http://servibyte.net/ftp/hotspot/xml/WISPAccessGatewayParam.xsd","dst-path"=>"hotspot/xml/WISPAccessGatewayParam.xsd", "user"=>"Hotspot", "password"=>"Hs07052018", "mode"=>"http"))){
         
         print_r("==> OK <==\n\n");
         

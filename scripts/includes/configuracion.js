@@ -712,9 +712,15 @@ function guardar_hotspot(action) {
                     dataok = [];
                 }
                 mensajealert('ok');
+                
+                // FUNCION PARA CREAR CARPETA EN VPS
+                
             } else {
                 row.remove().draw();
                 mensajealert('delete');
+                
+                // FUNCION PARA ELIMINAR CARPETA EN VPS
+                
             }
         });
     } 
