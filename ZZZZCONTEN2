@@ -1,7 +1,0 @@
-Array
-(
-    [Table] => radius.radacct
-    [Op] => repair
-    [Msg_type] => status
-    [Msg_text] => OK
-)
