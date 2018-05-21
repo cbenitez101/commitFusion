@@ -947,6 +947,57 @@ function external_standalone() {
     die();
 }
 
+
+
+//Funcion para reparar radacct
+function external_reparar_radacct(){
+    global $database;
+    global $radius;
+    
+    if (isset($_POST)){
+        
+        if ($_POST['accion'] == 'reparar'){
+            
+            if ($_POST['tabla'].split(".")[0] == 'radius'){
+                
+                $result = $radius->query('REPAIR TABLE '.$_POST['tabla'].';');
+                 
+            }else{
+                
+                $result = $database->query('REPAIR TABLE '.$_POST['tabla'].';');
+                 
+            }
+           
+            
+        }else if($_POST['accion'] == 'optimizar'){
+            
+            if ($_POST['tabla'].split(".")[0] == 'radius'){
+                
+                $result = $radius->query('OPTIMIZE TABLE '.$_POST['tabla'].';');
+                 
+            }else{
+                
+                $result = $database->query('OPTIMIZE TABLE '.$_POST['tabla'].';');
+                 
+            }
+            
+        }else{
+            // BACKUP
+        }
+        
+        
+        
+    }
+    $aux = $result->fetch_assoc();
+
+    // file_put_contents('ZZZZCONTEN2', print_r($aux, true));
+     
+    if ($result->num_rows > 0 && $aux['Msg_text'] == 'OK') echo 1;
+    else echo 0;
+    die();
+}
+
+
 function external_script_hotspot() {
     if (strstr($_SERVER['HTTP_USER_AGENT'], 'Mikrotik') && (isset($_GET['id_hotspot'])) && (isset($_GET['hotspot_serial']))) {
         global $database;
