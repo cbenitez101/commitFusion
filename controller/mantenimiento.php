@@ -86,6 +86,26 @@ if (isLoggedIn()) {
                 die();
             }
             break;
+            
+        case 'acciones':
+            
+
+            $result = $radius->query("SHOW TABLES");
+            while($aux = $result->fetch_assoc()){
+                $out[] = $aux['Tables_in_radius'];
+            }
+
+
+            $result2 = $database->query("SHOW TABLES");
+            while($aux2 = $result2->fetch_assoc()){
+                $out2[] = $aux2['Tables_in_plataforma'];
+            }
+                    
+            $smarty->assign('tablasrad', $out);
+            $smarty->assign('tablasplat', $out2);
+            
+            break;
+            
         default:
             header('Location: '.DOMAIN);
             die();

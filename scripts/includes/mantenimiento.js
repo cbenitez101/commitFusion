@@ -74,6 +74,30 @@ $(document).ready(function(){
         habilitar_dispositivo($(this).attr('id').split('-').pop(), ($(this).prop('checked'))? 1 : 0);
     });
     
+    
+    
+    
+    /**
+     *
+     * PARTE DE ACCIONES PARA REPARAR TABLAS 
+     * 
+     */
+     
+    // Nuevo evento para reparar la tabla radacct de base de datos cuando se quee pillada
+    if ($('[id*="reparar_"]').length > 0){
+        $('[id*="reparar_"]').click(function(){
+            if($("#"+$(this).attr('id').split("_")[1]+"tables option:selected").val() !== '') table_actions($("#"+$(this).attr('id').split("_")[1]+"tables option:selected").val(), 'reparar');
+            
+        });
+    }
+    
+    if ($('[id*="optimizar_"]').length > 0){
+        $('[id*="optimizar_"]').click(function(){
+            if ($("#"+$(this).attr('id').split("_")[1]+"tables option:selected").val() !== '') table_actions($("#"+$(this).attr('id').split("_")[1]+"tables option:selected").val(), 'optimizar');
+        });
+    }
+    
+    
 });
 var table;
 var data;
@@ -119,5 +143,20 @@ function habilitar_dispositivo(id, valor) {
         } else {
             mensajealert('ok');
         }
+    });
+}
+
+//Funcion para reparar tabla radius.radacct
+function table_actions(table, action){
+    // console.log(table);
+    // console.log(action);
+    $.ajax({
+        url: '/reparar_radacct',
+        type: 'POST',
+        data:{tabla:table, accion:action}
+    }).done(function(data){
+        if(data) console.log('Exito');
+        else console.log('Error');
+       
     });
 }
