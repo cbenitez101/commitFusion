@@ -950,18 +950,20 @@ function external_standalone() {
 
 
 //Funcion para reparar y optimizar tablas en la base de datos
-function external_reparar_radacct(){
+function external_table_actions(){
     if (isset($_POST['accion']) && isset($_POST['tabla'])){
         global $database;
         global $radius;
         // Obtenemos la tabla y laaccion, y ejecutamos la query con dichos parametros
-        if (split(".",$_POST['tabla'])[0] == 'radius') $result = $radius->query( (($_POST['accion'] == 'reparar')?'REPAIR':'OPTIMIZE').' TABLE '.$_POST['tabla'].';');
+        if (split(".", $_POST['tabla'])[0] == 'radius') $result = $radius->query( (($_POST['accion'] == 'reparar')?'REPAIR':'OPTIMIZE').' TABLE '.$_POST['tabla'].';');
         else $result = $database->query((($_POST['accion'] == 'reparar')?'REPAIR':'OPTIMIZE').' TABLE '.$_POST['tabla'].';'); 
+    
+        while ($aux = $result->fetch_assoc()) if (isset($aux['Msg_type']) && $aux['Msg_type'] == 'status') $out[] = $aux;
+       
+        if ($result->num_rows > 0 && isset($out[0]) && $out[0]['Msg_text'] == 'OK') echo true;
+        else echo false;
     }
-    while ($aux = $result->fetch_assoc()) if (isset($aux['Msg_type']) && $aux['Msg_type'] == 'status') $out[] = $aux;
-   
-    if ($result->num_rows > 0 && $out[0]['Msg_text'] == 'OK') echo true;
-    else echo false;
+    
     die();
 }
 
