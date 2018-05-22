@@ -153,6 +153,7 @@ function table_actions(table, action){
     $.ajax({
         url: '/reparar_radacct',
         type: 'POST',
+        dataType: "json",
         data:{tabla:table, accion:action, api: '943756eb7841efcc43b7cd37d7254c76' }
     }).done(function(data){
         if(data) console.log('Exito');

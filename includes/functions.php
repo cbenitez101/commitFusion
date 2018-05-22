@@ -954,11 +954,11 @@ function external_reparar_radacct(){
     global $database;
     global $radius;
     
-    if (isset($_POST)){
+    if (!empty($_POST)){
         
         if ($_POST['accion'] == 'reparar'){
             
-            if ($_POST['tabla'].split(".")[0] == 'radius'){
+            if (split(".",$_POST['tabla'])[0] == 'radius'){
                 
                 $result = $radius->query('REPAIR TABLE '.$_POST['tabla'].';');
                  
@@ -971,7 +971,7 @@ function external_reparar_radacct(){
             
         }else if($_POST['accion'] == 'optimizar'){
             
-            if ($_POST['tabla'].split(".")[0] == 'radius'){
+            if (split(".",$_POST['tabla'])[0] == 'radius'){
                 
                 $result = $radius->query('OPTIMIZE TABLE '.$_POST['tabla'].';');
                  
