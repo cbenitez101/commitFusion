@@ -87,14 +87,14 @@ $(document).ready(function(){
     // Nuevo evento para reparar la tabla radacct de base de datos cuando se quee pillada
     if ($('[id*="reparar_"]').length > 0){
         $('[id*="reparar_"]').click(function(){
-            if($("#"+$(this).attr('id').split("_")[1]+"tables option:selected").val() !== '') table_actions($("#"+$(this).attr('id').split("_")[1]+"tables option:selected").val(), 'reparar');
+            if($("#"+$(this).attr('id').split("_")[1]+"tables option:selected").val() !== '') table_action($("#"+$(this).attr('id').split("_")[1]+"tables option:selected").val(), 'reparar');
             
         });
     }
     
     if ($('[id*="optimizar_"]').length > 0){
         $('[id*="optimizar_"]').click(function(){
-            if ($("#"+$(this).attr('id').split("_")[1]+"tables option:selected").val() !== '') table_actions($("#"+$(this).attr('id').split("_")[1]+"tables option:selected").val(), 'optimizar');
+            if ($("#"+$(this).attr('id').split("_")[1]+"tables option:selected").val() !== '') table_action($("#"+$(this).attr('id').split("_")[1]+"tables option:selected").val(), 'optimizar');
         });
     }
     
@@ -148,13 +148,13 @@ function habilitar_dispositivo(id, valor) {
 }
 
 //Funcion para reparar tabla radius.radacct
-function table_actions(table, action){
+function table_action(table, action){
     $.ajax({
-        url: '/reparar_radacct',
+        url: '/table_actions',
         type: 'POST',
-        data:{tabla:table, accion:action, api:'943756eb7841efcc43b7cd37d7254c76'}
+        data:{tabla:table, accion:action/*, api:'943756eb7841efcc43b7cd37d7254c76'*/}
     }).done(function(data){
         if(data) $('#msgexito').fadeIn().delay(3000).fadeOut();
-        else  $('#msgerror').fadeIn().delay(3000).fadeOut();
+        else $('#msgerror').fadeIn().delay(3000).fadeOut();
     });
 }
