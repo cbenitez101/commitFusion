@@ -156,6 +156,5 @@ function table_actions(table, action){
     }).done(function(data){
         if(data) $('#msgexito').fadeIn().delay(3000).fadeOut();
         else  $('#msgerror').fadeIn().delay(3000).fadeOut();
-       
     });
 }
