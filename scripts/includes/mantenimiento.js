@@ -1,4 +1,5 @@
 $(document).ready(function(){
+    $('[id*=msg]').hide();
     // Manejador de la tabla, se le pone que al hacer lick en una fila llame al modal y guarda los datos de la tabla
     // en data.
     
@@ -148,15 +149,12 @@ function habilitar_dispositivo(id, valor) {
 
 //Funcion para reparar tabla radius.radacct
 function table_actions(table, action){
-    // console.log(table);
-    // console.log(action);
     $.ajax({
         url: '/reparar_radacct',
         type: 'POST',
-        data:{tabla:table, accion:action, api: '943756eb7841efcc43b7cd37d7254c76' }
+        data:{tabla:table, accion:action, api:'943756eb7841efcc43b7cd37d7254c76'}
     }).done(function(data){
-        if(data) console.log('Exito');
-        else console.log('Error');
-       
+        if(data) $('#msgexito').fadeIn().delay(3000).fadeOut();
+        else  $('#msgerror').fadeIn().delay(3000).fadeOut();
     });
 }
