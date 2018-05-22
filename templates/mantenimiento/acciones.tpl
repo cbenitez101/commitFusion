@@ -1,4 +1,8 @@
 <div class="row">
+	<div id="msgerror" class="alert alert-danger">Ha habido un error y no se ha podido realizar la operación</div>
+	<div id="msgexito" class="alert alert-success">La operación se ha realizado con éxito</div>
+</div>
+<div class="row">
 	<div class="col-lg-8">
 		<h1 class="page-header"> Acciones</h1>
 	</div>
