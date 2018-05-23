@@ -951,7 +951,6 @@ function external_standalone() {
 
 //Funcion para reparar y optimizar tablas en la base de datos
 function external_table_actions(){
-    
     if (isset($_POST['accion']) && isset($_POST['tabla'])){
         global $database;
         global $radius;
@@ -964,6 +963,24 @@ function external_table_actions(){
         else echo false;
     }
     
+    die();
+}
+
+//Funcion para hacer backups de las BBDD
+function external_db_backup(){
+    if (isset($_POST['tabla'])){
+        global $fulldomain;
+        if ($_POST['tabla'] == 'plataforma') {
+        $res = exec('mysqldump --user=platformuser --password=rfC79w?3 --host=localhost plataforma > plataforma.sql');
+            // exec('chmod 777 plataforma.sql');
+        } else {
+            $res = exec('mysqldump --user=radiususer --password=Pwp+*f2b --host=localhost radius > radius.sql');
+            // exec('chmod 777 radius.sql');
+        }
+        if (empty($res)) echo true;
+        else echo false;
+    }
+   
     die();
 }
 

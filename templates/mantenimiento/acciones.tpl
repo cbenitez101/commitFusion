@@ -44,15 +44,6 @@
                                 {/foreach}
 							</select>
 						</div>
-						<div class="row">
-							<div class="col-md-7">
-								<button id="reparar_radius" type="submit" class="btn btn-success">Reparar</button>
-								<button id="optimizar_radius" type="submit" class="btn btn-info">Optimizar</button>
-							</div>
-							<div class="col-md-offset-4 col-md-1">
-								<!--<button type="submit" class="btn btn-warning">Backup</button>-->
-							</div>
-						</div>
                     </div>
                     
                     <div role="tabpanel" class="tab-pane" id="plataformatables">
@@ -65,16 +56,18 @@
                                 {/foreach}
 							</select>
 						</div>
-						<div class="row">
-							<div class="col-md-7">
-								<button id="reparar_plataforma" type="submit" class="btn btn-success">Reparar</button>
-								<button id="optimizar_plataforma" type="submit" class="btn btn-info">Optimizar</button>
-							</div>
-							<div class="col-md-offset-4 col-md-1">
-								<!--<button id="" type="submit" class="btn btn-warning">Backup</button>-->
-							</div>
-						</div>
                     </div>
+                    
+                    <div class="row">
+						<div class="col-md-7">
+							<button id="reparar_radius" type="submit" class="btn btn-success botonacciones">Reparar</button>
+							<button id="optimizar_radius" type="submit" class="btn btn-info botonacciones">Optimizar</button>
+						</div>
+						<div class="col-md-offset-4 col-md-1">
+							<button type="submit" class="btn btn-warning botonbackup">Backup</button>
+						</div>
+					</div>
+                    
                 </div>
 			</div>
 		</div>
