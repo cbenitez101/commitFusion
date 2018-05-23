@@ -23,7 +23,6 @@ date_default_timezone_set ('Atlantic/Canary');
 if (!empty($_POST)){
     // Se obtienen los headers de la peticion realizada
     $headers = apache_request_headers();
-    
     // Si tiene el header de autorizacion y concuerda con el del cliente podemos realizar la operacion
     if (isset($headers['Authorization'])){
         
