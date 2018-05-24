@@ -99,7 +99,31 @@ if (isLoggedIn()) {
             $smarty->assign('tablasplat', $out2);
             
             break;
+         
+         
+         
+        case 'apilog':
+            $result = $database->query("SELECT * FROM `apilog`");
             
+            if ($result->num_rows > 0){
+                
+                while($aux = $result->fetch_assoc()){
+                    $out[] = $aux['id'];
+                    $out[] = $aux['fecha'];
+                    $out[] = $aux['ServerName'];
+                    $out[] = $aux['apikey'];
+                    $out[] = $aux['body'];
+                    $out[] = $aux['response'];
+                    $out[] = $aux['codigo'];
+                    $out[] = $aux['ip'];
+                }
+                
+            }
+            $smarty->assign('cols', 'id, fecha, ServerName, apikey, body, response, codigo, ip');
+            $smarty->assign('apilog', $out);
+            break;
+             
+           
         default:
             header('Location: '.DOMAIN);
             die();
