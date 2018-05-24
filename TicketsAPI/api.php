@@ -22,9 +22,9 @@ date_default_timezone_set ('Atlantic/Canary');
 // Se comprueba si se nos han enviado datos
 if (!empty($_POST)){
     // Se obtienen los headers de la peticion realizada
-    $headers = apache_request_headers();
+    // $headers = apache_request_headers();
     // Si tiene el header de autorizacion y concuerda con el del cliente podemos realizar la operacion
-    if (isset($headers['Authorization'])){
+    if (isset($_SERVER['HTTP_AUTHORIZATION'])){
         
         /*---------------------------------------------------------------
                     COMIENZO OBTENCION API KEY Y DATOS HOTSPOT
@@ -32,7 +32,7 @@ if (!empty($_POST)){
 
 
         // Se busca el usuario por su apikey
-        if ($hotspots = $apidbp->query("SELECT * FROM hotspots WHERE apikey='".$headers['Authorization']."'"));  
+        if ($hotspots = $apidbp->query("SELECT * FROM hotspots WHERE apikey='".$_SERVER['HTTP_AUTHORIZATION']."'"));  
         
         /*---------------------------------------------------------------
                     FIN OBTENCION API KEY Y DATOS HOTSPOT
@@ -274,7 +274,7 @@ if (!empty($_POST)){
     
         // Meter log
         
-        $apidbp->query("INSERT INTO `apilog` (`fecha`, `ServerName`, `apikey`, `body`, `response`, `codigo`) VALUES (NOW(), '".$ServerName."', '".$headers['Authorization']."', '".json_encode($_POST)."', '".json_encode($response)."', '".$response['code']."')");
+        $apidbp->query("INSERT INTO `apilog` (`fecha`, `ServerName`, `apikey`, `body`, `response`, `codigo`) VALUES (NOW(), '".$ServerName."', '".$_SERVER['HTTP_AUTHORIZATION']."', '".json_encode($_POST)."', '".json_encode($response)."', '".$response['code']."')");
         die();
 }
 
