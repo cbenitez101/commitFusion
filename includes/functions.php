@@ -18,14 +18,13 @@ function getTemplateData($getparams) {
             // define(COUNTRY, $get_values[0]);
             if (!in_array($get_values[0], $pages)) {    //If no page is found, try to find
                 if (function_exists('external_'.$get_values[0])) {   //a function or error
-                    if (isset($_POST['api']) && $_POST['api'] == APIKEY){
+                    if ((isset($_POST['api']) && $_POST['api'] == APIKEY) || $params_parts[0] == 'salir'){
                         array_shift($_GET);
                         call_user_func_array('external_'.$get_values[0], $_GET);
                     }else{
                         echo "Mal parametizado";
                         die();
                     }
-                  
                 } elseif($get_values[0] == 'olrai'){ file_put_contents(getcwd()."/olrai.txt", 'data');
                 } else {
                     // If no function and page is found send 404 code

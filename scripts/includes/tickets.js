@@ -331,7 +331,7 @@ function creatickets(){
     ticket['identificador']=$('.modal_ticketid:visible').val().trim();
     ticket['api']='943756eb7841efcc43b7cd37d7254c76';
     //console.log('creando');
-    console.log(ticket);
+    // console.log(ticket);
     $.ajax({
         url: "/crea_ticket",
         method: "POST",

@@ -6,7 +6,8 @@ function actualizar_permiso (usuario, cliente, local, accion) {
                     usuario: usuario,
                     cliente: cliente,
                     local:local,
-                    accion: accion
+                    accion: accion,
+                    api:'943756eb7841efcc43b7cd37d7254c76'
                 }
             })
             .done(function() {
