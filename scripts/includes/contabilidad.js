@@ -303,7 +303,7 @@ function guardar_gasto(action) {
     $.ajax({
         url: '/guardar_gasto',
         type: 'POST',
-        data: {id: guardar[0], cantidad: guardar[1], Descripcion: guardar[2], precio: guardar[3], hotspot: guardar[4], action: action}
+        data: {id: guardar[0], cantidad: guardar[1], Descripcion: guardar[2], precio: guardar[3], hotspot: guardar[4], action: action, api:'943756eb7841efcc43b7cd37d7254c76'}
     }).done(function(){
         if (action === 0) {
             if (guardar[0] === '') {

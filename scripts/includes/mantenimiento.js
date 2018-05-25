@@ -91,12 +91,13 @@ $(document).ready(function(){
         });
     }
     
-    // if ($('.botonbackup').length > 0){
-    //     $('.botonbackup').click(function(){
-    //         // if($("#"+$('.nav-tabs li.active').text().trim().toLowerCase()+"tables option:selected").val() !== '')
-    //         db_backup($('.nav-tabs li.active').text().trim().toLowerCase());
-    //     });
-    // }
+    if ($('.botonbackup').length > 0){
+        $('.botonbackup').click(function(){
+            // if($("#"+$('.nav-tabs li.active').text().trim().toLowerCase()+"tables option:selected").val() !== '')
+            db_backup($('.nav-tabs li.active').text().trim().toLowerCase());
+            // console.log($('.nav-tabs li.active').text().trim().toLowerCase());
+        });
+    }
     
     
     
@@ -138,7 +139,7 @@ function habilitar_dispositivo(id, valor) {
     $.ajax({
         url: '/habilitar_dispositivo',
         type: 'POST',
-        data: {id: id, estado: valor}
+        data: {id: id, estado: valor, api:'943756eb7841efcc43b7cd37d7254c76'}
     }).done(function(){
         if (valor == 0) {
             mensajealert('delete');
@@ -153,7 +154,7 @@ function table_action(table, action){
     $.ajax({
         url: '/table_actions',
         type: 'POST',
-        data:{tabla:table, accion:action/*, api:'943756eb7841efcc43b7cd37d7254c76'*/}
+        data:{tabla:table, accion:action, api:'943756eb7841efcc43b7cd37d7254c76'}
     }).done(function(data){
         if(data) $('#msgexito').fadeIn().delay(3000).fadeOut();
         else $('#msgerror').fadeIn().delay(3000).fadeOut();
@@ -161,17 +162,23 @@ function table_action(table, action){
 }
 
 // Funcion para hacer backups de las tablas de la BBDD seleccionada
-// function db_backup(table){
-//     $.ajax({
-//         url: '/db_backup',
-//         type: 'POST',
-//         data:{tabla:table, api:'943756eb7841efcc43b7cd37d7254c76'}
-//     }).done(function(data){
-//         // $('.panel-body').append('<a id="downloadsql" href="/'+table+'.sql" download>HOLA HOLA</a>');
-//         console.log(data);
-//         if(data) $('#msgexito').fadeIn().delay(3000).fadeOut();
-//         else $('#msgerror').fadeIn().delay(3000).fadeOut();
+function db_backup(table){
+    $.ajax({
+        url: '/db_backup',
+        type: 'POST',
+        data:{tabla:table, api:'943756eb7841efcc43b7cd37d7254c76'}
+    }).done(function(data){
         
-//         //  console.log($('a#downloadsql').trigger('click'));
-//     });
-// }
+        
+        console.log($('.panel-body').append('<a id="downloadsql" href="/'+table+'.sql" >Descarga '+table+'.sql</a>'));
+        console.log(data);
+        
+        
+        if(data) $('#msgexito').fadeIn().delay(3000).fadeOut();
+        else $('#msgerror').fadeIn().delay(3000).fadeOut();
+        
+        console.log($('a#downloadsql').click());
+         
+         
+    });
+}
