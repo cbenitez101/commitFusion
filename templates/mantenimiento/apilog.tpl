@@ -15,7 +15,7 @@
     			<div class="panel-body">
     				<div class="dataTable_wrapper row">
     					<div class="col-md-12">
-    						{html_table cols=$cols  table_attr='border="0" class="tabledit userstable hover" id="table-search" width="100%"' loop=$apilog}
+    						{html_table cols=$cols table_attr='border="0" class="tabledit hotspottable hover" id="table-search" width="100%"' loop=$apilog}
     					</div>
     				</div>
 				</div>

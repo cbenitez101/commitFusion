@@ -88,39 +88,43 @@ if (isLoggedIn()) {
             break;
             
         case 'acciones':
-            // Obtenemos las tablas que hay tanto en radius como en plataforma
-            $result = $radius->query("SHOW TABLES");
-            while($aux = $result->fetch_assoc()) $out[] = $aux['Tables_in_radius'];
-            
-            $result2 = $database->query("SHOW TABLES");
-            while($aux2 = $result2->fetch_assoc()) $out2[] = $aux2['Tables_in_plataforma'];
-            
-            $smarty->assign('tablasrad', $out);
-            $smarty->assign('tablasplat', $out2);
-            
+            if ($_SESSION['cliente'] == 'admin') {
+                // Obtenemos las tablas que hay tanto en radius como en plataforma
+                $result = $radius->query("SHOW TABLES");
+                while($aux = $result->fetch_assoc()) $out[] = $aux['Tables_in_radius'];
+                
+                $result2 = $database->query("SHOW TABLES");
+                while($aux2 = $result2->fetch_assoc()) $out2[] = $aux2['Tables_in_plataforma'];
+                
+                $smarty->assign('tablasrad', $out);
+                $smarty->assign('tablasplat', $out2);
+            }else{
+                header('Location: '.DOMAIN);
+                die();
+            }
             break;
          
-         
-         
         case 'apilog':
-            $result = $database->query("SELECT * FROM `apilog`");
-            
-            if ($result->num_rows > 0){
-                
-                while($aux = $result->fetch_assoc()){
-                    $out[] = $aux['id'];
-                    $out[] = $aux['fecha'];
-                    $out[] = $aux['ServerName'];
-                    $out[] = $aux['apikey'];
-                    $out[] = $aux['body'];
-                    $out[] = $aux['response'];
-                    $out[] = $aux['codigo'];
-                    $out[] = $aux['ip'];
+            if ($_SESSION['cliente'] == 'admin') {
+                $result = $database->query("SELECT * FROM `apilog`");
+                if ($result->num_rows > 0){
+                    while($aux = $result->fetch_assoc()){
+                        $out[] = $aux['id'];
+                        $out[] = $aux['fecha'];
+                        $out[] = $aux['ServerName'];
+                        $out[] = $aux['apikey'];
+                        $out[] = $aux['body'];
+                        $out[] = $aux['response'];
+                        $out[] = $aux['codigo'];
+                        $out[] = $aux['ip'];
+                    }
                 }
-                
+                $smarty->assign('cols', 'id, fecha, ServerName, apikey, body, response, codigo, ip');
+                $smarty->assign('apilog', $out);
+            } else {
+                header('Location: '.DOMAIN);
+                die();
             }
-            $smarty->assign('cols', 'id, fecha, ServerName, apikey, body, response, codigo, ip');
-            $smarty->assign('apilog', $out);
             break;
              
            

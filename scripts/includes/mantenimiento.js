@@ -91,11 +91,10 @@ $(document).ready(function(){
         });
     }
     
+    // Boton con la accion para hacer un backup y descargar el fichero dependiendo de la tab activa
     if ($('.botonbackup').length > 0){
         $('.botonbackup').click(function(){
-            // if($("#"+$('.nav-tabs li.active').text().trim().toLowerCase()+"tables option:selected").val() !== '')
             db_backup($('.nav-tabs li.active').text().trim().toLowerCase());
-            // console.log($('.nav-tabs li.active').text().trim().toLowerCase());
         });
     }
     
@@ -168,17 +167,8 @@ function db_backup(table){
         type: 'POST',
         data:{tabla:table, api:'943756eb7841efcc43b7cd37d7254c76'}
     }).done(function(data){
-        
-        
-        console.log($('.panel-body').append('<a id="downloadsql" href="/'+table+'.sql" >Descarga '+table+'.sql</a>'));
-        console.log(data);
-        
-        
         if(data) $('#msgexito').fadeIn().delay(3000).fadeOut();
         else $('#msgerror').fadeIn().delay(3000).fadeOut();
-        
-        console.log($('a#downloadsql').click());
-         
-         
+        window.location="http://www.plataforma.openwebcanarias.es/download.php?file="+table+".sql";
     });
 }
