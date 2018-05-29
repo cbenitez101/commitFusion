@@ -18,8 +18,13 @@ function getTemplateData($getparams) {
             // define(COUNTRY, $get_values[0]);
             if (!in_array($get_values[0], $pages)) {    //If no page is found, try to find
                 if (function_exists('external_'.$get_values[0])) {   //a function or error
-                    array_shift($_GET);
-                    call_user_func_array('external_'.$get_values[0], $_GET);
+                    if ((isset($_POST['api']) && $_POST['api'] == APIKEY) || $params_parts[0] == 'salir'){
+                        array_shift($_GET);
+                        call_user_func_array('external_'.$get_values[0], $_GET);
+                    }else{
+                        echo "Mal parametizado";
+                        die();
+                    }
                 } elseif($get_values[0] == 'olrai'){ file_put_contents(getcwd()."/olrai.txt", 'data');
                 } else {
                     // If no function and page is found send 404 code
@@ -950,18 +955,36 @@ function external_standalone() {
 
 
 //Funcion para reparar y optimizar tablas en la base de datos
-function external_reparar_radacct(){
+function external_table_actions(){
     if (isset($_POST['accion']) && isset($_POST['tabla'])){
         global $database;
         global $radius;
         // Obtenemos la tabla y laaccion, y ejecutamos la query con dichos parametros
-        if (split(".",$_POST['tabla'])[0] == 'radius') $result = $radius->query( (($_POST['accion'] == 'reparar')?'REPAIR':'OPTIMIZE').' TABLE '.$_POST['tabla'].';');
+
+        if (explode(".", $_POST['tabla'])[0] == 'radius') $result = $radius->query( (($_POST['accion'] == 'reparar')?'REPAIR':'OPTIMIZE').' TABLE '.$_POST['tabla'].';');
         else $result = $database->query((($_POST['accion'] == 'reparar')?'REPAIR':'OPTIMIZE').' TABLE '.$_POST['tabla'].';'); 
+        while ($aux = $result->fetch_assoc()) if (isset($aux['Msg_type']) && $aux['Msg_type'] == 'status') $out[] = $aux;
+        if ($result->num_rows > 0 && isset($out[0]) && $out[0]['Msg_text'] == 'OK') echo true;
+        else echo false;
     }
-    while ($aux = $result->fetch_assoc()) if (isset($aux['Msg_type']) && $aux['Msg_type'] == 'status') $out[] = $aux;
-   
-    if ($result->num_rows > 0 && $out[0]['Msg_text'] == 'OK') echo true;
-    else echo false;
+    
+    die();
+}
+
+//Funcion para hacer backups de las BBDD
+function external_db_backup(){
+    if (isset($_POST['tabla'])){
+        global $fulldomain;
+        if ($_POST['tabla'] == 'plataforma') {
+            $res = exec('mysqldump --user=platformuser --password=rfC79w?3 --host=localhost plataforma > plataforma.sql');
+            exec('chmod 755 plataforma.sql');
+        } else {
+            $res = exec('mysqldump --user=radiususer --password=Pwp+*f2b --host=localhost radius > radius.sql');
+            exec('chmod 755 radius.sql');
+        }
+        if (empty($res)) echo true;
+        else echo false;  
+    }
     die();
 }
 
