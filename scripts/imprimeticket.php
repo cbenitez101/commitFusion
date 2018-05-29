@@ -90,7 +90,17 @@ and open the template in the editor.
             </div>
               
         	<div class='border'>
-                <p>User: <?php echo $_GET['user']; ?></p>
+                
+                <!-- Aqui no estaba el condicional, solo se por el usuario -->
+
+                <?php if (!empty($_GET['pass'])): ?>
+                    <p>User: <?php echo $_GET['user']; ?></p>
+                <?php else: ?>
+                    <p>Pass: <?php echo $_GET['user']; ?></p>
+                <?php endif; ?>
+                
+                <!-- Aqui no estaba el condicional, solo se por el usuario -->
+                  
                 <?php if (!empty($_GET['pass'])): ?>
                     <p>Pass: <?php echo $_GET['pass']; ?></p>
                 <?php endif; ?>
@@ -115,6 +125,7 @@ and open the template in the editor.
                     <p>
                         <?php echo (($_GET['precio'] == '0.00')?"Free":$_GET['precio']."€"); ?>
                          &nbsp;<?php echo secondsToTime($_GET['duracion']); ?>
+                         &nbsp;-&nbsp; <?php echo ((strtolower($_GET['hotspot']) == 'coronablanca')? 'HIGH SPEED' : ''); ?>
                     </p>
                 <?php endif; ?>
             </div>
@@ -136,7 +147,7 @@ and open the template in the editor.
                     <div class="grid_1">&nbsp; </div>
                     <div class="grid_5"> 
                         <ol>
-                            <li><strong>¿Puedo coneectarme con más de un dispositivo a la vez? </strong>Si, hay un límite de x dispositivos por sesión. Si quiere conectar mas dispositivos, primero tiene que cerrar la sesión en uno que esté en uso. Para saber como desconectar consulte el punto 6.</li>
+                            <li><strong>¿Puedo coneectarme con más de un dispositivo a la vez? </strong>Si, hay un límite de <strong> <?php echo ((strtolower($_GET['hotspot']) == 'coronablanca')? '3 dispositivos por sesión' : 'X dispositivos por sesión'); ?> </strong> . Si quiere conectar mas dispositivos, primero tiene que cerrar la sesión en uno que esté en uso. Para saber como desconectar consulte el punto 6.</li>
                             <li><strong>¿Hay limitaciones de tráfico, velocidad o aplicaciones? </strong>Los límites están establecidos en la velocidad de descarga y de subida. No hay límites en la cantidad de tráfico ni en aplicaciones.</li>
                             <li><strong>¿Formas de pago?</strong>Se puede pagar en mostrador del establecimiento en efectivo o tarjeta, o mediante la plataforma de pago paypal en el portal de la red wifi (donde se pide el código de conexión).</li>
                             <li><strong>¿Seguridad de los datos?</strong>Todas las redes están protegidas para que los usuarios no se vean entre sí. Los datos de conexión del dispositivo serán registrados acorde con la Ley Orgánica de Protección de Datos (LOPD).</li>
@@ -144,7 +155,7 @@ and open the template in the editor.
                             <li><strong>¿Cómo me desconecto?</strong>Para cerrar la conexión acceda a http://exit.com. La sesión se cerrará automáticamente si no se conecta en un periodo de 7 días.</li>
                             <li><strong>Solución de problemas</strong>
                                 <ol>
-                                    <li><u>No me puedo conectar:</u> Dependiendo del número de dispositivos autorizados en el establecimiento puede ser que tenga otros dispositivos con la sesión abierta. Cierre la sesión en todos los sdispositivos y vuelva a conectarse. Si este no es el caso o habiendo cerrado todos los dispositivos sigue sin poder conectar, borre las cookies del navegador (en la configuración del navegador del dispositivo) y en las conexiones wifi escoja olvidar la red del establecimiento (en la configuración wifi del dispoditivo).</li>
+                                    <li><u>No me puedo conectar:</u> Dependiendo del número de dispositivos autorizados en el establecimiento puede ser que tenga otros dispositivos con la sesión abierta. Cierre la sesión en todos los dispositivos y vuelva a conectarse. Si este no es el caso o habiendo cerrado todos los dispositivos sigue sin poder conectar, borre las cookies del navegador (en la configuración del navegador del dispositivo) y en las conexiones wifi escoja olvidar la red del establecimiento (en la configuración wifi del dispoditivo).</li>
                                     <li><u>Estoy conctado pero no navego:</u> Asegúrese de que ha iniciado la sesión en el dispositivo, si no sabe si está iniciada la sesión, ciérrela y vuelva a iniciar la sesión.</li>
                                     <li><u>Otras dudas:</u> En caso de no poder solucionar las dudas acuda al mostrador del establecimiento donde le podrán asesorar y en el caso abrir un ticket de incidencia.</li>
                                 </ol>
@@ -153,7 +164,7 @@ and open the template in the editor.
                     </div> 
                     <div class="grid_5"> 
                         <ol>
-                            <li><strong>Can I connect more than one device at the same time? </strong>Yes, there is a limit of x devices per session. If you want to connect more than x device first must log out one in use. To know how to disconnect, see point 6.</li>
+                            <li><strong>Can I connect more than one device at the same time? </strong>Yes, there is a limit of <strong><?php echo ((strtolower($_GET['hotspot']) == 'coronablanca')? '3 dispositivos por sesión' : 'X dispositivos por sesión'); ?> </strong>. If you want to connect more than x device first must log out one in use. To know how to disconnect, see point 6.</li>
                             <li><strong>Are there limitations of traffic, speed or applications? </strong>The limits are set at download and upload speed. There is no limitation about the traffic amount or kind of applications.</li>
                             <li><strong>Payment?</strong>You can pay cash or credit card at info establishment's desk, or by paypal payment at wireless wabsite platform (where connection code is required).</li><!--<br>-->
                             <li><strong>Data security?</strong>All networks are protected that users can not see each other. The connection data device will be recorded according to Spanish Data Protection Law (LOPD).</li><!--<br>-->
@@ -161,7 +172,7 @@ and open the template in the editor.
                             <li><strong>How do I disconnect?</strong>To log out reach http://exit.com. The session will close automatically if it is not connected over a period of 7 days</li><!--<br>-->
                             <li><strong>Troubleshooting</strong>
                                 <ol>
-                                    <li><u>I can not connect:</u> Depending on the number of authorized devices at the same time you might have another device logged in. Log out all devices and try again. If this is not the case or having closed all devices still can not be able to connect, delete browser cookier (in device browser settings) and Wi-Fi connections choose "forget network" option (in the wireless device configuration).</li><!--<br><br>-->
+                                    <li><u>I can not connect:</u> Depending on the number of authorized devices at the same time you might have another device logged in. Log out all devices and try again. If this is not the case or having closed all devices still can not be able to connect, delete browser cookies (in device browser settings) and Wi-Fi connections choose "forget network" option (in the wireless device configuration).</li><!--<br><br>-->
                                     <li><u>I am connected to the network but not navigate:</u> Make sure you are logged in, if you do not know if you're logged in, then logout and try again to log in.</li>
                                     <li><u>Other questions:</u> If you have more doubt, please ask in establishment info where they will advise you and if it's needed open a sat ticket.</li>
                                 </ol>

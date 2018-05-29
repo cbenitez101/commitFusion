@@ -1,4 +1,5 @@
 $(document).ready(function(){
+    $('[id*=msg]').hide();
     // Manejador de la tabla, se le pone que al hacer lick en una fila llame al modal y guarda los datos de la tabla
     // en data.
     
@@ -74,6 +75,31 @@ $(document).ready(function(){
         habilitar_dispositivo($(this).attr('id').split('-').pop(), ($(this).prop('checked'))? 1 : 0);
     });
     
+    
+    
+    
+    /**
+     *
+     * PARTE DE ACCIONES PARA REPARAR U OPTIMIZAR TABLAS 
+     * 
+     */
+     
+    // Nuevo evento para reparar la tabla radacct de base de datos cuando se quede pillada
+    if ($('.botonacciones').length > 0){
+        $('.botonacciones').click(function(){
+            if($("#"+$('.nav-tabs li.active').text().trim().toLowerCase()+"tables option:selected").val() !== '') table_action($("#"+$('.nav-tabs li.active').text().trim().toLowerCase()+"tables option:selected").val(), $(this).text().trim().toLowerCase());
+        });
+    }
+    
+    // Boton con la accion para hacer un backup y descargar el fichero dependiendo de la tab activa
+    if ($('.botonbackup').length > 0){
+        $('.botonbackup').click(function(){
+            db_backup($('.nav-tabs li.active').text().trim().toLowerCase());
+        });
+    }
+    
+    
+    
 });
 var table;
 var data;
@@ -112,12 +138,37 @@ function habilitar_dispositivo(id, valor) {
     $.ajax({
         url: '/habilitar_dispositivo',
         type: 'POST',
-        data: {id: id, estado: valor}
+        data: {id: id, estado: valor, api:'943756eb7841efcc43b7cd37d7254c76'}
     }).done(function(){
         if (valor == 0) {
             mensajealert('delete');
         } else {
             mensajealert('ok');
         }
+    });
+}
+
+// Funcion para reparar tabla radius.radacct
+function table_action(table, action){
+    $.ajax({
+        url: '/table_actions',
+        type: 'POST',
+        data:{tabla:table, accion:action, api:'943756eb7841efcc43b7cd37d7254c76'}
+    }).done(function(data){
+        if(data) $('#msgexito').fadeIn().delay(3000).fadeOut();
+        else $('#msgerror').fadeIn().delay(3000).fadeOut();
+    });
+}
+
+// Funcion para hacer backups de las tablas de la BBDD seleccionada
+function db_backup(table){
+    $.ajax({
+        url: '/db_backup',
+        type: 'POST',
+        data:{tabla:table, api:'943756eb7841efcc43b7cd37d7254c76'}
+    }).done(function(data){
+        if(data) $('#msgexito').fadeIn().delay(3000).fadeOut();
+        else $('#msgerror').fadeIn().delay(3000).fadeOut();
+        window.location="http://www.plataforma.openwebcanarias.es/download.php?file="+table+".sql";
     });
 }

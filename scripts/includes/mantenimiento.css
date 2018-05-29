@@ -4,3 +4,6 @@ tbody tr td:first-of-type, tbody tr td:last-of-type {
 select#modal_dispositivotipo > option:disabled {
     display: none;
 }
+/*.botonbackup{*/
+/*    padding-right:55%!important;*/
+/*}*/

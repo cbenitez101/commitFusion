@@ -14,7 +14,9 @@ if (isLoggedIn()) {
                      * PASO 2: Obtenemos los dispositivos linkados al local(id) ya sean APs de hotspot u otros dispositivos ya sean Camaras,
                      * TPVs, servidores...
                      */
-                  $result = $database->query("SELECT syslog.*, dispositivos.notas, dispositivos.tipo, dispositivos.habilitado, dispositivos.id as dispid FROM `locales` LEFT JOIN `dispositivos` ON dispositivos.id_hotspot = locales.id LEFT JOIN `syslog` ON (locales.nombre = syslog.local AND syslog.dispositivo = dispositivos.descripcion OR (locales.nombre = syslog.local AND syslog.dispositivo = 'Hotspot')) WHERE locales.id=".$template_data[2]." GROUP BY id");
+                //   $result = $database->query("SELECT syslog.*, dispositivos.notas, dispositivos.tipo, dispositivos.habilitado, dispositivos.id as dispid FROM `locales` LEFT JOIN `dispositivos` ON dispositivos.id_hotspot = locales.id LEFT JOIN `syslog` ON (locales.nombre = syslog.local AND syslog.dispositivo = dispositivos.descripcion OR (locales.nombre = syslog.local AND syslog.dispositivo = 'Hotspot')) WHERE locales.id=".$template_data[2]." GROUP BY id");
+                
+                    $result = $database->query("SELECT syslog.*, dispositivos.notas, dispositivos.tipo, dispositivos.habilitado, dispositivos.id as dispid FROM `locales` LEFT JOIN `dispositivos` ON dispositivos.id_local = locales.id LEFT JOIN `syslog` ON (locales.nombre = syslog.local AND syslog.dispositivo = dispositivos.descripcion OR (locales.nombre = syslog.local AND syslog.dispositivo = 'Hotspot')) WHERE locales.id=".$template_data[2]." GROUP BY id");
                    
                     $out = array();
                     if ($result->num_rows > 0) {
@@ -54,8 +56,8 @@ if (isLoggedIn()) {
                      * INICIO PARTE NUEVA DE DISPOSITIVOS
                      * PASO 1: Buscamos Locales que tengan el campo monitorizacion a TRUE
                     */
-                    $result = $database->query("SELECT locales.id ,locales.nombre as Local, COUNT(*) AS dispositivos, (SELECT COUNT(*) FROM syslog WHERE local = locales.nombre AND fecha > '".date("Y-m-d H:i:s", strtotime("-30 min"))."' AND (dispositivo IN (SELECT descripcion FROM dispositivos WHERE habilitado = 1 AND id_hotspot = locales.id))  OR (dispositivo = 'hotspot' AND local = locales.nombre)) as activos FROM `locales` LEFT JOIN dispositivos ON dispositivos.id_hotspot= locales.id WHERE locales.Monitorizacion = 1 GROUP BY locales.id ");
-                    
+                    // $result = $database->query("SELECT locales.id ,locales.nombre as Local, COUNT(*) AS dispositivos, (SELECT COUNT(*) FROM syslog WHERE local = locales.nombre AND fecha > '".date("Y-m-d H:i:s", strtotime("-30 min"))."' AND (dispositivo IN (SELECT descripcion FROM dispositivos WHERE habilitado = 1 AND id_hotspot = locales.id))  OR (dispositivo = 'hotspot' AND local = locales.nombre)) as activos FROM `locales` LEFT JOIN dispositivos ON dispositivos.id_hotspot= locales.id WHERE locales.Monitorizacion = 1 GROUP BY locales.id ");
+                    $result = $database->query("SELECT locales.id ,locales.nombre as Local, COUNT(*) AS dispositivos, (SELECT COUNT(*) FROM syslog WHERE local = locales.nombre AND fecha > '".date("Y-m-d H:i:s", strtotime("-30 min"))."' AND (dispositivo IN (SELECT descripcion FROM dispositivos WHERE habilitado = 1 AND id_local = locales.id))  OR (dispositivo = 'hotspot' AND local = locales.nombre)) as activos FROM `locales` LEFT JOIN dispositivos ON dispositivos.id_local= locales.id WHERE locales.Monitorizacion = 1 GROUP BY locales.id ");
                      if ($result->num_rows > 0) {
                         while ($aux = $result->fetch_assoc()){
                             if ($aux['dispositivos'] > 1) $aux['dispositivos']++;
@@ -86,6 +88,48 @@ if (isLoggedIn()) {
                 die();
             }
             break;
+            
+        case 'acciones':
+            if ($_SESSION['cliente'] == 'admin') {
+                // Obtenemos las tablas que hay tanto en radius como en plataforma
+                $result = $radius->query("SHOW TABLES");
+                while($aux = $result->fetch_assoc()) $out[] = $aux['Tables_in_radius'];
+                
+                $result2 = $database->query("SHOW TABLES");
+                while($aux2 = $result2->fetch_assoc()) $out2[] = $aux2['Tables_in_plataforma'];
+                
+                $smarty->assign('tablasrad', $out);
+                $smarty->assign('tablasplat', $out2);
+            }else{
+                header('Location: '.DOMAIN);
+                die();
+            }
+            break;
+         
+        case 'apilog':
+            if ($_SESSION['cliente'] == 'admin') {
+                $result = $database->query("SELECT * FROM `apilog`");
+                if ($result->num_rows > 0){
+                    while($aux = $result->fetch_assoc()){
+                        $out[] = $aux['id'];
+                        $out[] = $aux['fecha'];
+                        $out[] = $aux['ServerName'];
+                        $out[] = $aux['apikey'];
+                        $out[] = $aux['body'];
+                        $out[] = $aux['response'];
+                        $out[] = $aux['codigo'];
+                        $out[] = $aux['ip'];
+                    }
+                }
+                $smarty->assign('cols', 'id, fecha, ServerName, apikey, body, response, codigo, ip');
+                $smarty->assign('apilog', $out);
+            } else {
+                header('Location: '.DOMAIN);
+                die();
+            }
+            break;
+             
+           
         default:
             header('Location: '.DOMAIN);
             die();

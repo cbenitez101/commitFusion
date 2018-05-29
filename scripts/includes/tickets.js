@@ -172,7 +172,7 @@ $(document).ready(function(){
             $.ajax({
                 url: '/importbloc_hotspot',
                 method: 'POST',
-                data: {duracion: $('#modal_bloctiempo').val()}
+                data: {duracion: $('#modal_bloctiempo').val(), api:'943756eb7841efcc43b7cd37d7254c76'}
             }).done(function(data){
                 // Se crea el contenido de los options
                 $('#modal_importhotspot').append(data);
@@ -266,7 +266,7 @@ $(document).ready(function(){
         $.ajax({
                 url: '/desanular_ticket',
                 method: 'POST',
-                data: {usuario: window.location['pathname'].split('/').pop(), motivo: $('#modal_ticketcancel').val(), anuluser: anula_user}
+                data: {usuario: window.location['pathname'].split('/').pop(), motivo: $('#modal_ticketcancel').val(), anuluser: anula_user, api:'943756eb7841efcc43b7cd37d7254c76'}
             }).done(function(){
                 mensajealert('Se ha cancelado el ticket');
                 //setTimeout(function(){ window.location = document.URL; }, 2000);
@@ -304,7 +304,7 @@ function anularticket(){
     $.ajax({
             url: '/cancela_ticket',
             method: 'POST',
-            data: {usuario: window.location['pathname'].split('/').pop(), motivo: $('#modal_ticketcancel').val(), anuluser: anula_user}
+            data: {usuario: window.location['pathname'].split('/').pop(), motivo: $('#modal_ticketcancel').val(), anuluser: anula_user, api:'943756eb7841efcc43b7cd37d7254c76'}
         }).done(function(){
             //mensajealert('Se ha cancelado el ticket');
             //setTimeout(function(){ window.location = document.URL; }, 2000);
@@ -317,7 +317,7 @@ function borrarticket(){
     $.ajax({
         url: '/borrar_ticket',
         method: 'POST',
-        data: {usuario: window.location['pathname'].split('/').pop()}
+        data: {usuario: window.location['pathname'].split('/').pop(), api:'943756eb7841efcc43b7cd37d7254c76'}
     }).done(function(){
         mensajealert('Se ha cancelado el ticket');
         //setTimeout(function(){ window.location = document.URL; }, 2000);
@@ -329,6 +329,7 @@ function borrarticket(){
 }
 function creatickets(){
     ticket['identificador']=$('.modal_ticketid:visible').val().trim();
+    ticket['api']='943756eb7841efcc43b7cd37d7254c76';
     //console.log('creando');
     // console.log(ticket);
     $.ajax({
@@ -348,7 +349,7 @@ function guardar_bloc(action){
     $.ajax({
         url: '/guardar_bloc',
         type: 'POST',
-        data: {id: dataok[0], nombre: dataok[1], descripcion: dataok[3], action: action, tiempo: dataok[2], cantidad: dataok[4]}
+        data: {id: dataok[0], nombre: dataok[1], descripcion: dataok[3], action: action, tiempo: dataok[2], cantidad: dataok[4], api:'943756eb7841efcc43b7cd37d7254c76'}
     }).done(function(){
         if (action === 0) {
             if (dataok[0] === '') {
@@ -372,7 +373,7 @@ function importar_blocchange(){
     $.ajax({
         url: '/importbloc_perfil',
         method: 'POST',
-        data: {hotspot: $('#modal_importhotspot').val(), tiempo: $('#modal_importtime').val()}
+        data: {hotspot: $('#modal_importhotspot').val(), tiempo: $('#modal_importtime').val(), api:'943756eb7841efcc43b7cd37d7254c76'}
     }).done(function(data){
         $('#modal_importperfil').removeAttr('disabled');
         //$('#modal_button_agregar').removeAttr('disabled');
@@ -390,7 +391,7 @@ function importar_bloc(){
     $.ajax({
         url: '/importar_bloc',
         type: 'POST',
-        data: {id: $('#modal_importid').val(), perfil: $('#modal_importperfil').val()}
+        data: {id: $('#modal_importid').val(), perfil: $('#modal_importperfil').val(), api:'943756eb7841efcc43b7cd37d7254c76'}
     }).done(function(){
         window.location = document.URL;
     });
@@ -413,7 +414,7 @@ function guardar_bono(action) {
         $.ajax({
             url: '/guardar_bono',
             type: 'POST',
-            data: {id: guardar[0], id_hotspot: guardar[3], cantidad: guardar[1], tipo: guardar[4], action: action}
+            data: {id: guardar[0], id_hotspot: guardar[3], cantidad: guardar[1], tipo: guardar[4], action: action, api:'943756eb7841efcc43b7cd37d7254c76'}
         }).done(function(){
             if (action === 0) {
                 if (guardar[0] === '') {
@@ -444,7 +445,7 @@ function creaExcel(){
      $.ajax({
         url: '/bloc_excel',
         type: 'POST',
-        data: {ids: ids}
+        data: {ids: ids, api:'943756eb7841efcc43b7cd37d7254c76'}
     }).done(function(data){
         console.log(data);
           window.open('data:application/vnd.ms-excel,' + data);

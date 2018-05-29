@@ -58,7 +58,7 @@ $(document).ready(function(){
                     $.ajax({
                         url: '/edita_menus',
                         type: 'POST',
-                        data: {user: $(this).data('id'), menu: $(this).data('menu'), action: $(this).prop('checked') ? 'add' : 'del' }
+                        data: {user: $(this).data('id'), menu: $(this).data('menu'), action: $(this).prop('checked') ? 'add' : 'del', api:'943756eb7841efcc43b7cd37d7254c76' }
                     })
                     .done(function(){
                         if ($(this).prop('checked')) {
@@ -541,7 +541,7 @@ check-for-updates once\r\n\
         $.ajax({
             url: '/aleatorio',
             method: 'POST',
-            data: {tipoalf: 'T', lon: 6}
+            data: {tipoalf: 'T', lon: 6, api:'943756eb7841efcc43b7cd37d7254c76'}
         }).done(function(data) {
             $('#modal_usuariopass').val(data);
         });
@@ -559,7 +559,7 @@ check-for-updates once\r\n\
         $.ajax({
             url: '/edita_menus',
             type: 'POST',
-            data: {user: $('#modal_usuarioid').val(), menu: $(this).attr('id'), action: $(this).prop('checked') ? 'add' : 'del' }
+            data: {user: $('#modal_usuarioid').val(), menu: $(this).attr('id'), action: $(this).prop('checked') ? 'add' : 'del', api:'943756eb7841efcc43b7cd37d7254c76' }
         })
         .done(function(){
             if ($(this).prop('checked')) {
@@ -592,7 +592,8 @@ check-for-updates once\r\n\
                 usuario: $('#modal_usuarioid').val(),
                 cliente: user[0],
                 local:user[1] == undefined ? null: user[1],
-                accion: $(this).prop('checked') ? '1' : '2'
+                accion: $(this).prop('checked') ? '1' : '2',
+                api:'943756eb7841efcc43b7cd37d7254c76'
             }
         })
         .done(function() {
@@ -615,7 +616,7 @@ check-for-updates once\r\n\
         $.ajax({
             url: '/edita_menus',
             type: 'POST',
-            data: {user: $(this).data('id'), menu: $(this).data('menu'), action: $(this).prop('checked') ? 'add' : 'del' }
+            data: {user: $(this).data('id'), menu: $(this).data('menu'), action: $(this).prop('checked') ? 'add' : 'del', api:'943756eb7841efcc43b7cd37d7254c76' }
         })
         .done(function(){
             if ($(this).prop('checked')) {
@@ -632,7 +633,7 @@ check-for-updates once\r\n\
         $.ajax({
             url: '/edita_dash',
             type: 'POST',
-            data: {user: $(this).data('id'), dash: $(this).data('dash'), action: $(this).prop('checked') ? 'add' : 'del' }
+            data: {user: $(this).data('id'), dash: $(this).data('dash'), action: $(this).prop('checked') ? 'add' : 'del', api:'943756eb7841efcc43b7cd37d7254c76' }
         })
         .done(function(){
             if ($(this).prop('checked')) {
@@ -700,7 +701,7 @@ function guardar_hotspot(action) {
         $.ajax({
             url: '/guardar_hotspot',
             type: 'POST',
-            data: {id: guardar[0], name: guardar[1], number: guardar[2], full: guardar[3], fecha: guardar[4], precio: guardar[5], duracion: guardar[6], identificador: guardar[7], logo: guardar[8],  status: guardar[9].toUpperCase(), local: guardar[10], informe: guardar[11], action: action}
+            data: {id: guardar[0], name: guardar[1], number: guardar[2], full: guardar[3], fecha: guardar[4], precio: guardar[5], duracion: guardar[6], identificador: guardar[7], logo: guardar[8],  status: guardar[9].toUpperCase(), local: guardar[10], informe: guardar[11], action: action, api:'943756eb7841efcc43b7cd37d7254c76'}
         }).done(function(){
             if (action === 0) {
                 if (guardar[0] === '') {
@@ -732,6 +733,7 @@ function guardar_perfil(action) {
          guardar["per_"+$(this).attr("class").split(" ")[1].split("-")[1]] = $(this).val();
     });
     guardar['action'] = action;
+    guardar['api'] = '943756eb7841efcc43b7cd37d7254c76';
     $.ajax({
         url: '/guardar_perfil',
         type: 'POST',
@@ -765,7 +767,7 @@ function guardar_lote(action) {
         $.ajax({
             url: '/guardar_lote',
             type: 'POST',
-            data: {id: guardar[0], id_perfil: guardar[3], duracion: guardar[4], costo: guardar[1], precio: guardar[2], action: action}
+            data: {id: guardar[0], id_perfil: guardar[3], duracion: guardar[4], costo: guardar[1], precio: guardar[2], action: action, api:'943756eb7841efcc43b7cd37d7254c76'}
         }).done(function(){
             if (action === 0) {
                 if (guardar[0] === '') {
@@ -805,7 +807,7 @@ function guardar_usuario(action) {
         $.ajax({
             url: '/guardar_usuario',
             type: 'POST',
-            data: {id: guardar[0], nombre: guardar[1], correo: guardar[2], pass: guardar[4], envia: guardar[3], action: action}
+            data: {id: guardar[0], nombre: guardar[1], correo: guardar[2], pass: guardar[4], envia: guardar[3], action: action, api:'943756eb7841efcc43b7cd37d7254c76'}
         }).done(function(){
             if (action === 0) {
                 if (guardar[0] === '') {
@@ -830,7 +832,7 @@ function guardar_menu(action, value) {
     $.ajax({
         url: '/quitar_menu',
         type: 'POST',
-        data: {menu: 'menu_'+ value, action: action}
+        data: {menu: 'menu_'+ value, action: action, api:'943756eb7841efcc43b7cd37d7254c76'}
     }).done(function(){
         window.location = document.URL;
     });
@@ -840,7 +842,7 @@ function guardar_dash(action, value) {
     $.ajax({
         url: '/quitar_dash',
         type: 'POST',
-        data: {dash: 'dash_'+ value, action: action}
+        data: {dash: 'dash_'+ value, action: action, api:'943756eb7841efcc43b7cd37d7254c76'}
     }).done(function(){
         window.location = document.URL;
     });
@@ -857,7 +859,7 @@ function guardar_cliente(action) {
         $.ajax({
             url: '/guardar_cliente',
             type: 'POST',
-            data: {id: guardar[0], nombre: guardar[1], action: action}
+            data: {id: guardar[0], nombre: guardar[1], action: action, api:'943756eb7841efcc43b7cd37d7254c76'}
         }).done(function(){
             if (action === 0) {
                 if (guardar[0] === '') {
@@ -892,6 +894,7 @@ function guardar_logo(guardar){
     });
     //data.append('nombre', guardar [1]);
     data.append('nombre', guardar.length > 3 ? guardar[4] : guardar [1]);
+    data.append('api','943756eb7841efcc43b7cd37d7254c76');
     if (guardar.length > 3) data.append('local', guardar[1]);
     $.ajax({
         url: '/upload_logo',
@@ -919,7 +922,7 @@ function guardar_local(action) {
         $.ajax({
             url: '/guardar_local',
             type: 'POST',
-            data: {id: guardar[0], nombre: guardar[1], cliente: guardar[3], clientenombre: guardar[4], monitorizacion:(($('#modal_monitorizacion').prop('checked'))?1:0), action: action}
+            data: {id: guardar[0], nombre: guardar[1], cliente: guardar[3], clientenombre: guardar[4], monitorizacion:(($('#modal_monitorizacion').prop('checked'))?1:0), action: action, api:'943756eb7841efcc43b7cd37d7254c76'}
         }).done(function(){
             if (action === 0) {
                 if (guardar[0] === '') {

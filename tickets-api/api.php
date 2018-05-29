@@ -18,14 +18,21 @@ header('P3P: CP="IDC DSP COR CURa ADMa OUR IND PHY ONL COM STA"');
 
 
 date_default_timezone_set ('Atlantic/Canary');
-
 // Se comprueba si se nos han enviado datos
 if (!empty($_POST)){
+    foreach ($_POST as $key => $value){
+        $originales = 'ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûýýþÿ';
+        $modificadas = 'aaaaaaaceeeeiiiidnoooooouuuuybsaaaaaaaceeeeiiiidnoooooouuuyyby';
+        $cadena = utf8_decode($value);
+        $cadena = strtr($cadena, utf8_decode($originales), $modificadas);
+        $_POST[$key]=$cadena;
+    }
     // Se obtienen los headers de la peticion realizada
-    $headers = apache_request_headers();
-    
+    // $headers = apache_request_headers();
     // Si tiene el header de autorizacion y concuerda con el del cliente podemos realizar la operacion
-    if (isset($headers['Authorization'])){
+    if (isset($_SERVER['HTTP_AUTHORIZATION'])){
+        // if (isset($_SERVER['HTTP_AUTHORIZATION']) && isset($_POST['ServerName'])){
+        // UTILIZAR TAMBIEN SERVERNAME PARA IDENTIFICAR EL HOTSPOT, NO SOLO LA APIKEY
         
         /*---------------------------------------------------------------
                     COMIENZO OBTENCION API KEY Y DATOS HOTSPOT
@@ -33,7 +40,8 @@ if (!empty($_POST)){
 
 
         // Se busca el usuario por su apikey
-        if ($hotspots = $apidbp->query("SELECT * FROM hotspots WHERE apikey='".$headers['Authorization']."'"));  
+        if ($hotspots = $apidbp->query("SELECT * FROM hotspots WHERE apikey='".$_SERVER['HTTP_AUTHORIZATION']."'")); 
+        //  if ($hotspots = $apidbp->query("SELECT * FROM hotspots WHERE ServerName='".$_POST['ServerName']."' AND apikey='".$_SERVER['HTTP_AUTHORIZATION']."'")); 
         
         /*---------------------------------------------------------------
                     FIN OBTENCION API KEY Y DATOS HOTSPOT
@@ -48,7 +56,7 @@ if (!empty($_POST)){
             $idHotspot = $aux['id'];
             
             $ServerName = $aux['ServerName'];
-            
+            // $ServerName = $_POST['ServerName'];
             /*---------------------------------------------------------------
                                 COMIENZO OPERACIONES
             -----------------------------------------------------------------*/
@@ -275,7 +283,7 @@ if (!empty($_POST)){
     
         // Meter log
         
-        $apidbp->query("INSERT INTO `apilog` (`fecha`, `ServerName`, `apikey`, `body`, `response`, `codigo`) VALUES (NOW(), '".$ServerName."', '".$headers['Authorization']."', '".json_encode($_POST)."', '".json_encode($response)."', '".$response['code']."')");
+        $apidbp->query("INSERT INTO `apilog` (`fecha`, `ServerName`, `apikey`, `body`, `response`, `codigo`, `ip`) VALUES (NOW(), '".$ServerName."', '".$_SERVER['HTTP_AUTHORIZATION']."', '".json_encode($_POST)."', '".json_encode($response)."', '".$response['code']."', '".((empty($_SERVER['HTTP_X_FORWARDED_FOR']))?$_SERVER['REMOTE_ADDR']:$_SERVER['HTTP_X_FORWARDED_FOR'])."')");
         die();
 }
 
